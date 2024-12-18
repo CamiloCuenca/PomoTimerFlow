@@ -2,6 +2,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
+import colors from '../constants/colors.json';
+
 //Screens
 import MainTimerScreen from '../screens/MainTimerScreen';
 import StatsScreen from '../screens/StatsScreen';
@@ -31,17 +33,19 @@ export default function AppNavigator(){
 
 
             return <Ionicons name={iconName} size={size} color={color} />;
-        }, tabBarActiveTintColor: '#a500ff', 
-           tabBarActiveBackgroundColor: '#1e1e1e',
-           tabBarInactiveBackgroundColor: '#333333',
+        }, tabBarActiveTintColor: colors.primary, 
+           tabBarActiveBackgroundColor: colors.secondary,
+           tabBarInactiveBackgroundColor: colors.tertiary,
         
         tabBarLabelStyle: {
             fontSize: 12,
             fontFamily: 'Georgia',
           },
           tabBarStyle: { 
+            borderColor: colors.primary,
             position: 'absolute', 
             height: 60,  // Altura del tab bar
+        
           },
            
 

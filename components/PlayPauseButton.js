@@ -19,7 +19,7 @@ export default function PlayPauseButton({ isPlaying, onPress }) {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.primary,
-    padding: 10,
+    padding: 20,
     borderRadius: 50,
   },
 });

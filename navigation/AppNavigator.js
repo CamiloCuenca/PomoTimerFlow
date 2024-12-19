@@ -15,7 +15,9 @@ export default function AppNavigator(){
     return(
         <NavigationContainer >
       <Tab.Navigator 
-      initialRouteName='Timer'
+      initialRouteName='Timer' 
+
+  
       
       screenOptions={({ route}) => ({
         tabBarIcon: ({focused,color,size}) =>{
@@ -48,6 +50,11 @@ export default function AppNavigator(){
         
           },
            
+          headerStyle:{
+            height: 80,
+            backgroundColor: colors.primary,
+            
+          }
 
       })}
       

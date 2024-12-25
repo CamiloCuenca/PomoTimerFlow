@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{use, useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 // Navigation
@@ -6,6 +6,9 @@ import AppNavigator from './navigation/AppNavigator';
 
 
 export default function App() {
+
+  
+
   return (
     <>
       <AppNavigator></AppNavigator>

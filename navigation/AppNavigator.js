@@ -1,3 +1,4 @@
+import React,{use, useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,6 +13,10 @@ import SettingsScreen from '../screens/SettingsScreen';
 const Tab = createBottomTabNavigator();
 
 export default function AppNavigator(){
+  const [workTime, setWorkTime] = useState(25 *60);
+  const [restTime, setRestTime] = useState(5 * 60);
+
+
     return(
         <NavigationContainer >
       <Tab.Navigator 
@@ -59,11 +64,33 @@ export default function AppNavigator(){
       })}
       
       > 
+      <Tab.Screen
+          name="Settings"
+          children={() => (
+            <SettingsScreen
+              workTime={workTime}
+              setWorkTime={setWorkTime}
+              restTime={restTime}
+              setRestTime={setRestTime}
+            />
+          )}
+        />
+        <Tab.Screen
+          name="Timer"
+          children={() => (
+            <MainTimerScreen
+              workTime={workTime}
+              setWorkTime={setWorkTime}
+              restTime={restTime}
+              setRestTime={setRestTime}
+            />
+          )}
+        /> 
 
-        
-        <Tab.Screen name="Settings" component={SettingsScreen}/>
-        <Tab.Screen styles name="Timer" component={MainTimerScreen}/>
-        <Tab.Screen name="Stats" component={StatsScreen}/>
+         <Tab.Screen name="Stats" component={StatsScreen} />
+
+
+       
       </Tab.Navigator>
     </NavigationContainer>
 

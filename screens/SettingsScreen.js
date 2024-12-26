@@ -1,6 +1,8 @@
+import React from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
 import { useState } from 'react';
-import colors from '../constants/colors.json';
+import { themeContext } from '../themesContext';
+
 
 export default function SettingsScreen({
   workTime,
@@ -11,6 +13,8 @@ export default function SettingsScreen({
   // Estados locales para los valores de los inputs
   const [localWorkTime, setLocalWorkTime] = useState(workTime / 60);
   const [localRestTime, setLocalRestTime] = useState(restTime / 60);
+  const theme = React.useContext(themeContext);
+  
 
   const handleWorkTimeChange = (value) => {
     const parsedValue = Math.max(parseInt(value) || 0, 0); 
@@ -25,16 +29,16 @@ export default function SettingsScreen({
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <ScrollView contentContainerStyle={[styles.scrollContainer , {backgroundColor:theme.secondary}]}>
       <View style={styles.container}>
         <Text style={styles.HeaderText}>Pomodoro Settings</Text>
 
-        <Text style={styles.text}>Time work (minutes):</Text>
+        <Text style={[styles.text, {color:theme.foreground}]}>Time work (minutes):</Text>
         <TextInput
           value={localWorkTime.toString()} // Mostrar el valor local
           keyboardType="numeric"
           onChangeText={handleWorkTimeChange}
-          style={styles.input}
+          style={[styles.input , {backgroundColor: theme.tertiary}]}
         />
 
         <Text style={styles.text}>Time rest (minutes):</Text>
@@ -42,7 +46,7 @@ export default function SettingsScreen({
           value={localRestTime.toString()} // Mostrar el valor local
           keyboardType="numeric"
           onChangeText={handleRestTimeChange}
-          style={styles.input}
+          style={[styles.input ,{backgroundColor: theme.tertiary}]}
         />
       </View>
 
@@ -57,7 +61,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     alignItems: 'center',
-    backgroundColor: colors.secondary,
+   
   },
   container: {
     justifyContent: 'flex-start',
@@ -67,12 +71,12 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   text: {
-    color: 'white',
+   
     fontSize: 20,
     marginTop: 20,
   },
   input: {
-    backgroundColor: colors.tertiary,
+    
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',

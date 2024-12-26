@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Svg, Circle, Line } from "react-native-svg";
 import colors from '../constants/colors.json';
+import { themeContext } from '../themesContext';
 
 export default function Timer({ time, setTime, isPlaying }) {
   // Efecto para manejar el temporizador
@@ -19,11 +20,14 @@ export default function Timer({ time, setTime, isPlaying }) {
   }, [isPlaying]);
 
   // Formatear el tiempo como MM:SS
-  const formatTime = (time) => {
+    const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
+    
     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   };
+
+  const theme = React.useContext(themeContext);
 
   return (
     <View style={styles.container}>
@@ -60,7 +64,7 @@ export default function Timer({ time, setTime, isPlaying }) {
       </Svg>
 
       {/* Texto del temporizador */}
-      <Text style={styles.timerText}>{formatTime(time)}</Text>
+      <Text style={[styles.timerText ,{color: theme.primary}]}>{formatTime(time)}</Text>
       </View>
   );
 }
@@ -76,7 +80,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   timerText: {
-    color: colors.primary,
+    
     fontWeight: 'bold',
     fontSize: 50,
     textAlign: "center",

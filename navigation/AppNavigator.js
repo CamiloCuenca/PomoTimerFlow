@@ -2,13 +2,16 @@ import React,{use, useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { themeContext } from '../themesContext';
 
-import colors from '../constants/colors.json';
+
+
 
 //Screens
 import MainTimerScreen from '../screens/MainTimerScreen';
 import StatsScreen from '../screens/StatsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -16,8 +19,15 @@ export default function AppNavigator(){
   const [workTime, setWorkTime] = useState(25 *60);
   const [restTime, setRestTime] = useState(5 * 60);
 
+  
+  const theme = React.useContext(themeContext);
+  
+
 
     return(
+ 
+
+     
         <NavigationContainer >
       <Tab.Navigator 
       initialRouteName='Timer' 
@@ -40,16 +50,16 @@ export default function AppNavigator(){
 
 
             return <Ionicons name={iconName} size={size} color={color} />;
-        }, tabBarActiveTintColor: colors.primary, 
-           tabBarActiveBackgroundColor: colors.secondary,
-           tabBarInactiveBackgroundColor: colors.tertiary,
+        }, tabBarActiveTintColor: theme.primary, 
+           tabBarActiveBackgroundColor: theme.secondary,
+           tabBarInactiveBackgroundColor: theme.tertiary,
         
         tabBarLabelStyle: {
             fontSize: 12,
             fontFamily: 'Georgia',
           },
           tabBarStyle: { 
-            borderColor: colors.primary,
+            borderColor: theme.primary,
             position: 'absolute', 
             height: 60,  // Altura del tab bar
         
@@ -57,7 +67,7 @@ export default function AppNavigator(){
            
           headerStyle:{
             height: 80,
-            backgroundColor: colors.primary,
+            backgroundColor: theme.primary,
             
           }
 

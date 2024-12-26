@@ -1,16 +1,18 @@
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import colors from '../constants/colors.json';
+import { themeContext } from '../themesContext';
 
 
 export default function PlayPauseButton({ isPlaying, onPress }) {
+    const theme = React.useContext(themeContext);
+  
   return (
-    <Pressable style={styles.button} onPress={onPress}>
+    <Pressable style={[styles.button,{backgroundColor: theme.primary}]} onPress={onPress}>
       <Ionicons
         name={isPlaying ? 'pause' : 'play'}
         size={32}
-        color={colors.secondary}
+        color={theme.secondary}
       />
     </Pressable>
   );
@@ -18,7 +20,7 @@ export default function PlayPauseButton({ isPlaying, onPress }) {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.primary,
+
     padding: 20,
     borderRadius: 50,
   },

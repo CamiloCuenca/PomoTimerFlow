@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import colors from '../constants/colors.json';
+
+import { themeContext } from '../themesContext';
 
 // Components
 import PlayPauseButton from '../components/PlayPauseButton';
@@ -22,6 +23,7 @@ export default function MainTimerScreen({
 
   const [isWorkSession, setIsWorkSession] = useState(true); // Indica si es una sesión de trabajo
   const [completedCycles, setCompletedCycles] = useState([]); // Array para registrar ciclos completados
+  const theme = React.useContext(themeContext)
 
   useEffect(() => {
     if (workTime === 0) {
@@ -47,7 +49,7 @@ export default function MainTimerScreen({
   }, [workTime, isWorkSession]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: theme.secondary}]}>
       <View style={styles.timer}>
         <Timer time={workTime} setTime={setWorkTime} isPlaying={isPlaying} />
       </View>
@@ -64,12 +66,13 @@ export default function MainTimerScreen({
 }
 
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: colors.secondary,
+    
   },
   timer: {
     

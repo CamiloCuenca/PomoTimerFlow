@@ -7,14 +7,14 @@ import { themeContext } from '../themesContext';
 
 export default function IconButton({ iconName, onPress }) {  // Asegúrate de pasar `onPress` como prop
   
-  const theme = React.useContext(themeContext);
+  const { theme } = React.useContext(themeContext);
   
   return (
     <Pressable style={[styles.button, {backgroundColor: theme.primary , color: theme.foreground}]} onPress={onPress}>  {/* Agregar onPress aquí */}
       <Ionicons 
         name={iconName} 
         size={32}
-        color={colors.secondary}
+        color={theme.foreground}
       />
     </Pressable>
   );

@@ -27,7 +27,7 @@ export default function Timer({ time, setTime, isPlaying }) {
     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   };
 
-  const theme = React.useContext(themeContext);
+  const { theme } = React.useContext(themeContext);
 
   return (
     <View style={styles.container}>
@@ -37,9 +37,9 @@ export default function Timer({ time, setTime, isPlaying }) {
           cx="175"
           cy="175"
           r="170" // Radio del círculo interno
-          stroke={colors.tertiary}
+          stroke={theme.tertiary}
           strokeWidth="10"
-          fill={'black'}
+          fill={theme.tertiary}
         />
         {/* Marcas del reloj */}
         {Array.from({ length: 12 }).map((_, index) => {

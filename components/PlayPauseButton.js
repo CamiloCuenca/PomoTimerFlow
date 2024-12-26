@@ -5,14 +5,14 @@ import { themeContext } from '../themesContext';
 
 
 export default function PlayPauseButton({ isPlaying, onPress }) {
-    const theme = React.useContext(themeContext);
+  const { theme } = React.useContext(themeContext);
   
   return (
     <Pressable style={[styles.button,{backgroundColor: theme.primary}]} onPress={onPress}>
       <Ionicons
         name={isPlaying ? 'pause' : 'play'}
         size={32}
-        color={theme.secondary}
+        color={theme.foreground}
       />
     </Pressable>
   );

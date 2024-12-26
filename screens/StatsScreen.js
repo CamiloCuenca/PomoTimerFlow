@@ -4,7 +4,7 @@ import { themeContext } from '../themesContext';
 
 
 export default function StatsScreen(){
-    const theme = React.useContext(themeContext);
+  const { theme } = React.useContext(themeContext);
 
     return (
         <View style={[styles.container , {backgroundColor: theme.secondary}]}>

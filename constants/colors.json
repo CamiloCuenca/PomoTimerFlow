@@ -6,9 +6,9 @@
     "foreground": "#FFFFFF"
   },
   "dark": {
-    "primary": "#4CAF50",
-    "secondary": "#121212",
-    "tertiary": "#2C2C2C",
+    "primary": "#6A1E55",
+    "secondary": "#3B1C32",
+    "tertiary": "#1A1A1D",
     "foreground": "#FFFFFF"
   },
   "blue": {

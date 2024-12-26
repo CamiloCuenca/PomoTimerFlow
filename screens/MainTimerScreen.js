@@ -23,7 +23,7 @@ export default function MainTimerScreen({
 
   const [isWorkSession, setIsWorkSession] = useState(true); // Indica si es una sesión de trabajo
   const [completedCycles, setCompletedCycles] = useState([]); // Array para registrar ciclos completados
-  const theme = React.useContext(themeContext)
+  const { theme } = React.useContext(themeContext);
 
   useEffect(() => {
     if (workTime === 0) {

@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
-import { useState } from 'react';
 import { themeContext } from '../themesContext';
-
+import { Picker } from '@react-native-picker/picker';
 
 export default function SettingsScreen({
   workTime,
@@ -10,48 +9,74 @@ export default function SettingsScreen({
   restTime,
   setRestTime,
 }) {
-  // Estados locales para los valores de los inputs
   const [localWorkTime, setLocalWorkTime] = useState(workTime / 60);
   const [localRestTime, setLocalRestTime] = useState(restTime / 60);
-  const theme = React.useContext(themeContext);
-  
+  const [selectedTheme, setSelectedTheme] = useState('purple'); // Estado para el tema seleccionado
+  const { theme, changeTheme } = React.useContext(themeContext); // Desestructuración de 'theme' y 'changeTheme'
 
   const handleWorkTimeChange = (value) => {
-    const parsedValue = Math.max(parseInt(value) || 0, 0); 
+    const parsedValue = Math.max(parseInt(value) || 0, 0);
     setLocalWorkTime(parsedValue);
-    setWorkTime(parsedValue * 60); // Actualizar el estado global
+    setWorkTime(parsedValue * 60);
   };
 
   const handleRestTimeChange = (value) => {
     const parsedValue = Math.max(parseInt(value) || 0, 0);
     setLocalRestTime(parsedValue);
-    setRestTime(parsedValue * 60); // Actualizar el estado global
+    setRestTime(parsedValue * 60);
+  };
+
+  const handleThemeChange = (themeName) => {
+    setSelectedTheme(themeName);
+    changeTheme(themeName); // Cambiar el tema seleccionado
   };
 
   return (
-    <ScrollView contentContainerStyle={[styles.scrollContainer , {backgroundColor:theme.secondary}]}>
+    <ScrollView
+      contentContainerStyle={[styles.scrollContainer, { backgroundColor: theme.secondary }]}
+    >
       <View style={styles.container}>
-        <Text style={styles.HeaderText}>Pomodoro Settings</Text>
+        <Text style={[styles.HeaderText, { color: theme.foreground }]}>Pomodoro Settings</Text>
 
-        <Text style={[styles.text, {color:theme.foreground}]}>Time work (minutes):</Text>
+        <Text style={[styles.text, { color: theme.foreground }]}>Time work (minutes):</Text>
         <TextInput
-          value={localWorkTime.toString()} // Mostrar el valor local
+          value={localWorkTime.toString()}
           keyboardType="numeric"
           onChangeText={handleWorkTimeChange}
-          style={[styles.input , {backgroundColor: theme.tertiary}]}
+          style={[styles.input, { backgroundColor: theme.tertiary, color: theme.foreground }]}
         />
 
-        <Text style={styles.text}>Time rest (minutes):</Text>
+        <Text style={[styles.text, { color: theme.foreground }]}>Time rest (minutes):</Text>
         <TextInput
-          value={localRestTime.toString()} // Mostrar el valor local
+          value={localRestTime.toString()}
           keyboardType="numeric"
           onChangeText={handleRestTimeChange}
-          style={[styles.input ,{backgroundColor: theme.tertiary}]}
+          style={[styles.input, { backgroundColor: theme.tertiary, color: theme.foreground }]}
         />
       </View>
 
       <View style={styles.container}>
-        <Text style={styles.HeaderText}>Themes Settings</Text>
+        <Text style={[styles.HeaderText, { color: theme.foreground }]}>Themes Settings</Text>
+      </View>
+
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={selectedTheme}
+          onValueChange={(itemValue) => handleThemeChange(itemValue)}
+          style={styles.picker}
+        >
+         <Picker.Item label="Toxic" value="Toxic" />
+          <Picker.Item label="Dark" value="dark" />
+          <Picker.Item label="Blue" value="blue" />
+          <Picker.Item label="Light" value="light" />
+          <Picker.Item label="Ocean" value="ocean" />
+          <Picker.Item label="Sunset" value="sunset" />
+          <Picker.Item label="Forest" value="forest" />
+          <Picker.Item label="Purple" value="purple" />
+          <Picker.Item label="Red" value="red" />
+          <Picker.Item label="Yellow" value="yellow" />
+
+        </Picker>
       </View>
     </ScrollView>
   );
@@ -61,7 +86,6 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     alignItems: 'center',
-   
   },
   container: {
     justifyContent: 'flex-start',
@@ -71,13 +95,10 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   text: {
-   
     fontSize: 20,
     marginTop: 20,
   },
   input: {
-    
-    color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
     borderRadius: 12,
@@ -86,8 +107,17 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   HeaderText: {
-    color: 'white',
     fontWeight: 'bold',
     fontSize: 30,
+  },
+  pickerContainer: {
+    width: '80%',
+    backgroundColor: '#f0f0f0',
+    borderRadius: 12,
+    marginVertical: 15,
+  },
+  picker: {
+    height: 50,
+    color: '#000',
   },
 });

@@ -1,5 +1,62 @@
 {
-  "primary": "#4CAF50",
-  "secondary": "#121212",
-  "tertiary": "#2C2C2C"
+  "Toxic": {
+    "primary": "#4CAF50",
+    "secondary": "#121212",
+    "tertiary": "#2C2C2C",
+    "foreground": "#FFFFFF"
+  },
+  "dark": {
+    "primary": "#6A1E55",
+    "secondary": "#3B1C32",
+    "tertiary": "#1A1A1D",
+    "foreground": "#FFFFFF"
+  },
+  "blue": {
+    "primary": "#2196F3",
+    "secondary": "#E3F2FD",
+    "tertiary": "#BBDEFB",
+    "foreground": "#212121"
+  },
+  "light": {
+    "primary": "#FFEB3B",
+    "secondary": "#F5F5F5",
+    "tertiary": "#FFFFFF",
+    "foreground": "#212121"
+  },
+  "ocean": {
+    "primary": "#0288D1",
+    "secondary": "#00BCD4",
+    "tertiary": "#81D4FA",
+    "foreground": "#FFFFFF"
+  },
+  "sunset": {
+    "primary": "#FF5722",
+    "secondary": "#FF7043",
+    "tertiary": "#FFAB91",
+    "foreground": "#212121"
+  },
+  "forest": {
+    "primary": "#388E3C",
+    "secondary": "#2C6E2F",
+    "tertiary": "#81C784",
+    "foreground": "#FFFFFF"
+  },
+  "purple": {
+    "primary": "#9C27B0",
+    "secondary": "#AB47BC",
+    "tertiary": "#CE93D8",
+    "foreground": "#FFFFFF"
+  },
+  "red": {
+    "primary": "#F44336",
+    "secondary": "#FFCDD2",
+    "tertiary": "#EF9A9A",
+    "foreground": "#212121"
+  },
+  "yellow": {
+    "primary": "#FFEB3B",
+    "secondary": "#FFF9C4",
+    "tertiary": "#FFEE58",
+    "foreground": "#212121"
+  }
 }

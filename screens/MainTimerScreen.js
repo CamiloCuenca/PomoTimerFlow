@@ -54,7 +54,7 @@ export default function MainTimerScreen({
         <Timer time={workTime} setTime={setWorkTime} isPlaying={isPlaying} />
       </View>
 
-      <View style={styles.controlsbuttons}>
+      <View style={styles.controlButtons}>
         <PlayPauseButton
           isPlaying={isPlaying}
           onPress={() => setIsPlaying(!isPlaying)}
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     padding: '8%'
 
   },
-  controlsbuttons: {
+  controlButtons: {
     
     flexDirection: 'row',
     flexWrap: 'wrap',

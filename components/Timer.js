@@ -56,7 +56,7 @@ export default function Timer({ time, setTime, isPlaying }) {
               y1={y1}
               x2={x2}
               y2={y2}
-              stroke="white"
+              stroke= {theme.foreground }
               strokeWidth="2"
             />
           );
@@ -64,7 +64,7 @@ export default function Timer({ time, setTime, isPlaying }) {
       </Svg>
 
       {/* Texto del temporizador */}
-      <Text style={[styles.timerText ,{color: theme.primary}]}>{formatTime(time)}</Text>
+      <Text style={[styles.timerText ,{color: theme.foreground}]}>{formatTime(time)}</Text>
       </View>
   );
 }

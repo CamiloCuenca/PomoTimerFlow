@@ -1,9 +1,9 @@
 {
   "Toxic": {
-    "primary": "#4CAF50",
-    "secondary": "#121212",
-    "tertiary": "#2C2C2C",
-    "foreground": "#FFFFFF"
+    "primary": "#32CD32", 
+    "secondary": "#101010",
+    "tertiary": "#1F1F1F",
+    "foreground": "#A8FF60"
   },
   "dark": {
     "primary": "#6A1E55",
@@ -12,51 +12,51 @@
     "foreground": "#FFFFFF"
   },
   "blue": {
-    "primary": "#2196F3",
-    "secondary": "#E3F2FD",
-    "tertiary": "#BBDEFB",
-    "foreground": "#212121"
+    "primary": "#1E88E5",
+    "secondary": "#1565C0",
+    "tertiary": "#90CAF9",
+    "foreground": "#F5F5F5"
   },
   "light": {
-    "primary": "#FFEB3B",
-    "secondary": "#F5F5F5",
+    "primary": "#FFC107",
+    "secondary": "#FAFAFA",
     "tertiary": "#FFFFFF",
-    "foreground": "#212121"
+    "foreground": "#2C2C2C"
   },
   "ocean": {
     "primary": "#0288D1",
-    "secondary": "#00BCD4",
-    "tertiary": "#81D4FA",
-    "foreground": "#FFFFFF"
+    "secondary": "#26C6DA",
+    "tertiary": "#80DEEA",
+    "foreground": "#E3F2FD"
   },
   "sunset": {
-    "primary": "#FF5722",
-    "secondary": "#FF7043",
-    "tertiary": "#FFAB91",
-    "foreground": "#212121"
+    "primary": "#FF7043",
+    "secondary": "#FF8A65",
+    "tertiary": "#FFCCBC",
+    "foreground": "#3E2723"
   },
   "forest": {
-    "primary": "#388E3C",
-    "secondary": "#2C6E2F",
-    "tertiary": "#81C784",
-    "foreground": "#FFFFFF"
+    "primary": "#2E7D32",
+    "secondary": "#1B5E20",
+    "tertiary": "#66BB6A",
+    "foreground": "#E8F5E9"
   },
   "purple": {
-    "primary": "#9C27B0",
-    "secondary": "#AB47BC",
-    "tertiary": "#CE93D8",
-    "foreground": "#FFFFFF"
+    "primary": "#8E24AA",
+    "secondary": "#6A1B9A",
+    "tertiary": "#BA68C8",
+    "foreground": "#F3E5F5"
   },
   "red": {
-    "primary": "#F44336",
-    "secondary": "#FFCDD2",
-    "tertiary": "#EF9A9A",
-    "foreground": "#212121"
+    "primary": "#E53935",
+    "secondary": "#D32F2F",
+    "tertiary": "#1A1A1D",
+    "foreground": "#FBE9E7"
   },
   "yellow": {
     "primary": "#FFEB3B",
-    "secondary": "#FFF9C4",
+    "secondary": "#FFF59D",
     "tertiary": "#FFEE58",
-    "foreground": "#212121"
+    "foreground": "#2C2C2C"
   }
 }

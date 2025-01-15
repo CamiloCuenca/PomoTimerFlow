@@ -8,6 +8,11 @@ import { themeContext, ThemeProvider } from '../themesContext';  // Asegúrate d
 import MainTimerScreen from '../screens/MainTimerScreen';
 import StatsScreen from '../screens/StatsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+// Crear una instancia de QueryClient
+const queryClient = new QueryClient();
+
 
 const Tab = createBottomTabNavigator();
 
@@ -16,6 +21,7 @@ export default function AppNavigator() {
   const [restTime, setRestTime] = useState(5 * 60);
 
   return (
+    <QueryClientProvider client={queryClient}>
     <ThemeProvider> {/* Asegúrate de envolver toda la aplicación */}
       <NavigationContainer>
         <AppNavigatorInner
@@ -26,6 +32,7 @@ export default function AppNavigator() {
         />
       </NavigationContainer>
     </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

@@ -15,7 +15,6 @@ const queryClient = new QueryClient();
 
 
 const Tab = createBottomTabNavigator();
-
 export default function AppNavigator() {
   const [workTime, setWorkTime] = useState(25 * 60);
   const [restTime, setRestTime] = useState(5 * 60);

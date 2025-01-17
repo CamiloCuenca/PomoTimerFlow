@@ -2,12 +2,12 @@ import React, { createContext, useState } from 'react';
 import colors from './constants/colors.json';
 
 // Crear el contexto
-export const themeContext = createContext(colors.purple); // Valor por defecto del contexto
+export const themeContext = createContext(colors.dark); // Valor por defecto del contexto
 
 // Proveedor del contexto
 export const ThemeProvider = ({ children }) => {
   // Usamos un estado para manejar el tema
-  const [theme, setTheme] = useState(colors.purple); // Tema inicial
+  const [theme, setTheme] = useState(colors.dark); // Tema inicial
 
   // Función para cambiar el tema
   const changeTheme = (themeName) => {

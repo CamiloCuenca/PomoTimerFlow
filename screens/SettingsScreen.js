@@ -11,7 +11,7 @@ export default function SettingsScreen({
 }) {
   const [localWorkTime, setLocalWorkTime] = useState(workTime / 60);
   const [localRestTime, setLocalRestTime] = useState(restTime / 60);
-  const [selectedTheme, setSelectedTheme] = useState('purple'); // Estado para el tema seleccionado
+  const [selectedTheme, setSelectedTheme] = useState('Dark'); // Estado para el tema seleccionado
   const { theme, changeTheme } = React.useContext(themeContext); // Desestructuración de 'theme' y 'changeTheme'
 
   const handleWorkTimeChange = (value) => {
@@ -65,8 +65,8 @@ export default function SettingsScreen({
           onValueChange={(itemValue) => handleThemeChange(itemValue)}
           style={styles.picker}
         >
-         <Picker.Item label="Toxic" value="Toxic" />
           <Picker.Item label="Dark" value="dark" />
+          <Picker.Item label="Toxic" value="Toxic" />
           <Picker.Item label="Blue" value="blue" />
           <Picker.Item label="Light" value="light" />
           <Picker.Item label="Ocean" value="ocean" />
@@ -105,6 +105,8 @@ const styles = StyleSheet.create({
     height: 50,
     width: '50%',
     marginVertical: 15,
+    borderWidth: 1,
+    borderColor: 'white',
   },
   HeaderText: {
     fontWeight: 'bold',

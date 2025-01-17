@@ -11,6 +11,7 @@ import MainTimerScreen from '../screens/MainTimerScreen';
 import StatsScreen from '../screens/StatsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import LoginScreen from '../screens/LoginScreen';
+import SignupScreen from '../screens/SignupScreen';
 
 const queryClient = new QueryClient();
 const Tab = createBottomTabNavigator();
@@ -31,52 +32,18 @@ export default function AppNavigator() {
                 {() => <MainTabs workTime={workTime} setWorkTime={setWorkTime} restTime={restTime} setRestTime={setRestTime} />}
               </Stack.Screen>
             ) : (
-              <Stack.Screen name="Login">
-                {(props) => <LoginScreen {...props} onLogin={() => setIsAuthenticated(true)} />}
-              </Stack.Screen>
+              <>
+                <Stack.Screen name="Login">
+                  {(props) => <LoginScreen {...props} onLogin={() => setIsAuthenticated(true)} />}
+                </Stack.Screen>
+                <Stack.Screen name="Signup">
+                  {(props) => <SignupScreen {...props} onSignup={() => setIsAuthenticated(true)} />}
+                </Stack.Screen>
+              </>
             )}
           </Stack.Navigator>
         </NavigationContainer>
       </ThemeProvider>
     </QueryClientProvider>
-  );
-}
-
-function MainTabs({ workTime, setWorkTime, restTime, setRestTime }) {
-  const { theme } = React.useContext(themeContext);
-
-  return (
-    <Tab.Navigator
-      initialRouteName="Timer"
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-          if (route.name === 'Timer') {
-            iconName = focused ? 'hourglass-outline' : 'hourglass';
-          } else if (route.name === 'Stats') {
-            iconName = focused ? 'stats-chart-outline' : 'stats-chart';
-          } else if (route.name === 'Settings') {
-            iconName = focused ? 'settings-outline' : 'settings';
-          }
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: theme.primary,
-        tabBarActiveBackgroundColor: theme.secondary,
-        tabBarInactiveBackgroundColor: theme.tertiary,
-        tabBarLabelStyle: { fontSize: 12, fontFamily: 'Georgia' },
-        tabBarStyle: { borderColor: theme.primary, position: 'absolute', height: 60 },
-        headerStyle: { height: 80, backgroundColor: theme.primary },
-      })}
-    >
-      <Tab.Screen
-        name="Settings"
-        children={() => <SettingsScreen workTime={workTime} setWorkTime={setWorkTime} restTime={restTime} setRestTime={setRestTime} />}
-      />
-      <Tab.Screen
-        name="Timer"
-        children={() => <MainTimerScreen workTime={workTime} setWorkTime={setWorkTime} restTime={restTime} setRestTime={setRestTime} />}
-      />
-      <Tab.Screen name="Stats" component={StatsScreen} />
-    </Tab.Navigator>
   );
 }

@@ -1,17 +1,15 @@
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
 import { themeContext } from '../themesContext';
-import React, { useState, useContext } from 'react';
 
 export default function LoginScreen({ navigation, onLogin }) {
-    const { theme } = useContext(themeContext); // ✅ Ahora accedemos correctamente al tema
-
+    const { theme } = useContext(themeContext);
     const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
         onLogin();
-        navigation.replace("MainTabs"); 
+        navigation.navigate("MainTabs");
     };
 
     return (
@@ -23,9 +21,7 @@ export default function LoginScreen({ navigation, onLogin }) {
                 value={name}
                 onChangeText={setName}
             />
-            
 
-            
             <TextInput 
                 style={[styles.input, { backgroundColor: theme.tertiary, color: theme.foreground }]} 
                 placeholder="Contraseña"
@@ -37,23 +33,20 @@ export default function LoginScreen({ navigation, onLogin }) {
 
             <Pressable 
                 style={[styles.button, { backgroundColor: theme.primary }]} 
-                accessibilityLabel="Iniciar sesión"
                 onPress={handleLogin}  
             >
-                <Text style={[styles.buttonText, { color: theme.foreground }]}>Iniciar</Text>
+                <Text style={[styles.buttonText, { color: theme.foreground }]}>Iniciar sesión</Text>
             </Pressable>
 
             <Pressable 
-                style={[styles.button, { backgroundColor: theme.primary }]} 
-                accessibilityLabel="Crear cuenta"
-                onPress={handleLogin}  
+                style={[styles.button, { backgroundColor: theme.tertiary }]} 
+                onPress={() => navigation.navigate("Signup")}  
             >
-                <Text style={[styles.buttonText, { color: theme.foreground }]}>Crear cuenta</Text>
+                <Text style={[styles.buttonText, { color: theme.primary }]}>Crear cuenta</Text>
             </Pressable>
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -68,7 +61,7 @@ const styles = StyleSheet.create({
         height: 50,
         width: '80%',
         borderWidth: 1,
-       borderColor: 'white',
+        borderColor: 'white',
         marginVertical: 10,
         paddingHorizontal: 15,
     },

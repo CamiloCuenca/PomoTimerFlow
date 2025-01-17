@@ -2,15 +2,15 @@ import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
 import { themeContext } from '../themesContext';
 import React, { useState, useContext } from 'react';
 
-export default function LoginScreen({ navigation, onLogin }) {
-    const { theme } = useContext(themeContext); // ✅ Ahora accedemos correctamente al tema
+export default function SignupScreen({ navigation, onSignup }) {
+    const { theme } = useContext(themeContext); 
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
-        onLogin();
+        onSignup();
         navigation.replace("MainTabs"); 
     };
 

@@ -1,15 +1,19 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
 import { themeContext } from '../themesContext';
+import { AuthContext } from './AuthContext';
 
-export default function LoginScreen({ navigation, onLogin }) {
+export default function LoginScreen({ navigation }) {
     const { theme } = useContext(themeContext);
+    const { login } = useContext(AuthContext); // Obtener la función de login
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
-        onLogin();
-        navigation.navigate("MainTabs");
+        // Simulación de autenticación
+        const userData = { name };
+        login(userData); // Guardar usuario en contexto
+        
     };
 
     return (

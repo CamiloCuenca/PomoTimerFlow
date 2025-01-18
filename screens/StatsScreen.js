@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { themeContext } from '../themesContext';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import LoginScreen from './LoginScreen';
+import { AuthContext } from './AuthContext'; // Contexto de autenticación
 
-export default function StatsScreen() {
+export default function StatsScreen({ navigation }) {
+    const { theme } = useContext(themeContext);
+    const { user } = useContext(AuthContext); // Obtener usuario del contexto
+
+    // Si el usuario no está autenticado, mostrar la pantalla de inicio de sesión
+    if (!user) {
+        return <LoginScreen navigation={navigation} />;
+    }
+
     // Función para obtener datos de sesiones
     const fetchSessions = async () => {
-        const response = await axios.get('http://192.168.1.44:5100/sessions'); // Cambia la URL según tu backend
+        const response = await axios.get('http://192.168.1.44:5100/sessions'); 
         return response.data;
     };
 
@@ -15,12 +25,9 @@ export default function StatsScreen() {
     const { data: sessions, isLoading, isError, error } = useQuery({
         queryKey: ['sessions'],
         queryFn: fetchSessions,
+        enabled: !!user, // Solo ejecuta la consulta si el usuario está autenticado
     });
 
-    // Tema desde el contexto
-    const { theme } = React.useContext(themeContext);
-
-    // Mostrar indicador de carga
     if (isLoading) {
         return (
             <View style={[styles.container, { backgroundColor: theme.secondary }]}>
@@ -29,7 +36,6 @@ export default function StatsScreen() {
         );
     }
 
-    // Manejar errores
     if (isError) {
         return (
             <View style={[styles.container, { backgroundColor: theme.secondary }]}>
@@ -38,7 +44,6 @@ export default function StatsScreen() {
         );
     }
 
-    // Mostrar datos
     return (
         <View style={[styles.container, { backgroundColor: theme.secondary }]}>
             <Text style={{ color: theme.primary, fontWeight: 'bold', marginBottom: 10 }}>

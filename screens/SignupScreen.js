@@ -9,10 +9,11 @@ export default function SignupScreen({ navigation, onSignup }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
-        onSignup();
-        navigation.replace("MainTabs"); 
+    const handleSignup = () => {
+        onSignup(); 
+        navigation.replace("Stats"); //Redirige a la pestaña Stats después de registrarse
     };
+    
 
     return (
         <View style={[styles.container, { backgroundColor: theme.secondary }]}>
@@ -46,7 +47,7 @@ export default function SignupScreen({ navigation, onSignup }) {
             <Pressable 
                 style={[styles.button, { backgroundColor: theme.primary }]} 
                 accessibilityLabel="Crear"
-                onPress={handleLogin}  
+                onPress={handleSignup}  
             >
                 <Text style={[styles.buttonText, { color: theme.foreground }]}>Crear</Text>
             </Pressable>

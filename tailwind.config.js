@@ -1,18 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./App.js",
+    "./app/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}"
+  ],
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
       colors: {
-        primary: "#3b53a1",
-        primaryNeutral_1: "#f4f6fa",
-        secondary: "#e57400",
-        tertiary: "#4444",
-        quaternary: "#f4fb8a",
-        disabled: "#4444",
-        bgMain: "#fffefc",
-        semitransparent: "rgba(244, 246, 250, 0.65)",
+        primary: "#17CF17",          // botón principal
+        secondary: "#125612",        // botón secundario
+        bgMain: "#112111"            // fondo general
       },
       fontFamily: {
         "alegra-medium": ["AlegreyaSans-Medium"],
@@ -25,5 +24,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
-
+};

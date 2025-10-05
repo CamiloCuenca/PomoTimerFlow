@@ -5,12 +5,14 @@ export default function Layout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
+        headerShown: false, //@TODO Poner luego que sea visible
         tabBarActiveTintColor: "#17CF17",
         tabBarInactiveTintColor: "#ccc",
         tabBarStyle: {
           backgroundColor: "#112111",
-          borderTopWidth: 0,
+          borderTopWidth: 1,
+          borderTopColor: "#125612",
+
         },
       }}
     >

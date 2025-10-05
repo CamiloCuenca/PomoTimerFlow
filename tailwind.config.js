@@ -9,14 +9,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#3b53a1",
-        primaryNeutral_1: "#f4f6fa",
-        secondary: "#e57400",
-        tertiary: "#444444",
-        quaternary: "#f4fb8a",
-        disabled: "#444444",
-        bgMain: "#fffefc",
-        semitransparent: "rgba(244, 246, 250, 0.65)",
+        primary: "#17CF17",          // botón principal
+        secondary: "#125612",        // botón secundario
+        bgMain: "#112111"            // fondo general
       },
       fontFamily: {
         "alegra-medium": ["AlegreyaSans-Medium"],
@@ -29,4 +24,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};

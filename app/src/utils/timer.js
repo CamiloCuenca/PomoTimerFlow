@@ -1,5 +1,5 @@
 // Constantes
-const WORK_DURATION = 1 * 60;      // 25 minutos
+const WORK_DURATION = 25 * 60;      // 25 minutos
 const SHORT_BREAK = 5 * 60;         // 5 minutos
 const LONG_BREAK = 15 * 60;         // 15 minutos
 const WORK_SESSIONS_BEFORE_LONG_BREAK = 4;

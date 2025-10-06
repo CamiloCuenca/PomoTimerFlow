@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from 'react-native'; 
 
 export default function Layout() {
   
@@ -18,8 +19,24 @@ export default function Layout() {
         headerStyle: {
           backgroundColor: "#112111",
         },
+        headerTitleStyle: {
+          fontSize: 25,
+        },
         headerTintColor: "#fff",
         headerTitleAlign: "center",
+     
+        headerLeft: () => (
+          <Image 
+            source={require("../../assets/icon-mini.png")} 
+            style={{ 
+              width: 40, 
+              height: 40, 
+              marginLeft: 15,
+              borderRadius: 15  // Opcional: para hacerlo circular
+            }} 
+            resizeMode="contain"
+          />
+        ),
         
       }}
     >

@@ -29,7 +29,7 @@ export default function ProgressBar() {
       <Svg width={size} height={size}>
         {/* Fondo del círculo */}
         <Circle
-          stroke="#4B5563"
+          stroke="#125612"
           fill="none"
           cx={size / 2}
           cy={size / 2}
@@ -57,7 +57,9 @@ export default function ProgressBar() {
         <Text className="text-5xl font-bold text-white">
           {time}
         </Text>
-        <Text className="text-white mt-2">
+
+        <Text className="text-white  text-xs">minutos</Text>
+        <Text className="text-white mt-3">
           {timer.getState().timerType === 'work' ? 'Trabajo' : 'Descanso'}
         </Text>
       </View>

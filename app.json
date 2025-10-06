@@ -1,8 +1,9 @@
 {
   "expo": {
+    "owner": "camilocuenca",
     "name": "PomoTimerFlow",
     "slug": "PomoTimerFlow",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -19,15 +20,22 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.camilocuenca.PomoTimerFlow"
     },
     "web": {
       "favicon": "./assets/favicon.png",
-       "bundler": "metro"
+      "bundler": "metro"
     },
     "plugins": [
       "expo-sqlite",
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "4c07fa35-e14a-4cb2-8f43-4b0d3d35f80f"
+      }
+    }
   }
 }

@@ -11,7 +11,8 @@ module.exports = {
       colors: {
         primary: "#17CF17",          // botón principal
         secondary: "#125612",        // botón secundario
-        bgMain: "#112111"            // fondo general
+        bgMain: "#112111" ,    // fondo general
+        bgDarkGreen: "#1f4e33", // fondo oscuro
       },
       fontFamily: {
         "alegra-medium": ["AlegreyaSans-Medium"],

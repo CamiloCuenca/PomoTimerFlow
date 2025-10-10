@@ -49,15 +49,23 @@ const LineChartCustom = () => {
       margin: 10,
       paddingHorizontal: 5
     }}>
-      <Text style={{ 
-        color: 'white', 
-        fontSize: 16, 
-        fontWeight: 'bold', 
-        marginBottom: 20,
-        paddingLeft: 15
-      }}>
-        Sesiones por Día
-      </Text>
+     <View className="flex-row justify-between">
+
+<View className="flex-col">
+  <Text className="color-gray-400  text-xl text-left pl-5 pt-2">
+    Sesiones por día
+  </Text>
+
+  <Text className="color-white text-2xl font-bold text-left pl-5 pt-2 pb-2">
+    16
+  </Text>
+</View>
+
+<Text className="color-gray-400 text-lg text-right pt-2">
+  Ultima semana
+</Text>
+
+</View>
       
       <LineChart
         areaChart

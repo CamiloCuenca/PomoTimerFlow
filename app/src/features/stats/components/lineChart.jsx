@@ -48,7 +48,7 @@ const LineChartCustom = ({
 
   // 🔼 Escala del eje Y redondeada (más estética)
   const maxSessions = Math.max(...fullWeekData.map(d => d.sessions), 1);
-  const roundedMax = Math.ceil(maxSessions * 1.2); // agrega un 20% de margen arriba
+  const roundedMax = Math.ceil(maxSessions * 1);
 
   // 🎯 Distancia entre puntos ajustada automáticamente
   const spacing = fullWeekData.length <= 4 ? 80 : 50;
@@ -112,6 +112,7 @@ const LineChartCustom = ({
         yAxisLabelPrefix=""
         xAxisLabelTexts={dayOrder}
         initialSpacing={25}
+        hideRules
       />
     </View>
   );

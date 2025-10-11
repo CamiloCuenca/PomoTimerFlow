@@ -7,6 +7,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "scheme": "pomotimerflow",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -14,7 +15,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.camilocuenca.PomoTimerFlow"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,9 +30,23 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-sqlite",
-      "expo-router"
-    ],
+  [
+    "expo-sqlite",
+    {
+      "enableFTS": true,
+      "useSQLCipher": true,
+      "android": {
+        "enableFTS": false,
+        "useSQLCipher": false
+      },
+      "ios": {
+        "customBuildFlags": ["-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_SNAPSHOT=1"]
+      }
+    }
+  ],
+  "expo-router"
+]
+,
     "extra": {
       "router": {},
       "eas": {

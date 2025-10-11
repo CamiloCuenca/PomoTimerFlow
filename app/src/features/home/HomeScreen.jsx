@@ -1,8 +1,8 @@
-import { View } from "react-native";
+import { View, AppState } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import ProgressBar from "./components/ProgressBar";
-import { useState, useEffect } from "react";
-import timer from "../../utils/timer";
+import { useState, useEffect, useRef } from "react";
+import timer, { initAppStateListener, loadTimerState, clearTimerState } from "../../utils/timer";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const storeSession = async (type) => {
@@ -25,14 +25,27 @@ const storeSession = async (type) => {
 
 export default function HomeScreen() {
   const [isRunning, setIsRunning] = useState(false);
+  const appState = useRef(AppState.currentState);
 
+  // Inicializar el estado del temporizador al cargar el componente
   useEffect(() => {
+    const initTimer = async () => {
+      const savedState = await loadTimerState();
+      if (savedState) {
+        setIsRunning(savedState.isRunning);
+      }
+    };
+    
+    initTimer();
+    
+    // Inicializar el listener de cambio de estado de la app
+    initAppStateListener();
+    
     // Suscribirse al evento de finalización del temporizador
     const onTimerComplete = () => {
       const currentState = timer.getState();
-      // Solo guardar cuando el temporizador se complete, no en cambios manuales
       storeSession(currentState.timerType);
-      handleStartPause();
+      setIsRunning(false);
     };
     
     timer.on('complete', onTimerComplete);
@@ -42,6 +55,22 @@ export default function HomeScreen() {
       timer.off('complete', onTimerComplete);
     };
   }, []);
+  
+  // Manejar cambios en el estado de la aplicación
+ useEffect(() => {
+  const subscription = AppState.addEventListener('change', nextAppState => {
+    if (nextAppState === 'active' && appState.current.match(/inactive|background/)) {
+      // Actualizamos el estado local basado en el estado real del temporizador
+      const currentState = timer.getState();
+      setIsRunning(currentState.isRunning);
+    }
+    appState.current = nextAppState;
+  });
+
+  return () => {
+    subscription.remove();
+  };
+}, []);
 
   const handleStartPause = () => {
     if (isRunning) {
@@ -52,9 +81,10 @@ export default function HomeScreen() {
     setIsRunning(!isRunning);
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
     timer.reset();
     setIsRunning(false);
+    await clearTimerState();
   };
 
   const handleCambiar = () => {

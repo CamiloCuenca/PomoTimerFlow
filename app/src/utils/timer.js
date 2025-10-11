@@ -20,7 +20,14 @@ const eventListeners = {
 
 // Funciones del temporizador
 function startTimer(callback) {
+  // Si ya está corriendo, no hacemos nada
   if (state.isRunning) return;
+  
+  // Limpiamos cualquier intervalo existente por si acaso
+  if (state.intervalId) {
+    clearInterval(state.intervalId);
+    state.intervalId = null;
+  }
   
   state.isRunning = true;
   state.intervalId = setInterval(() => {
@@ -111,6 +118,99 @@ function handleTimerComplete() {
   // Iniciar automáticamente el siguiente temporizador
   startTimer();
 }
+
+// Ejecución en segundo plano
+import { AppState } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const TIMER_STATE_KEY = "@PomoTimer_state";
+
+// Guardar el estado actual del temporizador
+export const saveTimerState = async () => {
+  try {
+    await AsyncStorage.setItem(TIMER_STATE_KEY, JSON.stringify({
+      ...state,
+      intervalId: null, // No guardamos el intervalo
+      lastUpdated: Date.now()
+    }));
+  } catch (e) {
+    console.error('Error al guardar el estado del temporizador:', e);
+  }
+};
+
+// Cargar el estado guardado del temporizador
+export const loadTimerState = async () => {
+  try {
+    const savedState = await AsyncStorage.getItem(TIMER_STATE_KEY);
+    if (!savedState) return null;
+    
+    const parsedState = JSON.parse(savedState);
+    if (!parsedState) return null;
+
+    // Restaurar el estado, excepto el intervalo
+    const { intervalId, lastUpdated, ...savedStateData } = parsedState;
+    
+    // Calcular el tiempo transcurrido desde la última actualización
+    if (savedStateData.isRunning && lastUpdated) {
+      const elapsed = Math.floor((Date.now() - lastUpdated) / 1000);
+      savedStateData.timeLeft = Math.max(0, (savedStateData.timeLeft || 0) - elapsed);
+      
+      // Si el tiempo se agotó, manejamos la finalización
+      if (savedStateData.timeLeft <= 0) {
+        savedStateData.isRunning = false;
+        // No llamamos a handleTimerComplete aquí para evitar bucles
+      }
+    }
+    
+    return savedStateData;
+  } catch (e) {
+    console.error('Error al cargar el estado del temporizador:', e);
+    return null;
+  }
+};
+
+// Limpiar el estado guardado
+export const clearTimerState = async () => {
+  try {
+    await AsyncStorage.removeItem(TIMER_STATE_KEY);
+  } catch (e) {
+    console.error('Error al limpiar el estado del temporizador:', e);
+  }
+};
+
+// Inicializar el manejo de AppState
+let appStateListener = null;
+
+export const initAppStateListener = () => {
+  if (appStateListener) return appStateListener;
+  
+  appStateListener = AppState.addEventListener('change', async (nextAppState) => {
+    if (nextAppState === 'background') {
+      // Guardar el estado cuando la app va a segundo plano
+      await saveTimerState();
+    } else if (nextAppState === 'active') {
+      // Restaurar el estado cuando la app vuelve al primer plano
+      const savedState = await loadTimerState();
+      if (savedState) {
+        // Solo actualizamos el estado si el temporizador estaba corriendo
+        if (savedState.isRunning) {
+          state = { 
+            ...state, 
+            ...savedState,
+            isRunning: false // Lo pausamos temporalmente
+          };
+          // Iniciamos el temporizador manualmente
+          startTimer();
+        } else {
+          // Si no estaba corriendo, solo actualizamos el estado sin iniciar
+          state = { ...state, ...savedState };
+        }
+      }
+    }
+  });
+  
+  return appStateListener;
+};
 
 // Exportar solo lo necesario
 export default {

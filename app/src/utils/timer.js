@@ -1,7 +1,7 @@
 // Constantes
-const WORK_DURATION = 25 * 60;      // 25 minutos
-const SHORT_BREAK = 5 * 60;         // 5 minutos
-const LONG_BREAK = 15 * 60;         // 15 minutos
+const WORK_DURATION = 1 * 60;      // 1 minuto para pruebas
+const SHORT_BREAK = 5 * 60;        // 5 minutos
+const LONG_BREAK = 15 * 60;        // 15 minutos
 const WORK_SESSIONS_BEFORE_LONG_BREAK = 4;
 
 // Estado del temporizador
@@ -11,6 +11,11 @@ let state = {
   timerType: 'work', // 'work' | 'shortBreak' | 'longBreak'
   workSessionsCompleted: 0,
   intervalId: null
+};
+
+// Eventos
+const eventListeners = {
+  complete: []
 };
 
 // Funciones del temporizador
@@ -43,25 +48,6 @@ function resetTimer() {
   state.intervalId = null;
 }
 
-function handleTimerComplete() {
-  clearInterval(state.intervalId);
-  
-  if (state.timerType === 'work') {
-    state.workSessionsCompleted++;
-    
-    if (state.workSessionsCompleted % WORK_SESSIONS_BEFORE_LONG_BREAK === 0) {
-      setTimerType('longBreak');
-    } else {
-      setTimerType('shortBreak');
-    }
-  } else {
-    setTimerType('work');
-  }
-  
-  // Iniciar automáticamente el siguiente temporizador
-  startTimer();
-}
-
 function setTimerType(type) {
   state.timerType = type;
   state.timeLeft = getCurrentTimerDuration();
@@ -82,6 +68,50 @@ function getFormattedTime() {
   return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
+// Funciones de eventos
+function on(event, callback) {
+  if (!eventListeners[event]) {
+    eventListeners[event] = [];
+  }
+  eventListeners[event].push(callback);
+  return () => eventListeners[event] = eventListeners[event].filter(cb => cb !== callback);
+}
+
+function off(event, callback) {
+  if (!eventListeners[event]) return;
+  eventListeners[event] = eventListeners[event].filter(cb => cb !== callback);
+}
+
+function emit(event, data) {
+  if (!eventListeners[event]) return;
+  eventListeners[event].forEach(callback => callback(data));
+}
+
+function handleTimerComplete() {
+  clearInterval(state.intervalId);
+  
+  // Emitir evento de finalización antes de cambiar el tipo
+  emit('complete', { 
+    completedType: state.timerType,
+    workSessionsCompleted: state.workSessionsCompleted
+  });
+
+  if (state.timerType === 'work') {
+    state.workSessionsCompleted++;
+    
+    if (state.workSessionsCompleted % WORK_SESSIONS_BEFORE_LONG_BREAK === 0) {
+      setTimerType('longBreak');
+    } else {
+      setTimerType('shortBreak');
+    }
+  } else {
+    setTimerType('work');
+  }
+  
+  // Iniciar automáticamente el siguiente temporizador
+  startTimer();
+}
+
 // Exportar solo lo necesario
 export default {
   start: startTimer,
@@ -90,6 +120,8 @@ export default {
   setTimerType,
   getCurrentTime: getFormattedTime,
   getState: () => ({ ...state }),
+  on,
+  off,
   getProgress: () => {
     const totalTime = getCurrentTimerDuration();
     return (totalTime - state.timeLeft) / totalTime;

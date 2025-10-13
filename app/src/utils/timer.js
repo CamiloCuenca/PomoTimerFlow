@@ -1,43 +1,60 @@
-// Constantes
-const WORK_DURATION = 1 * 60;      // 1 minuto para pruebas
-const SHORT_BREAK = 5 * 60;        // 5 minutos
-const LONG_BREAK = 15 * 60;        // 15 minutos
-const WORK_SESSIONS_BEFORE_LONG_BREAK = 4;
+// Variables editables 
+let workDuration = 25;    
+let shortBreak = 5;        
+let longBreak = 15;       
+let workSessionsBeforeLongBreak = 4; 
+
+// Eventos
+const eventListeners = {
+  complete: [],
+  tick: [],
+  stateChange: []
+};
+
+function getCurrentTimerDuration(timerType) {
+  switch (timerType) {
+    case 'work': return workDuration * 60;
+    case 'shortBreak': return shortBreak * 60;
+    case 'longBreak': return longBreak * 60;
+    default: return workDuration * 60;
+  }
+}
 
 // Estado del temporizador
 let state = {
-  timeLeft: WORK_DURATION,
+  timeLeft: 0, // Will be set by resetTimer()
   isRunning: false,
   timerType: 'work', // 'work' | 'shortBreak' | 'longBreak'
   workSessionsCompleted: 0,
   intervalId: null
 };
 
-// Eventos
-const eventListeners = {
-  complete: []
-};
-
 // Funciones del temporizador
 function startTimer(callback) {
-  // Si ya está corriendo, no hacemos nada
   if (state.isRunning) return;
   
-  // Limpiamos cualquier intervalo existente por si acaso
   if (state.intervalId) {
     clearInterval(state.intervalId);
     state.intervalId = null;
   }
   
   state.isRunning = true;
+  emit('stateChange', { ...state });
+  
   state.intervalId = setInterval(() => {
     state.timeLeft--;
+    
+    // Notificar cada segundo
+    if (callback) callback(getFormattedTime());
+    emit('tick', { 
+      timeLeft: state.timeLeft,
+      formattedTime: getFormattedTime(),
+      progress: getProgress()
+    });
     
     if (state.timeLeft <= 0) {
       handleTimerComplete();
     }
-    
-    if (callback) callback(getFormattedTime());
   }, 1000);
 }
 
@@ -46,27 +63,26 @@ function pauseTimer() {
   
   clearInterval(state.intervalId);
   state.isRunning = false;
+  state.intervalId = null;
+  emit('stateChange', { ...state });
 }
 
 function resetTimer() {
   clearInterval(state.intervalId);
+  state.timeLeft = getCurrentTimerDuration(state.timerType);
   state.isRunning = false;
-  state.timeLeft = getCurrentTimerDuration();
   state.intervalId = null;
+  emit('stateChange', { ...state });
 }
 
 function setTimerType(type) {
-  state.timerType = type;
-  state.timeLeft = getCurrentTimerDuration();
-}
-
-function getCurrentTimerDuration() {
-  switch (state.timerType) {
-    case 'work': return WORK_DURATION;
-    case 'shortBreak': return SHORT_BREAK;
-    case 'longBreak': return LONG_BREAK;
-    default: return WORK_DURATION;
+  if (!['work', 'shortBreak', 'longBreak'].includes(type)) {
+    console.error('Tipo de temporizador no válido:', type);
+    return;
   }
+  
+  state.timerType = type;
+  resetTimer();
 }
 
 function getFormattedTime() {
@@ -75,13 +91,21 @@ function getFormattedTime() {
   return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-// Funciones de eventos
+function getProgress() {
+  const totalTime = getCurrentTimerDuration(state.timerType);
+  return 1 - (state.timeLeft / totalTime);
+}
+
+// Manejo de eventos
 function on(event, callback) {
   if (!eventListeners[event]) {
     eventListeners[event] = [];
   }
   eventListeners[event].push(callback);
-  return () => eventListeners[event] = eventListeners[event].filter(cb => cb !== callback);
+  
+  return () => {
+    eventListeners[event] = eventListeners[event].filter(cb => cb !== callback);
+  };
 }
 
 function off(event, callback) {
@@ -90,14 +114,13 @@ function off(event, callback) {
 }
 
 function emit(event, data) {
-  if (!eventListeners[event]) return;
-  eventListeners[event].forEach(callback => callback(data));
+  const listeners = eventListeners[event] || [];
+  listeners.forEach(callback => callback(data));
 }
 
 function handleTimerComplete() {
   clearInterval(state.intervalId);
   
-  // Emitir evento de finalización antes de cambiar el tipo
   emit('complete', { 
     completedType: state.timerType,
     workSessionsCompleted: state.workSessionsCompleted
@@ -106,7 +129,7 @@ function handleTimerComplete() {
   if (state.timerType === 'work') {
     state.workSessionsCompleted++;
     
-    if (state.workSessionsCompleted % WORK_SESSIONS_BEFORE_LONG_BREAK === 0) {
+    if (state.workSessionsCompleted % workSessionsBeforeLongBreak === 0) {
       setTimerType('longBreak');
     } else {
       setTimerType('shortBreak');
@@ -115,7 +138,6 @@ function handleTimerComplete() {
     setTimerType('work');
   }
   
-  // Iniciar automáticamente el siguiente temporizador
   startTimer();
 }
 
@@ -125,7 +147,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TIMER_STATE_KEY = "@PomoTimer_state";
 
-// Guardar el estado actual del temporizador
 export const saveTimerState = async () => {
   try {
     await AsyncStorage.setItem(TIMER_STATE_KEY, JSON.stringify({
@@ -138,7 +159,6 @@ export const saveTimerState = async () => {
   }
 };
 
-// Cargar el estado guardado del temporizador
 export const loadTimerState = async () => {
   try {
     const savedState = await AsyncStorage.getItem(TIMER_STATE_KEY);
@@ -147,18 +167,14 @@ export const loadTimerState = async () => {
     const parsedState = JSON.parse(savedState);
     if (!parsedState) return null;
 
-    // Restaurar el estado, excepto el intervalo
     const { intervalId, lastUpdated, ...savedStateData } = parsedState;
     
-    // Calcular el tiempo transcurrido desde la última actualización
     if (savedStateData.isRunning && lastUpdated) {
       const elapsed = Math.floor((Date.now() - lastUpdated) / 1000);
       savedStateData.timeLeft = Math.max(0, (savedStateData.timeLeft || 0) - elapsed);
       
-      // Si el tiempo se agotó, manejamos la finalización
       if (savedStateData.timeLeft <= 0) {
         savedStateData.isRunning = false;
-        // No llamamos a handleTimerComplete aquí para evitar bucles
       }
     }
     
@@ -169,7 +185,6 @@ export const loadTimerState = async () => {
   }
 };
 
-// Limpiar el estado guardado
 export const clearTimerState = async () => {
   try {
     await AsyncStorage.removeItem(TIMER_STATE_KEY);
@@ -178,7 +193,6 @@ export const clearTimerState = async () => {
   }
 };
 
-// Inicializar el manejo de AppState
 let appStateListener = null;
 
 export const initAppStateListener = () => {
@@ -186,24 +200,20 @@ export const initAppStateListener = () => {
   
   appStateListener = AppState.addEventListener('change', async (nextAppState) => {
     if (nextAppState === 'background') {
-      // Guardar el estado cuando la app va a segundo plano
       await saveTimerState();
     } else if (nextAppState === 'active') {
-      // Restaurar el estado cuando la app vuelve al primer plano
       const savedState = await loadTimerState();
       if (savedState) {
-        // Solo actualizamos el estado si el temporizador estaba corriendo
         if (savedState.isRunning) {
           state = { 
             ...state, 
             ...savedState,
-            isRunning: false // Lo pausamos temporalmente
+            isRunning: false
           };
-          // Iniciamos el temporizador manualmente
           startTimer();
         } else {
-          // Si no estaba corriendo, solo actualizamos el estado sin iniciar
           state = { ...state, ...savedState };
+          emit('stateChange', { ...state });
         }
       }
     }
@@ -212,7 +222,58 @@ export const initAppStateListener = () => {
   return appStateListener;
 };
 
-// Exportar solo lo necesario
+// Getters
+export const getWorkDuration = () => workDuration;
+export const getShortBreak = () => shortBreak;
+export const getLongBreak = () => longBreak;
+export const getWorkSessionsBeforeLongBreak = () => workSessionsBeforeLongBreak;
+
+// Setters
+export const setWorkDuration = (minutes) => {
+  if (typeof minutes !== 'number' || minutes < 1) {
+    console.error('Duración de trabajo no válida:', minutes);
+    return;
+  }
+  workDuration = minutes;
+  if (state.timerType === 'work') {
+    resetTimer();
+  }
+}
+
+export const setShortBreak = (minutes) => {
+  if (typeof minutes !== 'number' || minutes < 1) {
+    console.error('Duración de descanso corto no válida:', minutes);
+    return;
+  }
+  shortBreak = minutes;
+  if (state.timerType === 'shortBreak') {
+    resetTimer();
+  }
+}
+
+export const setLongBreak = (minutes) => {
+  if (typeof minutes !== 'number' || minutes < 1) {
+    console.error('Duración de descanso largo no válida:', minutes);
+    return;
+  }
+  longBreak = minutes;
+  if (state.timerType === 'longBreak') {
+    resetTimer();
+  }
+}
+
+export const setWorkSessionsBeforeLongBreak = (sessions) => {
+  if (typeof sessions !== 'number' || sessions < 1) {
+    console.error('Número de sesiones no válido:', sessions);
+    return;
+  }
+  workSessionsBeforeLongBreak = sessions;
+}
+
+// Inicializar el temporizador
+resetTimer();
+
+// Exportar la API pública
 export default {
   start: startTimer,
   pause: pauseTimer,
@@ -220,10 +281,7 @@ export default {
   setTimerType,
   getCurrentTime: getFormattedTime,
   getState: () => ({ ...state }),
+  getProgress,
   on,
-  off,
-  getProgress: () => {
-    const totalTime = getCurrentTimerDuration();
-    return (totalTime - state.timeLeft) / totalTime;
-  }
+  off
 };

@@ -4,6 +4,8 @@ import ProgressBar from "./components/ProgressBar";
 import { useState, useEffect, useRef } from "react";
 import timer, { initAppStateListener, loadTimerState, clearTimerState } from "../../utils/timer";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
+import { mostrarNotificacionLocal, registerForPushNotificationsAsync } from "../../services/notification";
 
 const storeSession = async (type) => {
   try {
@@ -11,7 +13,6 @@ const storeSession = async (type) => {
     const existingSessions = await AsyncStorage.getItem('sessions');
     const sessions = existingSessions ? JSON.parse(existingSessions) : [];
     
-    // Agregar nueva sesión con fecha
     sessions.push({
       type,
       date: today
@@ -37,40 +38,49 @@ export default function HomeScreen() {
     };
     
     initTimer();
-    
-    // Inicializar el listener de cambio de estado de la app
     initAppStateListener();
-    
+    registerForPushNotificationsAsync();
+
+    // Configurar el listener para notificaciones
+    const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log('Notificación recibida:', response);
+    });
+
     // Suscribirse al evento de finalización del temporizador
-    const onTimerComplete = () => {
+    const onTimerComplete = async () => {
       const currentState = timer.getState();
-      storeSession(currentState.timerType);
+      await storeSession(currentState.timerType);
       setIsRunning(false);
+      await mostrarNotificacionLocal({
+        title: '¡Sesión completada!',
+        body: `Has terminado una sesión de ${currentState.timerType === 'work' ? 'trabajo' : 'descanso'}.`,
+        seconds: 1,
+      });
     };
     
     timer.on('complete', onTimerComplete);
 
-    // Limpiar el listener al desmontar
+    // Limpiar los listeners al desmontar
     return () => {
+      subscription.remove();
       timer.off('complete', onTimerComplete);
     };
   }, []);
-  
-  // Manejar cambios en el estado de la aplicación
- useEffect(() => {
-  const subscription = AppState.addEventListener('change', nextAppState => {
-    if (nextAppState === 'active' && appState.current.match(/inactive|background/)) {
-      // Actualizamos el estado local basado en el estado real del temporizador
-      const currentState = timer.getState();
-      setIsRunning(currentState.isRunning);
-    }
-    appState.current = nextAppState;
-  });
 
-  return () => {
-    subscription.remove();
-  };
-}, []);
+  // Manejar cambios en el estado de la aplicación
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (nextAppState === 'active' && appState.current.match(/inactive|background/)) {
+        const currentState = timer.getState();
+        setIsRunning(currentState.isRunning);
+      }
+      appState.current = nextAppState;
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   const handleStartPause = () => {
     if (isRunning) {
@@ -89,12 +99,7 @@ export default function HomeScreen() {
 
   const handleCambiar = () => {
     const currentState = timer.getState();
-    if (currentState.timerType === 'work') {
-      timer.setTimerType('shortBreak');
-    } else {
-      timer.setTimerType('work');
-    }
-    // No guardamos la sesión aquí, solo en el evento de finalización
+    timer.setTimerType(currentState.timerType === 'work' ? 'shortBreak' : 'work');
     timer.reset();
     setIsRunning(false);
   };

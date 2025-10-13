@@ -30,6 +30,13 @@
       "bundler": "metro"
     },
     "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon-mini.png",
+          "color": "#ffffff"
+        }
+      ] ,
   [
     "expo-sqlite",
     {

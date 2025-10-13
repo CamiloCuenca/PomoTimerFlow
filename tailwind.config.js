@@ -22,7 +22,12 @@ module.exports = {
         "montserrat-medium": ["Montserrat-Medium"],
         "roboto-mono-regular": ["RobotoMono-Regular"],
       },
+      textShadow: {
+        sm: '1px 1px 2px rgba(0, 0, 0, 0.3)',
+      },
     },
   },
-  plugins: [],
+  plugins: [
+     require('tailwindcss-textshadow')
+  ],
 };

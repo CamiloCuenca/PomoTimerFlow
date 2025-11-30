@@ -8,7 +8,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "pomotimerflow",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "jsEngine": "hermes",
     "splash": {
       "image": "./assets/splash-icon.png",

@@ -123,7 +123,19 @@ yarn start
 - [ ] Sonidos y vibraciones personalizables
 - [ ] Temas segun festividades (Navidad, halloween, Pascua, etc)
 
+## 📄 Licencia
 
+Este proyecto está bajo una **Licencia Propietaria de Código Fuente Visible**.
+
+**Esto significa:**
+- ✅ Puedes ver y estudiar el código
+- ✅ Puedes hacer fork para aprender
+- ❌ NO puedes usar este código comercialmente
+- ❌ NO puedes redistribuir o crear apps derivadas
+
+Ver el archivo [LICENSE](LICENSE) para más detalles.
+
+Para solicitar permisos especiales o licencias comerciales, contacta al autor.
 
 ## 👨‍💻 Autor
 

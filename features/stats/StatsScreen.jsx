@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, ScrollView } from "react-native";
 import LineChartCustom from "./components/lineChart";
 import { getCurrentWeekRange } from "../../dateUtils";
+import Strak from '../../components/Strak';
 
 export default function StatsScreen() {
   const [workSessions, setWorkSessions] = useState([]);
@@ -37,19 +38,21 @@ export default function StatsScreen() {
     }
   };
 
-  // 👇 Recarga la data cada vez que la pantalla se enfoque
+  
   useFocusEffect(
     useCallback(() => {
       loadSessions();
     }, [])
   );
 
-  const totalWorkSessions = workSessions.reduce((sum, day) => sum + day.sessions, 0);
-  const totalBreakSessions = breakSessions.reduce((sum, day) => sum + day.sessions, 0);
+  const workedDays = workSessions.filter((day) => day.sessions > 0).length;
+
 
   return (
     <ScrollView className="bg-bgMain">
       <View className="p-4">
+
+        <Strak title="Racha" days={workedDays} weekSessions={workSessions} />
 
         {/* Sesiones de trabajo */}
         <View className="mb-6">

@@ -3,7 +3,7 @@ import { useCallback , useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, ScrollView } from "react-native";
 import LineChartCustom from "./components/lineChart";
-import { getCurrentWeekRange } from "../../../../dateUtils";
+import { getCurrentWeekRange } from "../../dateUtils";
 
 export default function StatsScreen() {
   const [workSessions, setWorkSessions] = useState([]);

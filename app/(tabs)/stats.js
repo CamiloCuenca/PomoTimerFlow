@@ -1,5 +1,4 @@
-import StatsScreen from "../src/features/stats/StatsScreen";
-
+import StatsScreen from '../../features/stats/StatsScreen';
 export default function Stats() {
   return <StatsScreen />;
 }

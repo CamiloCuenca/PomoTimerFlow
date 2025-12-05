@@ -1,28 +1,30 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from 'react-native'; 
+import { useTheme } from "../../hooks/useTheme";
 
 export default function Layout() {
+  const { theme } = useTheme();
   
   return (
     <Tabs
       screenOptions={{
         headerShown: true, 
-        tabBarActiveTintColor: "#17CF17",
-        tabBarInactiveTintColor: "#ccc",
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.textSecondary,
         tabBarStyle: {
-          backgroundColor: "#112111",
+          backgroundColor: theme.colors.bgMain,
           borderTopWidth: 1,
-          borderTopColor: "#125612",
-
+          borderTopColor: theme.colors.bgDarkGreen,
         },
         headerStyle: {
-          backgroundColor: "#112111",
+          backgroundColor: theme.colors.bgMain,
         },
         headerTitleStyle: {
           fontSize: 25,
+          color: theme.colors.text,
         },
-        headerTintColor: "#fff",
+        headerTintColor: theme.colors.text,
         headerTitleAlign: "center",
      
         headerLeft: () => (
@@ -32,7 +34,7 @@ export default function Layout() {
               width: 40, 
               height: 40, 
               marginLeft: 15,
-              borderRadius: 15  // Opcional: para hacerlo circular
+              borderRadius: 15
             }} 
             resizeMode="contain"
           />

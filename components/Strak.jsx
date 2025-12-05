@@ -1,6 +1,8 @@
 import { View, Text, Image } from "react-native";
+import { useTheme } from "../hooks/useTheme";
 
 export default function Strak({ title, days = 0, weekSessions = [] }) {
+    const { theme } = useTheme();
     const dayOrder = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
 
     const normalizedWeek = dayOrder.map((day) => {
@@ -9,15 +11,15 @@ export default function Strak({ title, days = 0, weekSessions = [] }) {
     });
 
     return (
-        <View className="bg-bgDarkGreen rounded-lg mb-5">
+        <View style={{ backgroundColor: theme.colors.bgDarkGreen }} className="rounded-lg mb-5">
             <View className="gap-3 flex-row items-center p-4 rounded-lg ">
-                <Text className="text-white font-bold text-2xl">{title}:</Text>
-                <Text className="text-white font-bold text-2xl">
+                <Text style={{ color: theme.colors.text }} className="font-bold text-2xl">{title}:</Text>
+                <Text style={{ color: theme.colors.text }} className="font-bold text-2xl">
                     {days} {days === 1 ? "día" : "días"}
                 </Text>
             </View>
 
-            <View className=" p-4 rounded-lg">
+            <View style={{ backgroundColor: theme.colors.primary }} className="p-4 rounded-lg">
                 <View className="flex-row justify-between">
                     {normalizedWeek.map(({ day, sessions }) => (
                         <View key={day} className="items-center">
@@ -32,12 +34,12 @@ export default function Strak({ title, days = 0, weekSessions = [] }) {
                                         width: 28,
                                         height: 28,
                                         borderRadius: 14,
-                                        backgroundColor: "#4B5563",
+                                        backgroundColor: theme.colors.accentGray,
                                         marginBottom: 8,
                                     }}
                                 />
                             )}
-                            <Text className="text-white text-xs font-semibold">{day}</Text>
+                            <Text style={{ color: theme.colors.text }} className="text-xs font-semibold">{day}</Text>
                         </View>
                     ))}
                 </View>

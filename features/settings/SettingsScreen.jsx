@@ -1,48 +1,55 @@
-import { View, Text, Button } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { useTheme } from "../../hooks/useTheme";
 import DurationsButom from "./components/DurationsButom";
 
 export default function SettingsScreen() {
+  const { theme, changeTheme, themes } = useTheme();
+
   return (
-    <View className="flex-1 items-center justify-start bg-bgMain">
+    <ScrollView style={{ backgroundColor: theme.colors.bgMain }} className="flex-1">
+      <View className="p-4">
+        {/* Sección de Duraciones */}
+        <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
+          Duraciones
+        </Text>
+        <DurationsButom />
 
-      <Text className="text-white text-xl font-bold p-4">Duraciones</Text>
-
-      <DurationsButom />
-
-{/* Botones de AsyncStorage
-      <Button
-        title="Ver AsyncStorage"
-        onPress={async () => {
-          try {
-            const keys = await AsyncStorage.getAllKeys();
-            const stores = await AsyncStorage.multiGet(keys);
-            console.log('=== AsyncStorage ===');
-            stores.forEach(([key, value]) => {
-              console.log(`${key}:`, value);
-            });
-            console.log('===================');
-          } catch (e) {
-            console.error('Error leyendo AsyncStorage:', e);
-          }
-        }}
-      />
-
-      <Button
-        title="Reiniciar toda la semana"
-        onPress={async () => {
-          try {
-            await AsyncStorage.clear();
-            console.log('Toda la async storage reiniciada');
-          } catch (e) {
-            console.error('Error reiniciando toda la async storage:', e);
-          }
-        }}
-      />
- */}
-
-
-    </View>
+        {/* Sección de Temas */}
+        <View className="mt-8 mb-4">
+          <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
+            Tema
+          </Text>
+          <View className="gap-3 px-4">
+            {Object.entries(themes).map(([key, themeOption]) => (
+              <TouchableOpacity
+                key={key}
+                onPress={() => changeTheme(key)}
+                style={{
+                  backgroundColor: theme.id === key ? theme.colors.primary : theme.colors.bgDarkGreen,
+                  borderWidth: 2,
+                  borderColor: theme.id === key ? theme.colors.primary : theme.colors.accentGray,
+                }}
+                className="p-4 rounded-lg flex-row items-center justify-between"
+              >
+                <Text style={{ color: theme.colors.text }} className="font-bold text-lg">
+                  {themeOption.name}
+                </Text>
+                <View
+                  style={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: 10,
+                    backgroundColor: themeOption.colors.primary,
+                    borderWidth: 2,
+                    borderColor: theme.colors.text,
+                  }}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
+

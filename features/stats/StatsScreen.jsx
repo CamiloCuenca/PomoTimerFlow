@@ -5,10 +5,13 @@ import { View, Text, ScrollView } from "react-native";
 import LineChartCustom from "./components/lineChart";
 import { getCurrentWeekRange } from "../../dateUtils";
 import Strak from '../../components/Strak';
+import { useTheme } from "../../hooks/useTheme";
+
 
 export default function StatsScreen() {
   const [workSessions, setWorkSessions] = useState([]);
   const [breakSessions, setBreakSessions] = useState([]);
+    const { theme, changeTheme, themes } = useTheme();
 
   const loadSessions = async () => {
     try {
@@ -49,30 +52,30 @@ export default function StatsScreen() {
 
 
   return (
-    <ScrollView className="bg-bgMain">
+    <ScrollView style={{ backgroundColor: theme.colors.bgMain }}>
       <View className="p-4">
 
         <Strak title="Racha" days={workedDays} weekSessions={workSessions} />
 
         {/* Sesiones de trabajo */}
         <View className="mb-6">
-          <Text className="text-white text-xl font-bold mb-2 ml-3">Sesiones de trabajo</Text>
+          <Text style={{ color: theme.colors.text }} className="text-xl font-bold mb-2 ml-3">Sesiones de trabajo</Text>
           <LineChartCustom
             key={JSON.stringify(workSessions)} 
             data={workSessions}
             title="Sesiones de trabajo"
-            color="#4CAF50"
+            color={theme.colors.primary}
           />
         </View>
 
         {/* Descansos */}
         <View>
-          <Text className="text-white text-xl font-bold mb-2 ml-3">Sesiones de descanso</Text>
+          <Text style={{ color: theme.colors.text }} className="text-xl font-bold mb-2 ml-3">Sesiones de descanso</Text>
           <LineChartCustom
             key={JSON.stringify(breakSessions)} 
             data={breakSessions}
             title="Descansos"
-            color="#4CAF50"
+            color={theme.colors.primary}
           />
         </View>
       </View>

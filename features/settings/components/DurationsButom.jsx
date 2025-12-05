@@ -1,6 +1,7 @@
 import { View, Pressable, Text } from "react-native";
 import { useState } from "react";
 import DurationModal from "./DurationModal";
+import { useTheme } from "../../../hooks/useTheme";
 import { 
   getWorkDuration, 
   getShortBreak, 
@@ -11,6 +12,7 @@ import {
 const DurationsButom = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedType, setSelectedType] = useState(null);
+  const { theme } = useTheme();
 
   const durations = [
     { 
@@ -58,11 +60,14 @@ const DurationsButom = () => {
             ]}
             onPress={() => handlePress(item.type)}
           >
-            <View className="flex-1 bg-white/20 border border-white/30 rounded-2xl justify-center items-center p-3">
-              <Text className="text-white text-3xl font-bold text-center">
+            <View style={{
+              backgroundColor: `${theme.colors.primary}33`,
+              borderColor: `${theme.colors.primary}50`,
+            }} className="flex-1 border-2 rounded-2xl justify-center items-center p-3">
+              <Text style={{ color: theme.colors.text }} className="text-3xl font-bold text-center">
                 {item.getMinutes()}
               </Text>
-              <Text className="text-white/90 text-sm text-center mt-1 font-medium">
+              <Text style={{ color: theme.colors.textSecondary }} className="text-sm text-center mt-1 font-medium">
                 {item.label}
               </Text>
             </View>

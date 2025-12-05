@@ -1,12 +1,14 @@
 import { LineChart } from "react-native-gifted-charts";
 import { View, Text } from "react-native";
 import React from "react";
+import { useTheme } from "../../../hooks/useTheme";
 
 const LineChartCustom = ({ 
   data = [], 
   title = "Sesiones esta semana",
   color = "#17CF17" 
 }) => {
+  const { theme } = useTheme();
 
   const customDataPoint = () => (
     <View
@@ -60,7 +62,7 @@ const LineChartCustom = ({
     <View
       style={{
         paddingVertical: 16,
-        backgroundColor: "#1f4e33",
+        backgroundColor: theme.colors.bgDarkGreen,
         borderRadius: 14,
         margin: 10,
         paddingHorizontal: 10,
@@ -71,12 +73,12 @@ const LineChartCustom = ({
     >
       <View className="flex-row justify-between items-center mb-3">
         <View>
-          <Text className="text-gray-400 text-base pl-2">{title}</Text>
-          <Text className="text-white text-3xl font-bold pl-2">
+          <Text style={{ color: theme.colors.textSecondary }} className="text-base pl-2">{title}</Text>
+          <Text style={{ color: theme.colors.text }} className="text-3xl font-bold pl-2">
             {totalSessions}
           </Text>
         </View>
-        <Text className="text-gray-400 text-base capitalize mb-3">
+        <Text style={{ color: theme.colors.textSecondary }} className="text-base capitalize mb-3">
           {new Date().toLocaleDateString("es-ES", { month: "long" })}
         </Text>
       </View>

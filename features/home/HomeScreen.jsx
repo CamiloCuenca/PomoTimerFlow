@@ -6,6 +6,7 @@ import timer, { initAppStateListener, loadTimerState, clearTimerState } from "..
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import { mostrarNotificacionLocal, registerForPushNotificationsAsync } from "../../services/notification";
+import { useTheme } from "../../hooks/useTheme";
 
 const storeSession = async (type) => {
   try {
@@ -27,6 +28,7 @@ const storeSession = async (type) => {
 export default function HomeScreen() {
   const [isRunning, setIsRunning] = useState(false);
   const appState = useRef(AppState.currentState);
+  const { theme } = useTheme();
 
   // Inicializar el estado del temporizador al cargar el componente
   useEffect(() => {
@@ -105,7 +107,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <View className="flex-1 items-center justify-center bg-bgMain gap-10">
+    <View style={{ backgroundColor: theme.colors.bgMain }} className="flex-1 items-center justify-center gap-10">
       <ProgressBar />
       <View className="flex-row gap-10">
         <CustomButton

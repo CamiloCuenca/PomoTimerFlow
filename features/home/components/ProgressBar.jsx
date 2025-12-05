@@ -2,11 +2,13 @@ import { View, Text } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 import { useEffect, useState, useCallback } from "react";
 import timer from "../../../utils/timer";
+import { useTheme } from "../../../hooks/useTheme";
 
 export default function ProgressBar() {
   const [time, setTime] = useState(timer.getCurrentTime());
   const [progress, setProgress] = useState(0);
   const [timerType, setTimerType] = useState(timer.getState().timerType);
+  const { theme } = useTheme();
 
   const updateTimer = useCallback(() => {
     setTime(timer.getCurrentTime());
@@ -39,17 +41,17 @@ export default function ProgressBar() {
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference * (1 - progress);
 
-  // Colores basados en el tipo de temporizador
+  // Colores basados en el tipo de temporizador y el tema
   const getColors = () => {
     switch(timerType) {
       case 'work':
-        return { background: '#125612', progress: '#17CF17' };
+        return { background: theme.colors.secondary, progress: theme.colors.primary };
       case 'shortBreak':
-        return { background: '#12565a', progress: '#17b7cf' };
+        return { background: theme.colors.bgDarkGreen, progress: theme.colors.primary };
       case 'longBreak':
-        return { background: '#2a1256', progress: '#6b17cf' };
+        return { background: theme.colors.bgDarkGreen, progress: theme.colors.primary };
       default:
-        return { background: '#125612', progress: '#17CF17' };
+        return { background: theme.colors.secondary, progress: theme.colors.primary };
     }
   };
 

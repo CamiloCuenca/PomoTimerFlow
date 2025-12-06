@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+    import { View, Text, Image } from "react-native";
 import { useTheme } from "../hooks/useTheme";
 
 export default function Strak({ title, days = 0, weekSessions = [] }) {
@@ -19,21 +19,35 @@ export default function Strak({ title, days = 0, weekSessions = [] }) {
                 </Text>
             </View>
 
-            <View style={{ backgroundColor: theme.colors.primary }} className="p-4 rounded-lg">
-                <View className="flex-row justify-between">
+            <View style={{ backgroundColor: theme.colors.primary }} className="p-6">
+                <View className="flex-row justify-around items-center">
                     {normalizedWeek.map(({ day, sessions }) => (
-                        <View key={day} className="items-center">
+                        <View key={day} className="items-center" >
                             {sessions > 0 ? (
-                                <Image
-                                    source={require("../assets/pomo.png")}
-                                    className="w-8 h-8 mb-2"
-                                />
+                                <View
+                                    style={{
+                                        width: 45,
+                                        height: 45,
+                                        borderRadius: 22,
+                                        borderWidth: 3,
+                                        borderColor: "#ffffff",
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        marginBottom: 8,
+                                        backgroundColor: theme.colors.primary,
+                                    }}
+                                >
+                                    <Image
+                                        source={require("../assets/pomo.png")}
+                                        className="w-10 h-10"
+                                    />
+                                </View>
                             ) : (
                                 <View
                                     style={{
-                                        width: 28,
-                                        height: 28,
-                                        borderRadius: 14,
+                                        width: 45,
+                                        height: 45,
+                                        borderRadius: 22,
                                         backgroundColor: theme.colors.accentGray,
                                         marginBottom: 8,
                                     }}

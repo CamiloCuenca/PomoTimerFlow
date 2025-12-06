@@ -1,10 +1,13 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Image } from 'react-native'; 
+import { Image, TouchableOpacity } from 'react-native'; 
 import { useTheme } from "../../hooks/useTheme";
+import { Play, Pause } from 'lucide-react-native';
+import { useAudioPlayerContext } from "../../hooks/useAudioPlayerContext";
 
 export default function Layout() {
   const { theme } = useTheme();
+  const { status, isConfigured, handlePlayPause } = useAudioPlayerContext();
   
   return (
     <Tabs
@@ -39,6 +42,21 @@ export default function Layout() {
             resizeMode="contain"
           />
         ),
+
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={handlePlayPause}
+            style={{ backgroundColor: theme.colors.primary, marginRight: 15 }}
+            className="w-10 h-10 rounded-full items-center justify-center active:opacity-70"
+            disabled={!isConfigured}
+          >
+            {status.playing ? (
+              <Pause size={20} color={theme.colors.bgMain} fill={theme.colors.bgMain} />
+            ) : (
+              <Play size={20} color={theme.colors.bgMain} fill={theme.colors.bgMain} />
+            )}
+          </TouchableOpacity>
+        )
         
       }}
     >

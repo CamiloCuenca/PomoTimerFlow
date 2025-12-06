@@ -17,14 +17,21 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.camilocuenca.PomoTimerFlow"
+      "bundleIdentifier": "com.camilocuenca.PomoTimerFlow",
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.camilocuenca.PomoTimerFlow"
+      "package": "com.camilocuenca.PomoTimerFlow",
+      "permissions": [
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -37,24 +44,32 @@
           "icon": "./assets/icon-mini.png",
           "color": "#F54E4E"
         }
-      ] ,
-  [
-    "expo-sqlite",
-    {
-      "enableFTS": true,
-      "useSQLCipher": true,
-      "android": {
-        "enableFTS": false,
-        "useSQLCipher": false
-      },
-      "ios": {
-        "customBuildFlags": ["-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_SNAPSHOT=1"]
-      }
-    }
-  ],
-  "expo-router"
-]
-,
+      ],
+      [
+        "expo-sqlite",
+        {
+          "enableFTS": true,
+          "useSQLCipher": true,
+          "android": {
+            "enableFTS": false,
+            "useSQLCipher": false
+          },
+          "ios": {
+            "customBuildFlags": [
+              "-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_SNAPSHOT=1"
+            ]
+          }
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "recordAudioAndroid": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ],
+      "expo-router",
+      "expo-audio"
+    ],
     "extra": {
       "router": {},
       "eas": {

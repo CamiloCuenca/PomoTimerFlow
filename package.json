@@ -19,6 +19,7 @@
     "@tanstack/react-query": "^5.64.1",
     "axios": "^1.7.9",
     "expo": "~54.0.25",
+    "expo-audio": "~1.0.16",
     "expo-background-fetch": "~14.0.8",
     "expo-file-system": "~19.0.17",
     "expo-linear-gradient": "~15.0.7",

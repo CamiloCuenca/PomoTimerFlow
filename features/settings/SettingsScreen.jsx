@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useTheme } from "../../hooks/useTheme";
 import DurationsButom from "./components/DurationsButom";
+import Playingsounds from "../../components/Playingsounds";
+import SoundSelector from "./components/SoundSelector";
 
 export default function SettingsScreen() {
   const { theme, changeTheme, themes } = useTheme();
@@ -48,8 +50,28 @@ export default function SettingsScreen() {
             ))}
           </View>
         </View>
+
+        {/* Sección de Música */}
+        <View className="mt-8 mb-4">
+          <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
+            Música Ambiente
+          </Text>
+          <View className="px-4">
+            <Playingsounds />
+          </View>
+        </View>
+
+        {/* Sección de Seleccionar Canción */}
+        <View className="mt-8 mb-6">
+          <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
+            Seleccionar Canción
+          </Text>
+          <View className="px-4">
+            <SoundSelector />
+          </View>
+        </View>
+        
       </View>
     </ScrollView>
   );
 }
-

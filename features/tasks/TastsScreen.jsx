@@ -1,5 +1,6 @@
 import { View, Text, ScrollView } from "react-native";
 import { useTheme } from "../../hooks/useTheme";
+import TaskItem from "./components/TaskItem";
 
 export default function TasksScreen() {
 
@@ -12,6 +13,11 @@ export default function TasksScreen() {
         <Text className="text-2xl font-bold mb-4" style={{ color: theme.colors.text }}>
           Mis Tareas
         </Text>
+
+        <TaskItem title="Tarea de ejemplo"
+         description="Descripción de la tarea de ejemplo. Esta es una tarea para demostrar el componente TaskItem." 
+         priority="Alta"
+         />
         
       </View>
 

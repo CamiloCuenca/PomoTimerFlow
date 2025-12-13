@@ -4,6 +4,7 @@ import { ThemeProvider } from '../context/ThemeContext';
 import { AudioProvider } from '../context/AudioContext';
 import { AudioPlayerProvider } from '../context/AudioPlayerContext';
 
+
 export default function RootLayout() {
   return (
     <ThemeProvider>

@@ -37,6 +37,7 @@
     "react-hook-form": "^7.54.2",
     "react-native": "0.81.5",
     "react-native-gifted-charts": "^1.4.64",
+    "react-native-paper": "^5.14.5",
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",

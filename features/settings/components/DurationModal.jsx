@@ -75,11 +75,20 @@ export default function DurationModal({
     <Modal
       visible={visible}
       animationType="fade"
-      transparent={true}
+      transparent
       onRequestClose={onClose}
     >
-      <View className="flex-1 justify-center items-center bg-black/40">
-      <View style={{ backgroundColor: `${theme.colors.bgDarkGreen}CC` }} className="w-11/12 max-w-md rounded-3xl p-8 overflow-hidden border-2" style={{ borderColor: `${theme.colors.primary}50` }}>
+      <View
+        className="flex-1 justify-center items-center"
+        style={{ backgroundColor: "rgba(0,0,0,0.45)" }}
+      >
+        <View
+          style={{
+            backgroundColor: theme.colors.bgMain,
+            borderColor: `${theme.colors.primary}33`,
+          }}
+          className="w-11/12 max-w-md rounded-3xl p-8 overflow-hidden border"
+        >
           <View className="items-center">
             <Text style={{ color: theme.colors.text }} className="text-xl font-semibold mb-8">
               {getTitle()}

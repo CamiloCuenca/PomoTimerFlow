@@ -80,6 +80,16 @@ export default function Layout() {
         }}
       />
 
+       <Tabs.Screen
+        name="Task"
+        options={{
+          title: "Tasks",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="list-outline" color={color} size={size} />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="stats"
         options={{
@@ -89,6 +99,8 @@ export default function Layout() {
           ),
         }}
       />
+
+     
     </Tabs>
   );
 }

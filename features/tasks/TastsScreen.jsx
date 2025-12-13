@@ -4,9 +4,11 @@ import { Provider as PaperProvider, FAB, Portal } from "react-native-paper";
 import { useTheme } from "../../hooks/useTheme";
 import TaskItem from "./components/TaskItem";
 import TaskForm from "./components/TaskForm";
+import { useTaskContext } from "../../context/TaskContext";
 
 export default function TasksScreen() {
   const { theme } = useTheme();
+  const { tasks, addTask, deleteTask, completeTask } = useTaskContext();
   const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [formVisible, setFormVisible] = useState(false);
 
@@ -14,6 +16,20 @@ export default function TasksScreen() {
 
   const handleAddTask = () => {
     setFormVisible(true);
+  };
+
+  const handleSubmitTask = (data) => {
+    const newTask = {
+      id: `${Date.now()}`,
+      title: data.title,
+      description: data.description,
+      priority: data.priority,
+      status: "New Task",
+      createdAt: new Date().toISOString(),
+      completedAt: null,
+       pomodoros: 0,
+    };
+    addTask(newTask);
   };
 
   return (
@@ -60,16 +76,27 @@ export default function TasksScreen() {
           }}
         />
       </View>
-        <TaskItem
-          title="Diseñar interfaz de usuario"
-          description="Crear bocetos y prototipos para la nueva aplicación móvil."  
-          priority="Alta"
-          icon="brush-outline"
-          state="In Progress"
-        />
+        {(
+          selectedCategory === "Todas"
+            ? tasks
+            : tasks.filter((t) => t.status === selectedCategory)
+        ).map((task) => (
+          <TaskItem
+            key={task.id}
+            id={task.id}
+            title={task.title}
+            description={task.description}
+            priority={task.priority}
+            status={task.status}
+            pomodoros={task.pomodoros}
+            icon={task.status === "Completed" ? "checkmark-circle-outline" : "briefcase-outline"}
+            onDelete={() => deleteTask(task.id)}
+            onComplete={() => completeTask(task.id)}
+          />
+        ))}
 
     </ScrollView>
-        <TaskForm visible={formVisible} onClose={() => setFormVisible(false)} />
+        <TaskForm visible={formVisible} onClose={() => setFormVisible(false)} onSubmit={handleSubmitTask} />
 
         <Portal>
           <FAB

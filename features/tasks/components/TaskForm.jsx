@@ -3,7 +3,7 @@ import { useTheme } from "../../../hooks/useTheme";
 import { TextInput, Button } from "react-native-paper";
 import * as React from "react";
 
-export default function TaskForm({ visible, onClose }) {
+export default function TaskForm({ visible, onClose, onSubmit }) {
     const { theme } = useTheme();
 
     const [title, setTitle] = React.useState("");
@@ -15,7 +15,11 @@ export default function TaskForm({ visible, onClose }) {
     };
 
     const handleSave = () => {
-        // Aquí luego podrás pasar onSubmit({ title, description, priority })
+        if (!title.trim()) return;
+        onSubmit?.({ title: title.trim(), description: description.trim(), priority });
+        setTitle("");
+        setDescription("");
+        setPriority("Alta");
         handleClose();
     };
 

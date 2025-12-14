@@ -87,10 +87,10 @@ export default function ProgressBar() {
       </Svg>
 
       <View className="absolute items-center justify-center">
-        <Text className="text-6xl font-bold text-white">
+        <Text className="text-6xl font-bold" style={{ color: theme.colors.text }}>
           {time}
         </Text>
-        <Text className="text-white text-sm mt-1">
+        <Text className="text-sm mt-1" style={{ color: theme.colors.textSecondary}}>
           {timerType === 'work' ? 'Trabajo' : 
            timerType === 'shortBreak' ? 'Descanso Corto' : 'Descanso Largo'}
         </Text>

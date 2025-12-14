@@ -7,7 +7,7 @@ export default function CustomButton({title, onPress, style}) {
     if(style === "primary"){
         return (
             <Pressable style={{ backgroundColor: theme.colors.primary }} className="w-32 p-2 rounded-3xl" onPress={onPress}>
-            <Text style={{ color: theme.colors.bgMain }} className="font-bold text-lg text-center">{title}</Text>
+            <Text style={{ color: theme.colors.text }} className="font-bold text-lg text-center">{title}</Text>
             </Pressable>    
           );
     }else{

@@ -70,15 +70,7 @@ export default function Layout() {
         }}
       />
 
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Home",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" color={color} size={size} />
-          ),
-        }}
-      />
+   
 
        <Tabs.Screen
         name="Task"
@@ -90,12 +82,32 @@ export default function Layout() {
         }}
       />
 
+         <Tabs.Screen
+        name="index"
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" color={color} size={size} />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="stats"
         options={{
           title: "Stats",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="bar-chart-outline" color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="achievements"
+        options={{
+          title: "trophy",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="trophy-outline" color={color} size={size} />
           ),
         }}
       />

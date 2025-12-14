@@ -19,7 +19,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.camilocuenca.PomoTimerFlow",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"]
+        "UIBackgroundModes": [
+          "audio"
+        ]
       }
     },
     "android": {
@@ -68,7 +70,8 @@
         }
       ],
       "expo-router",
-      "expo-audio"
+      "expo-audio",
+      "expo-asset"
     ],
     "extra": {
       "router": {},

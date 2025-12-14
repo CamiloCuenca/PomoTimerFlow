@@ -9,7 +9,7 @@ export default function Level({ Level, title_level, number_of_medals, total_hour
         <View style={{ backgroundColor: theme.colors.primary }} className="m-4 p-4 rounded-lg items-center justify-center">
 
             <View className="mb-4 rounded-full p-5" style={{ backgroundColor: theme.colors.secondary }}>
-                <Ionicons name="trophy" color={theme.colors.primary} size={60} />
+                <Ionicons name="trophy" color={theme.colors.bgMain} size={60} />
             </View>
 
 

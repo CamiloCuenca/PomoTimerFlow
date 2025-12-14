@@ -4,22 +4,18 @@ import { Image, TouchableOpacity } from 'react-native';
 import { useTheme } from "../../hooks/useTheme";
 import { Play, Pause } from 'lucide-react-native';
 import { useAudioPlayerContext } from "../../hooks/useAudioPlayerContext";
+import AnimatedTabBar from "../../components/AnimatedTabBar";
 
 export default function Layout() {
   const { theme } = useTheme();
   const { status, isConfigured, handlePlayPause } = useAudioPlayerContext();
   
   return (
+    
     <Tabs
+      tabBar={(props) => <AnimatedTabBar {...props} />}
       screenOptions={{
-        headerShown: true, 
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: theme.colors.textSecondary,
-        tabBarStyle: {
-          backgroundColor: theme.colors.bgMain,
-          borderTopWidth: 1,
-          borderTopColor: theme.colors.bgDarkGreen,
-        },
+        headerShown: true,
         headerStyle: {
           backgroundColor: theme.colors.bgMain,
         },
@@ -105,7 +101,7 @@ export default function Layout() {
       <Tabs.Screen
         name="achievements"
         options={{
-          title: "trophy",
+          title: "Trophy",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="trophy-outline" color={color} size={size} />
           ),

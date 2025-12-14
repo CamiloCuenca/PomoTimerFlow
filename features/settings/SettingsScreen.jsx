@@ -21,35 +21,42 @@ export default function SettingsScreen() {
           <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
             Tema
           </Text>
-          <View className="gap-3 px-4">
-            {Object.entries(themes).map(([key, themeOption]) => (
-              <TouchableOpacity
-                key={key}
-                onPress={() => changeTheme(key)}
-                style={{
-                  backgroundColor: theme.id === key ? theme.colors.primary : theme.colors.bgDarkGreen,
-                  borderWidth: 2,
-                  borderColor: theme.id === key ? theme.colors.primary : theme.colors.accentGray,
-                }}
-                className="p-4 rounded-lg flex-row items-center justify-between"
-              >
-                <Text style={{ color: theme.colors.text }} className="font-bold text-lg">
-                  {themeOption.name}
-                </Text>
-                <View
+          <ScrollView 
+            style={{ maxHeight: 420 }}
+            showsVerticalScrollIndicator={true}
+            nestedScrollEnabled={true}
+          >
+            <View className="gap-3 px-4">
+              {Object.entries(themes).map(([key, themeOption]) => (
+                <TouchableOpacity
+                  key={key}
+                  onPress={() => changeTheme(key)}
                   style={{
-                    width: 20,
-                    height: 20,
-                    borderRadius: 10,
-                    backgroundColor: themeOption.colors.primary,
+                    backgroundColor: theme.id === key ? theme.colors.primary : theme.colors.bgDarkGreen,
                     borderWidth: 2,
-                    borderColor: theme.colors.text,
+                    borderColor: theme.id === key ? theme.colors.primary : theme.colors.accentGray,
                   }}
-                />
-              </TouchableOpacity>
-            ))}
-          </View>
+                  className="p-4 rounded-lg flex-row items-center justify-between"
+                >
+                  <Text style={{ color: theme.colors.text }} className="font-bold text-lg">
+                    {themeOption.name}
+                  </Text>
+                  <View
+                    style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: 10,
+                      backgroundColor: themeOption.colors.primary,
+                      borderWidth: 2,
+                      borderColor: theme.colors.text,
+                    }}
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
         </View>
+        
 
         {/* Sección de Música */}
         <View className="mt-8 mb-4">

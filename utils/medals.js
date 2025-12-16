@@ -23,5 +23,32 @@ export const medals = [
         requirement: 50,
         type: 'sessions'
     },
+
+     {
+        id: 4,
+        name: 'Diamante',
+        description: 'Completa 100 sesiones',
+        image: require('../assets/medals/medal-diamond.png'),
+        requirement: 100,
+        type: 'sessions'
+    },
+
+     {
+        id: 5,
+        name: 'Ruby',
+        description: 'Completa 150 sesiones',
+        image: require('../assets/medals/medal-ruby.png'),
+        requirement: 150,
+        type: 'sessions'
+    },
+
+     {
+        id: 6,
+        name: 'Esmeralda',
+        description: 'Completa 200 sesiones',
+        image: require('../assets/medals/medal-esmeralda.png'),
+        requirement: 200,
+        type: 'sessions'
+    },
     
 ];

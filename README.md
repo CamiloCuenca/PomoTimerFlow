@@ -1,6 +1,8 @@
 # PomoTimerFlow 🍅⏱️
 
-Una aplicación móvil de Técnica Pomodoro moderna, elegante y personalizable construida con **React Native**, **Expo** y **NativeWind**.
+### Una aplicación móvil de Técnica Pomodoro moderna, elegante y personalizable construida con **React Native**, **Expo** y **NativeWind**.
+
+<img width="1024" height="500" alt="T9FXiKTwLeQF_1024_500" src="https://github.com/user-attachments/assets/d47661db-bb53-499c-8a64-c91e965b86c0" />
 
 ## 📱 Características
 

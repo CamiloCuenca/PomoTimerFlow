@@ -161,25 +161,31 @@ export default function HomeScreen() {
           </Text>
         )}
         <ProgressBar />
-        <View className="flex-row gap-10">
-          <CustomButton
+
+          <CustomButton 
             title={isRunning ? "Pausar" : "Iniciar"}
             onPress={handleStartPause}
             style="primary"
           />
+        
+        <View className="flex-row gap-5">
+        
           <CustomButton
             title="Reiniciar"
             onPress={handleReset}
             style="secondary"
           />
-        </View>
-        <CustomButton
+
+             <CustomButton
           title="Cambiar"
           onPress={handleCambiar}
           style="secondary"
         />
 
-      </View>
+        </View>
+        
+     
+        </View>
       <Portal>
         <FAB
           icon="menu"

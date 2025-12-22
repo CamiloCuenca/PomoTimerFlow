@@ -74,7 +74,7 @@ export default function TrophyScreen() {
         <PaperProvider>
             <View style={{ flex: 1, backgroundColor: theme.colors.bgMain }}>
                 <ScrollView>
-                    <Level Level={2} title_level="Aprendiz" number_of_medals={medalsCount} total_hours={totalHours} days={streakDays} />
+                    <Level Level={1} title_level="Aprendiz" number_of_medals={1} total_hours={totalHours} days={streakDays} />
 
 
                     <View className="px-4 mb-4 rounded-full items-center m-4" style={{ backgroundColor: theme.colors.bgDarkGreen, paddingVertical: 10 }}>

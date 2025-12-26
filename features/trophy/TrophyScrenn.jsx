@@ -26,14 +26,27 @@ export default function TrophyScreen() {
                 const sessions = await AsyncStorage.getItem('sessions');
                 const parsedSessions = sessions ? JSON.parse(sessions) : [];
 
-                // Calcular racha (días consecutivos)
+                // Calcular racha (días consecutivos) - CORREGIDO
                 let streak = 0;
                 const today = new Date();
+                today.setHours(0, 0, 0, 0); // Normalizar a medianoche
+                
                 let checkDate = new Date(today);
 
+                // Verificar si hay sesión hoy o ayer (la racha puede continuar si trabajaste ayer)
+                const todayStr = today.toISOString().split('T')[0];
+                const hasToday = parsedSessions.some(s => s.date === todayStr);
+                
+                if (!hasToday) {
+                    // Si no trabajaste hoy, empezar desde ayer
+                    checkDate.setDate(checkDate.getDate() - 1);
+                }
+
+                // Contar días consecutivos hacia atrás
                 while (true) {
                     const dateStr = checkDate.toISOString().split('T')[0];
                     const hasSession = parsedSessions.some(s => s.date === dateStr);
+                    
                     if (hasSession) {
                         streak++;
                         checkDate.setDate(checkDate.getDate() - 1);
@@ -42,14 +55,13 @@ export default function TrophyScreen() {
                     }
                 }
 
-                // Calcular horas totales (cada sesión de trabajo = ~25 min = 0.42 horas)
+                // Calcular horas totales (cada sesión de trabajo = ~25 min)
                 const workSessions = parsedSessions.filter(s => s.type === 'work').length;
                 const hours = Math.round((workSessions * 25) / 60 * 100) / 100;
 
                 setStreakDays(streak);
                 setTotalHours(hours);
                 setWorkSessionsCount(workSessions);
-                setMedalsCount(Math.floor(workSessions / 10)); // 1 medalla por cada 10 sesiones
 
                 // Determinar qué medallas están desbloqueadas
                 const unlocked = medals.filter(medal => {
@@ -59,9 +71,11 @@ export default function TrophyScreen() {
                         return streak >= medal.requirement;
                     }
                     return false;
-                }).map(m => m.id);
+                });
 
-                setUnlockedMedals(unlocked);
+                setUnlockedMedals(unlocked.map(m => m.id));
+                setMedalsCount(unlocked.length); // ✅ CORREGIDO: Contar medallas desbloqueadas
+                
             } catch (error) {
                 console.error('Error loading stats:', error);
             }
@@ -74,7 +88,7 @@ export default function TrophyScreen() {
         <PaperProvider>
             <View style={{ flex: 1, backgroundColor: theme.colors.bgMain }}>
                 <ScrollView>
-                    <Level Level={1} title_level="Aprendiz" number_of_medals={1} total_hours={totalHours} days={streakDays} />
+                    <Level Level={1} title_level="Aprendiz" number_of_medals={medalsCount} total_hours={totalHours} days={streakDays} />
 
 
                     <View className="px-4 mb-4 rounded-full items-center m-4" style={{ backgroundColor: theme.colors.bgDarkGreen, paddingVertical: 10 }}>

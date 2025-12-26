@@ -1,4 +1,4 @@
-    import { View, Text, Image } from "react-native";
+import { View, Text, Image } from "react-native";
 import { useTheme } from "../hooks/useTheme";
 
 export default function Strak({ title, days = 0, weekSessions = [] }) {

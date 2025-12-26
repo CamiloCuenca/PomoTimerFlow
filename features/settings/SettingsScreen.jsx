@@ -58,8 +58,10 @@ export default function SettingsScreen() {
         </View>
         
 
-        {/* Sección de Música */}
-        <View className="mt-8 mb-4">
+        
+         {/* Sección de Música 
+         
+         <View className="mt-8 mb-4">
           <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
             Música Ambiente
           </Text>
@@ -67,8 +69,11 @@ export default function SettingsScreen() {
             <Playingsounds />
           </View>
         </View>
+         
+         */}
+        
 
-        {/* Sección de Seleccionar Canción */}
+        {/* Sección de Selección de Canción 
         <View className="mt-8 mb-6">
           <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
             Seleccionar Canción
@@ -77,6 +82,8 @@ export default function SettingsScreen() {
             <SoundSelector />
           </View>
         </View>
+        */}   
+        
         
       </View>
     </ScrollView>

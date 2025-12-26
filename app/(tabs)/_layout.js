@@ -38,21 +38,6 @@ export default function Layout() {
             resizeMode="contain"
           />
         ),
-
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={handlePlayPause}
-            style={{ backgroundColor: theme.colors.primary, marginRight: 15 }}
-            className="w-10 h-10 rounded-full items-center justify-center active:opacity-70"
-            disabled={!isConfigured}
-          >
-            {status.playing ? (
-              <Pause size={20} color={theme.colors.bgMain} fill={theme.colors.bgMain} />
-            ) : (
-              <Play size={20} color={theme.colors.bgMain} fill={theme.colors.bgMain} />
-            )}
-          </TouchableOpacity>
-        )
         
       }}
     >

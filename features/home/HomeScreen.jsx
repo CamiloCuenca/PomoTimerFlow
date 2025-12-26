@@ -36,6 +36,14 @@ export default function HomeScreen() {
   const { tasks, activeTaskId, setActiveTask, incrementPomodoros } = useTaskContext();
   const [selectorVisible, setSelectorVisible] = useState(false);
 
+  // ✅ Usar ref para mantener el valor actualizado de activeTaskId
+  const activeTaskIdRef = useRef(activeTaskId);
+
+  // ✅ Actualizar el ref cada vez que activeTaskId cambie
+  useEffect(() => {
+    activeTaskIdRef.current = activeTaskId;
+  }, [activeTaskId]);
+
   // Inicializar el estado del temporizador al cargar el componente
   useEffect(() => {
     const initTimer = async () => {
@@ -58,10 +66,16 @@ export default function HomeScreen() {
     const onTimerComplete = async () => {
       const currentState = timer.getState();
       await storeSession(currentState.timerType);
+      
+      // ✅ CORREGIDO: Usar activeTaskIdRef.current en lugar de activeTaskId
       // Si fue una sesión de trabajo y hay tarea activa, incrementa su contador
-      if (currentState.timerType === 'work' && activeTaskId) {
-        await incrementPomodoros(activeTaskId);
+      if (currentState.timerType === 'work' && activeTaskIdRef.current) {
+        console.log('✅ Incrementando pomodoros para tarea:', activeTaskIdRef.current);
+        await incrementPomodoros(activeTaskIdRef.current);
+      } else {
+        console.log('⚠️ No se incrementa - Tipo:', currentState.timerType, 'Tarea activa:', activeTaskIdRef.current);
       }
+      
       setIsRunning(false);
       await mostrarNotificacionLocal({
         title: '¡Sesión completada!',

@@ -40,6 +40,7 @@ export async function registerForPushNotificationsAsync() {
 }
 
 export async function mostrarNotificacionLocal({ title, body, seconds = 1 }) {
+  // En Android el trigger necesita un canal; usamos el canal "default" configurado en setupNotifications
   await Notifications.scheduleNotificationAsync({
     content: {
       title,
@@ -47,6 +48,9 @@ export async function mostrarNotificacionLocal({ title, body, seconds = 1 }) {
       sound: 'default',
       priority: Notifications.AndroidNotificationPriority.HIGH,
     },
-    trigger: { seconds }, // Notificación programada para 'seconds' segundos en el futuro
+    trigger: {
+      seconds: Number.isFinite(seconds) ? seconds : 1,
+      channelId: 'default',
+    },
   });
 }

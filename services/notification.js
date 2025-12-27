@@ -15,6 +15,7 @@ async function setupNotifications() {
   await Notifications.setNotificationChannelAsync('default', {
     name: 'default',
     importance: Notifications.AndroidImportance.HIGH,
+    sound: 'default',
     vibrationPattern: [0, 250, 250, 250],
     lightColor: '#FF231F7C',
   });

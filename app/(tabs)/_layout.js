@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Image, TouchableOpacity } from 'react-native'; 
 import { useTheme } from "../../hooks/useTheme";
@@ -9,6 +9,7 @@ import AnimatedTabBar from "../../components/AnimatedTabBar";
 export default function Layout() {
   const { theme } = useTheme();
   const { status, isConfigured, handlePlayPause } = useAudioPlayerContext();
+  const router = useRouter();
   
   return (
     
@@ -26,17 +27,31 @@ export default function Layout() {
         headerTintColor: theme.colors.text,
         headerTitleAlign: "center",
      
-        headerLeft: () => (
+        headerRight: () => (
           <Image 
             source={require("../../assets/icon-mini.png")} 
             style={{ 
               width: 40, 
               height: 40, 
-              marginLeft: 15,
+              marginRight: 15,
               borderRadius: 15
             }} 
             resizeMode="contain"
           />
+        ),
+
+        headerLeft: () => (
+          <TouchableOpacity
+            onPress={() => router.push("/info")}
+            style={{ marginLeft: 16, padding: 6 }}
+            accessibilityLabel="Información de la app"
+          >
+            <Ionicons
+              name="information-circle-outline"
+              size={28}
+              color={theme.colors.text}
+            />
+          </TouchableOpacity>
         ),
         
       }}

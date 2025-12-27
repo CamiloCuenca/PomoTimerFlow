@@ -1,6 +1,7 @@
 import { View, Text, FlatList, Pressable, ScrollView, Image } from "react-native";
 import { useTheme } from "../../hooks/useTheme";
 import Level from "./components/level";
+import LevelsList from "./components/LevelsList";
 import { useState, useEffect } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Provider as PaperProvider, FAB, Portal } from "react-native-paper";
@@ -88,7 +89,9 @@ export default function TrophyScreen() {
         <PaperProvider>
             <View style={{ flex: 1, backgroundColor: theme.colors.bgMain }}>
                 <ScrollView>
-                    <Level Level={1} title_level="Aprendiz" number_of_medals={medalsCount} total_hours={totalHours} days={streakDays} />
+                    <Level number_of_medals={medalsCount} total_hours={totalHours} days={streakDays} />
+
+                    <LevelsList totalHours={totalHours} />
 
 
                     <View className="px-4 mb-4 rounded-full items-center m-4" style={{ backgroundColor: theme.colors.bgDarkGreen, paddingVertical: 10 }}>

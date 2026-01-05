@@ -16,6 +16,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "experiments": {
+      "baseUrl": "/"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.camilocuenca.PomoTimerFlow",

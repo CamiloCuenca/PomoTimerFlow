@@ -1,4 +1,5 @@
 {
+  "installCommand": "npm ci",
   "buildCommand": "npm run build:web",
   "outputDirectory": "dist",
   "framework": null

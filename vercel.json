@@ -1,6 +1,5 @@
 {
-  "installCommand": "npm ci",
-  "buildCommand": "cd $PWD && npx expo export --platform web --output-dir dist",
+  "buildCommand": "echo 'Static files ready'",
   "outputDirectory": "dist",
   "framework": null
 }

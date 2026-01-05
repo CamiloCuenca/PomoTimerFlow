@@ -1,5 +1,5 @@
 {
-  "buildCommand": "echo 'Static files ready'",
+  "buildCommand": "npm run build:web",
   "outputDirectory": "dist",
   "framework": null
 }

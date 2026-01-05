@@ -2,13 +2,15 @@
   "name": "pomodoroflow",
   "version": "1.2.0",
   "main": "expo-router/entry",
-  "scripts": {
-    "start": "expo start --clear",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "clear": "expo start -c"
-  },
+"scripts": {
+  "start": "expo start --clear",
+  "android": "expo start --android",
+  "ios": "expo start --ios",
+  "web": "expo start --web",
+  "clear": "expo start -c",
+  "build:web": "expo export --platform web",
+  "deploy": "npm run build:web && gh-pages -d dist"
+},
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
     "@react-native-async-storage/async-storage": "2.2.0",
@@ -52,6 +54,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@react-native-community/cli": "^20.0.2",
+    "gh-pages": "^6.3.0",
     "react-devtools": "^7.0.0",
     "react-native-worklets": "0.5.1",
     "tailwindcss": "^3.4.18"

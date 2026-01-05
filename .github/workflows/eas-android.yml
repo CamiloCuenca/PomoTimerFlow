@@ -1,0 +1,51 @@
+name: EAS Android Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: 'EAS profile (production, preview, development)'
+        required: true
+        default: 'production'
+      platform:
+        description: 'Platform to build'
+        required: true
+        default: 'android'
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci || npm install
+
+      - name: Setup Expo & EAS
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Run EAS Build (Android)
+        env:
+          EAS_BUILD_PROFILE: ${{ github.event.inputs.profile || 'production' }}
+        run: |
+          eas build --platform android --profile "$EAS_BUILD_PROFILE" --non-interactive
+
+      - name: Upload build URL
+        if: success()
+        run: |
+          eas build:list --limit 1 --non-interactive --json | jq -r '.[0].artifacts.buildUrl' || echo 'Build URL fetch skipped'

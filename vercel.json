@@ -1,6 +1,6 @@
 {
   "installCommand": "npm ci",
-  "buildCommand": "npx expo export --platform web --output-dir dist && cp docs/privacy-policy.html dist/privacy-policy.html",
+  "buildCommand": "cd $PWD && npx expo export --platform web --output-dir dist",
   "outputDirectory": "dist",
   "framework": null
 }

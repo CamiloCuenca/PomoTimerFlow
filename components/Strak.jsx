@@ -39,7 +39,7 @@ export default function Strak({ title, days = 0, weekSessions = [] }) {
                                 >
                                     <Image
                                         source={require("../assets/pomo.png")}
-                                        className="w-10 h-10"
+                                        style={{ width: 32, height: 32 }}
                                     />
                                 </View>
                             ) : (

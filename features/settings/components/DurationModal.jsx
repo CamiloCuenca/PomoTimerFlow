@@ -1,4 +1,4 @@
-import { View, Pressable, Text, Modal } from "react-native";
+import { View, Pressable, Text, Modal, TextInput } from "react-native";
 import { Plus, Minus, Save } from 'lucide-react-native';
 import { useState, useEffect } from "react";
 import { useTheme } from "../../../hooks/useTheme";
@@ -38,15 +38,16 @@ export default function DurationModal({
   }, [type, initialMinutes]);
 
   const handleSave = () => {
+    const finalMinutes = minutes === '' ? 1 : minutes;
     switch(type) {
       case 'work':
-        setWorkDuration(minutes);
+        setWorkDuration(finalMinutes);
         break;
       case 'shortBreak':
-        setShortBreak(minutes);
+        setShortBreak(finalMinutes);
         break;
       case 'longBreak':
-        setLongBreak(minutes);
+        setLongBreak(finalMinutes);
         break;
     }
     onClose();
@@ -60,6 +61,17 @@ export default function DurationModal({
 
   const handlePlus = () => {
     setMinutes(prev => prev + 1);
+  };
+
+  const handleInputChange = (text) => {
+    // Solo permitir números
+    const numValue = parseInt(text, 10);
+    if (!isNaN(numValue) && numValue >= 1) {
+      setMinutes(numValue);
+    } else if (text === '') {
+      // Permitir campo vacío temporalmente para que el usuario pueda escribir
+      setMinutes('');
+    }
   };
 
   const getTitle = () => {
@@ -105,9 +117,19 @@ export default function DurationModal({
               </Pressable>
 
               <View className="items-center mx-4">
-                <Text style={{ color: theme.colors.text }} className="text-5xl font-bold">
-                  {minutes}
-                </Text>
+                <TextInput
+                  value={String(minutes)}
+                  onChangeText={handleInputChange}
+                  keyboardType="number-pad"
+                  maxLength={3}
+                  style={{ 
+                    color: theme.colors.text,
+                    fontSize: 48,
+                    fontWeight: '700',
+                    textAlign: 'center',
+                    width: 100,
+                  }}
+                />
                 <Text style={{ color: theme.colors.textSecondary }} className="text-sm mt-1">minutos</Text>
               </View>
 

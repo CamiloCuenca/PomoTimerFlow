@@ -1,7 +1,7 @@
 import {
   View,
   TouchableOpacity,
-  Dimensions,
+  useWindowDimensions,
   StyleSheet,
   Text,
 } from "react-native";
@@ -16,8 +16,6 @@ import Animated, {
 import { useTheme } from "../hooks/useTheme";
 import { useEffect } from "react";
 
-const { width } = Dimensions.get("window");
-
 const TAB_BAR_HEIGHT = 64;
 const INDICATOR_HEIGHT = 64;
 const SPRING = {
@@ -29,6 +27,7 @@ const SPRING = {
 export default function AnimatedTabBar({ state, descriptors, navigation }) {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
 
   const tabCount = state.routes.length;
   const tabWidth = width / tabCount;
@@ -46,7 +45,7 @@ export default function AnimatedTabBar({ state, descriptors, navigation }) {
     transform: [
       {
         translateX:
-          activeIndex.value * tabWidth + tabWidth * 0.1,
+          activeIndex.value * tabWidth + (tabWidth - tabWidth * 0.8) / 2,
       },
     ],
   }));

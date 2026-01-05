@@ -8,7 +8,7 @@
   "ios": "expo start --ios",
   "web": "expo start --web",
   "clear": "expo start -c",
-  "build:web": "npx expo export --platform web --output-dir dist",
+  "build:web": "npx expo export --platform web --output-dir ./dist",
   "fix:paths": "powershell -Command \"(Get-Content dist/index.html) -replace '\"/_expo/','\"./_expo/' | Set-Content dist/index.html\"",
   "deploy": "npm run build:web && npm run fix:paths && copy privacy-policy.html dist\\privacy-policy.html && gh-pages -d dist",
   "vercel-build": "npx expo export --platform web --output-dir dist && cp docs/privacy-policy.html dist/privacy-policy.html"

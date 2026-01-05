@@ -1,6 +1,6 @@
 {
   "installCommand": "npm ci",
-  "buildCommand": "npx expo export --platform web --output-dir .vercel/output/static && cp docs/privacy-policy.html .vercel/output/static/privacy-policy.html",
-  "outputDirectory": ".vercel/output/static",
+  "buildCommand": "npx expo export --platform web --output-dir dist && cp docs/privacy-policy.html dist/privacy-policy.html",
+  "outputDirectory": "dist",
   "framework": null
 }

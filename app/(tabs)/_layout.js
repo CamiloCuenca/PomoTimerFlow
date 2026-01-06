@@ -1,8 +1,8 @@
 import { Tabs, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Image, TouchableOpacity } from 'react-native'; 
+import { Image, TouchableOpacity, Platform } from 'react-native';
 import { useTheme } from "../../hooks/useTheme";
-import { Play, Pause } from 'lucide-react-native';
+import { Play, Pause, Settings, ListTodo, Home, BarChart3, Trophy, Info } from 'lucide-react-native';
 import { useAudioPlayerContext } from "../../hooks/useAudioPlayerContext";
 import AnimatedTabBar from "../../components/AnimatedTabBar";
 
@@ -46,11 +46,15 @@ export default function Layout() {
             style={{ marginLeft: 16, padding: 6 }}
             accessibilityLabel="Información de la app"
           >
-            <Ionicons
-              name="information-circle-outline"
-              size={28}
-              color={theme.colors.text}
-            />
+            {Platform.OS === 'web' ? (
+              <Info size={28} color={theme.colors.text} />
+            ) : (
+              <Ionicons
+                name="information-circle-outline"
+                size={28}
+                color={theme.colors.text}
+              />
+            )}
           </TouchableOpacity>
         ),
         
@@ -61,7 +65,9 @@ export default function Layout() {
         options={{
           title: "Settings",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings-outline" color={color} size={size} />
+            Platform.OS === 'web'
+              ? <Settings color={color} size={size} />
+              : <Ionicons name="settings-outline" color={color} size={size} />
           ),
         }}
       />
@@ -73,7 +79,9 @@ export default function Layout() {
         options={{
           title: "Tasks",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list-outline" color={color} size={size} />
+              Platform.OS === 'web'
+                ? <ListTodo color={color} size={size} />
+                : <Ionicons name="list-outline" color={color} size={size} />
           ),
         }}
       />
@@ -83,7 +91,9 @@ export default function Layout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" color={color} size={size} />
+            Platform.OS === 'web'
+              ? <Home color={color} size={size} />
+              : <Ionicons name="home-outline" color={color} size={size} />
           ),
         }}
       />
@@ -93,7 +103,9 @@ export default function Layout() {
         options={{
           title: "Stats",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="bar-chart-outline" color={color} size={size} />
+            Platform.OS === 'web'
+              ? <BarChart3 color={color} size={size} />
+              : <Ionicons name="bar-chart-outline" color={color} size={size} />
           ),
         }}
       />
@@ -103,7 +115,9 @@ export default function Layout() {
         options={{
           title: "Trophy",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="trophy-outline" color={color} size={size} />
+            Platform.OS === 'web'
+              ? <Trophy color={color} size={size} />
+              : <Ionicons name="trophy-outline" color={color} size={size} />
           ),
         }}
       />

@@ -10,20 +10,26 @@ import { Ionicons } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
-SplashScreen.preventAutoHideAsync();
+// Prevenir que el splash screen se oculte automáticamente
+SplashScreen.preventAutoHideAsync().catch(() => {
+  /* En web puede fallar, ignoramos el error */
+});
 
 export default function RootLayout() {
-  const [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     ...Ionicons.font,
   });
 
   useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync().catch(() => {
+        /* En web puede fallar, ignoramos el error */
+      });
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, fontError]);
 
-  if (!fontsLoaded) {
+  // No renderizar nada hasta que las fuentes estén cargadas
+  if (!fontsLoaded && !fontError) {
     return null;
   }
 

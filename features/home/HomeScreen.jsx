@@ -1,4 +1,4 @@
-import { View, AppState, Text } from "react-native";
+import { View, AppState, Text, Platform } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import ProgressBar from "./components/ProgressBar";
 import { useState, useEffect, useRef } from "react";
@@ -9,6 +9,7 @@ import { mostrarNotificacionLocal, registerForPushNotificationsAsync } from "../
 import { useTheme } from "../../hooks/useTheme";
 import { useTaskContext } from "../../context/TaskContext";
 import { Provider as PaperProvider, FAB, Portal, Button } from "react-native-paper";
+import { Menu } from "lucide-react-native";
 
 import { Modal, Pressable, ScrollView } from "react-native";
 
@@ -202,7 +203,7 @@ export default function HomeScreen() {
         </View>
       <Portal>
         <FAB
-          icon="menu"
+          icon={Platform.OS === "web" ? (props) => <Menu color={props.color} size={props.size ?? 24} /> : "menu"}
           onPress={() => setSelectorVisible(true)}
           style={{
             position: "absolute",

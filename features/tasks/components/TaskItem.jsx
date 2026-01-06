@@ -1,5 +1,6 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Check, Trash2 } from "lucide-react-native";
 import { useTheme } from "../../../hooks/useTheme";
 
 export default function TaskItem({ id, title, description, priority, status, pomodoros, icon, onDelete, onComplete }) {
@@ -12,10 +13,18 @@ export default function TaskItem({ id, title, description, priority, status, pom
                 <Text className="text-white text-lg font-bold">{title}</Text>
                 <View className="flex flex-row items-center gap-3">
                     <Pressable onPress={onComplete} className="p-1 rounded-full" style={{ backgroundColor: `${theme.colors.bgMain}22` }}>
-                        <Ionicons name="checkmark" color={theme.colors.bgMain} size={20} />
+                        {Platform.OS === 'web' ? (
+                            <Check color={theme.colors.bgMain} size={20} />
+                        ) : (
+                            <Ionicons name="checkmark" color={theme.colors.bgMain} size={20} />
+                        )}
                     </Pressable>
                     <Pressable onPress={onDelete} className="p-1 rounded-full" style={{ backgroundColor: `${theme.colors.bgMain}22` }}>
-                        <Ionicons name="trash-outline" color={theme.colors.bgMain} size={20} />
+                        {Platform.OS === 'web' ? (
+                            <Trash2 color={theme.colors.bgMain} size={20} />
+                        ) : (
+                            <Ionicons name="trash-outline" color={theme.colors.bgMain} size={20} />
+                        )}
                     </Pressable>
                 </View>
             </View>

@@ -1,6 +1,7 @@
-import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Image, Platform } from "react-native";
 import { Stack } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { LayoutGrid, Lightbulb, Github, ShieldCheck, ExternalLink } from "lucide-react-native";
 import * as Linking from "expo-linking";
 import { useTheme } from "../hooks/useTheme";
 
@@ -102,6 +103,20 @@ export default function InfoScreen() {
 }
 
 function Section({ icon, title, subtitle, theme }) {
+  const renderIcon = () => {
+    if (Platform.OS === "web") {
+      switch (icon) {
+        case "apps-outline":
+          return <LayoutGrid size={24} color={theme.colors.text} />;
+        case "bulb-outline":
+          return <Lightbulb size={24} color={theme.colors.text} />;
+        default:
+          return <LayoutGrid size={24} color={theme.colors.text} />;
+      }
+    }
+    return <Ionicons name={icon} size={24} color={theme.colors.text} />;
+  };
+
   return (
     <View style={{ flexDirection: "row", gap: 12, marginBottom: 16 }}>
       <View
@@ -114,7 +129,7 @@ function Section({ icon, title, subtitle, theme }) {
           backgroundColor: theme.colors.secondary,
         }}
       >
-        <Ionicons name={icon} size={24} color={theme.colors.text} />
+        {renderIcon()}
       </View>
       <View style={{ flex: 1 }}>
         <Text style={{ color: theme.colors.text, fontSize: 18, fontWeight: "700" }}>
@@ -149,6 +164,20 @@ function Row({ label, value, theme }) {
 }
 
 function LinkRow({ icon, label, url, theme, onPress }) {
+  const renderIcon = () => {
+    if (Platform.OS === "web") {
+      switch (icon) {
+        case "logo-github":
+          return <Github size={22} color={theme.colors.text} />;
+        case "shield-checkmark-outline":
+          return <ShieldCheck size={22} color={theme.colors.text} />;
+        default:
+          return <ExternalLink size={22} color={theme.colors.text} />;
+      }
+    }
+    return <Ionicons name={icon} size={22} color={theme.colors.text} />;
+  };
+
   return (
     <TouchableOpacity
       onPress={() => onPress(url)}
@@ -159,11 +188,15 @@ function LinkRow({ icon, label, url, theme, onPress }) {
         gap: 10,
       }}
     >
-      <Ionicons name={icon} size={22} color={theme.colors.text} />
+      {renderIcon()}
       <Text style={{ color: theme.colors.text, fontWeight: "600", flex: 1 }}>
         {label}
       </Text>
-      <Ionicons name="open-outline" size={18} color={theme.colors.textSecondary} />
+      {Platform.OS === "web" ? (
+        <ExternalLink size={18} color={theme.colors.textSecondary} />
+      ) : (
+        <Ionicons name="open-outline" size={18} color={theme.colors.textSecondary} />
+      )}
     </TouchableOpacity>
   );
 }

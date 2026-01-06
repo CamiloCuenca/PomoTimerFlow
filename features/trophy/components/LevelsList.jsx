@@ -1,6 +1,7 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Platform } from "react-native";
 import { useTheme } from "../../../hooks/useTheme";
 import { Ionicons } from "@expo/vector-icons";
+import { School, Hourglass, Medal, Star, Flame, CheckCircle } from "lucide-react-native";
 import { getAllLevelsStatus } from "../../../utils/levelSystem";
 
 export default function LevelsList({ totalHours }) {
@@ -34,11 +35,13 @@ export default function LevelsList({ totalHours }) {
                             }}
                             className="w-12 h-12 rounded-full items-center justify-center mr-4"
                         >
-                            <Ionicons
-                                name={level.icon}
-                                size={24}
-                                color={theme.colors.bgMain}
-                            />
+                            {Platform.OS === "web" ? renderLevelIcon(level.icon, theme) : (
+                                <Ionicons
+                                    name={level.icon}
+                                    size={24}
+                                    color={theme.colors.bgMain}
+                                />
+                            )}
                         </View>
 
                         {/* Información del nivel */}
@@ -54,11 +57,15 @@ export default function LevelsList({ totalHours }) {
                                     Nivel {level.id}
                                 </Text>
                                 {level.unlocked && (
-                                    <Ionicons
-                                        name="checkmark-circle"
-                                        size={18}
-                                        color={level.color}
-                                    />
+                                    Platform.OS === "web" ? (
+                                        <CheckCircle size={18} color={level.color} />
+                                    ) : (
+                                        <Ionicons
+                                            name="checkmark-circle"
+                                            size={18}
+                                            color={level.color}
+                                        />
+                                    )
                                 )}
                             </View>
 
@@ -97,4 +104,21 @@ export default function LevelsList({ totalHours }) {
             </ScrollView>
         </View>
     );
+}
+
+function renderLevelIcon(icon, theme) {
+    switch (icon) {
+        case "school":
+            return <School size={24} color={theme.colors.bgMain} />;
+        case "hourglass":
+            return <Hourglass size={24} color={theme.colors.bgMain} />;
+        case "medal":
+            return <Medal size={24} color={theme.colors.bgMain} />;
+        case "star":
+            return <Star size={24} color={theme.colors.bgMain} />;
+        case "flame":
+            return <Flame size={24} color={theme.colors.bgMain} />;
+        default:
+            return <Star size={24} color={theme.colors.bgMain} />;
+    }
 }

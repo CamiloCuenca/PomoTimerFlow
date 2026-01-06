@@ -1,6 +1,7 @@
-import { View, Text } from "react-native";
+import { View, Text, Platform } from "react-native";
 import { useTheme } from "../../../hooks/useTheme";
 import { Ionicons } from "@expo/vector-icons";
+import { School, Hourglass, Medal, Star, Flame } from "lucide-react-native";
 import { useState, useEffect, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "expo-router";
@@ -77,7 +78,11 @@ export default function Level({ number_of_medals, total_hours, days = 0 }) {
         <View style={{ backgroundColor: theme.colors.primary }} className="m-4 p-4 rounded-lg items-center justify-center">
             {/* Icono del nivel */}
             <View className="mb-4 rounded-full p-5" style={{ backgroundColor: levelInfo.color }}>
-                <Ionicons name={levelInfo.icon} color={theme.colors.bgMain} size={60} />
+                {Platform.OS === "web" ? (
+                    renderLevelIcon(levelInfo.icon, theme, 60)
+                ) : (
+                    <Ionicons name={levelInfo.icon} color={theme.colors.bgMain} size={60} />
+                )}
             </View>
 
             {/* Título y descripción del nivel */}
@@ -147,4 +152,21 @@ export default function Level({ number_of_medals, total_hours, days = 0 }) {
             )}
         </View>
     );
+}
+
+function renderLevelIcon(icon, theme, size = 24) {
+    switch (icon) {
+        case "school":
+            return <School size={size} color={theme.colors.bgMain} />;
+        case "hourglass":
+            return <Hourglass size={size} color={theme.colors.bgMain} />;
+        case "medal":
+            return <Medal size={size} color={theme.colors.bgMain} />;
+        case "star":
+            return <Star size={size} color={theme.colors.bgMain} />;
+        case "flame":
+            return <Flame size={size} color={theme.colors.bgMain} />;
+        default:
+            return <Star size={size} color={theme.colors.bgMain} />;
+    }
 }

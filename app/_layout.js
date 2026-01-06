@@ -10,27 +10,30 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
 
-// Prevenir que el splash screen se oculte automáticamente
-SplashScreen.preventAutoHideAsync().catch(() => {
-  /* En web puede fallar, ignoramos el error */
-});
+const isWeb = Platform.OS === 'web';
+
+// Solo controlar splash en nativo
+if (!isWeb) {
+  SplashScreen.preventAutoHideAsync().catch(() => {});
+}
 
 export default function RootLayout() {
-  const [fontsLoaded, fontError] = useFonts({
-    'Ionicons': require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
-    'MaterialCommunityIcons': require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf'),
-  });
+  // En web no cargamos fuentes nativas para evitar 404; en nativo sí.
+  const [fontsLoaded, fontError] = isWeb
+    ? [true, null]
+    : useFonts({
+        Ionicons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
+        MaterialCommunityIcons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf'),
+      });
 
   useEffect(() => {
-    if (fontsLoaded || fontError) {
-      SplashScreen.hideAsync().catch(() => {
-        /* En web puede fallar, ignoramos el error */
-      });
+    if (!isWeb && (fontsLoaded || fontError)) {
+      SplashScreen.hideAsync().catch(() => {});
     }
   }, [fontsLoaded, fontError]);
 
-  // No renderizar nada hasta que las fuentes estén cargadas (excepto en web donde se cargan dinámicamente)
-  if (!fontsLoaded && !fontError && Platform.OS !== 'web') {
+  // Esperar fuentes en nativo; en web ya retornamos true arriba
+  if (!isWeb && !fontsLoaded && !fontError) {
     return null;
   }
 

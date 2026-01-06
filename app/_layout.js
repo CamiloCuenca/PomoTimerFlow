@@ -6,9 +6,9 @@ import { AudioPlayerProvider } from '../context/AudioPlayerContext';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { TaskProvider } from '../context/TaskContext';
 import { useFonts } from 'expo-font';
-import { Ionicons } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { Platform } from 'react-native';
 
 // Prevenir que el splash screen se oculte automáticamente
 SplashScreen.preventAutoHideAsync().catch(() => {
@@ -17,7 +17,8 @@ SplashScreen.preventAutoHideAsync().catch(() => {
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
-    ...Ionicons.font,
+    'Ionicons': require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
+    'MaterialCommunityIcons': require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf'),
   });
 
   useEffect(() => {
@@ -28,8 +29,8 @@ export default function RootLayout() {
     }
   }, [fontsLoaded, fontError]);
 
-  // No renderizar nada hasta que las fuentes estén cargadas
-  if (!fontsLoaded && !fontError) {
+  // No renderizar nada hasta que las fuentes estén cargadas (excepto en web donde se cargan dinámicamente)
+  if (!fontsLoaded && !fontError && Platform.OS !== 'web') {
     return null;
   }
 

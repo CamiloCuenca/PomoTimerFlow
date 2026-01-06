@@ -8,10 +8,10 @@
   "ios": "expo start --ios",
   "web": "expo start --web",
   "clear": "expo start -c",
-"build:web": "npx expo export --platform web",
+"build:web": "npx expo export --platform web && node inject-fonts.js",
   "fix:paths": "powershell -Command \"(Get-Content dist/index.html) -replace '\"/_expo/','\"./_expo/' | Set-Content dist/index.html\"",
   "deploy": "npm run build:web && npm run fix:paths && copy privacy-policy.html dist\\privacy-policy.html && gh-pages -d dist",
-"vercel-build": "npx expo export --platform web"},
+"vercel-build": "npx expo export --platform web && node inject-fonts.js"},
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
     "@react-native-async-storage/async-storage": "2.2.0",

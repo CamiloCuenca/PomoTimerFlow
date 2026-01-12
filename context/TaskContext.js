@@ -58,10 +58,29 @@ export const TaskProvider = ({ children }) => {
   };
 
   const incrementPomodoros = async (id) => {
-    const task = tasks.find(t => t.id === id);
-    if (!task) return;
-    const updated = await storageUpdateTask(id, { pomodoros: (task.pomodoros || 0) + 1 });
-    setTasks(updated || []);
+    const targetId = `${id}`;
+    let nextPomodoros = null;
+
+    setTasks((prev) => {
+      const updatedLocal = prev.map((t) => {
+        if (t.id === targetId) {
+          nextPomodoros = (t.pomodoros || 0) + 1;
+          return { ...t, pomodoros: nextPomodoros };
+        }
+        return t;
+      });
+
+      // Persistimos en AsyncStorage
+      saveTasks(updatedLocal).catch((err) =>
+        console.error('Error guardando pomodoros:', err)
+      );
+      return updatedLocal;
+    });
+
+    // Si encontramos la tarea, sincronizamos también via storageUpdateTask
+    if (nextPomodoros !== null) {
+      await storageUpdateTask(targetId, { pomodoros: nextPomodoros });
+    }
   };
 
   const value = {

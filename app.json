@@ -33,8 +33,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.camilocuenca.PomoTimerFlow"
-   
+      "package": "com.camilocuenca.PomoTimerFlow",
+      "permissions": [
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+      ]
     },
        "web": {
       "favicon": "./assets/favicon.png",

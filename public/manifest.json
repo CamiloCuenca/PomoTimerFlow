@@ -1,0 +1,21 @@
+{
+  "name": "PomoTimerFlow",
+  "short_name": "PomoTimerFlow",
+  "description": "Temporizador Pomodoro online gratis. Mejora tu productividad con la técnica Pomodoro.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2196f3",
+  "icons": [
+    {
+      "src": "/assets/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/favicon.ico",
+      "sizes": "48x48 64x64 128x128 256x256",
+      "type": "image/x-icon"
+    }
+  ]
+}

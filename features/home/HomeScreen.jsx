@@ -132,9 +132,21 @@ export default function HomeScreen() {
   };
 
   return (
-
     <PaperProvider>
       <View style={{ backgroundColor: theme.colors.bgMain }} className="flex-1 items-center justify-center gap-6">
+        {/* SEO: h1 oculto solo en web */}
+        {Platform.OS === 'web' && (
+          <h1 style={{
+            position: 'absolute',
+            left: '-9999px',
+            width: '1px',
+            height: '1px',
+            overflow: 'hidden',
+            opacity: 0
+          }}>
+            PomoTimerFlow | Mejora tu productividad
+          </h1>
+        )}
         {/* Selector de tarea activa (solo FAB como trigger) */}
         <Modal
           visible={selectorVisible}

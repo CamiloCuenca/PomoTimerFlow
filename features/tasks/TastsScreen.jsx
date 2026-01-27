@@ -5,14 +5,22 @@ import { useTheme } from "../../hooks/useTheme";
 import TaskItem from "./components/TaskItem";
 import TaskForm from "./components/TaskForm";
 import { useTaskContext } from "../../context/TaskContext";
+import { useLocalization } from '../../context/LocalizationContext';
 
 export default function TasksScreen() {
   const { theme } = useTheme();
   const { tasks, addTask, deleteTask, completeTask } = useTaskContext();
-  const [selectedCategory, setSelectedCategory] = useState("Todas");
+  const { t } = useLocalization();
+  const [selectedCategory, setSelectedCategory] = useState(t('task.categories.all'));
   const [formVisible, setFormVisible] = useState(false);
 
-  const categories = ["Todas", "New Task", "In Progress", "Completed"];
+  const categories = [t('task.categories.all'), t('task.categories.new'), t('task.categories.in_progress'), t('task.categories.completed')];
+
+  const statusMap = {
+    [t('task.categories.new')]: 'New Task',
+    [t('task.categories.in_progress')]: 'In Progress',
+    [t('task.categories.completed')]: 'Completed'
+  };
 
   const handleAddTask = () => {
     setFormVisible(true);
@@ -32,13 +40,15 @@ export default function TasksScreen() {
     addTask(newTask);
   };
 
+  const filteredTasks = selectedCategory === t('task.categories.all') ? tasks : tasks.filter((tsk) => tsk.status === statusMap[selectedCategory]);
+
   return (
     <PaperProvider>
       <View style={{ flex: 1, backgroundColor: theme.colors.bgMain }}>
         <ScrollView style={{ backgroundColor: theme.colors.bgMain }}>
       <View className="p-4">
         <Text className="text-2xl font-bold mb-4" style={{ color: theme.colors.text }}>
-          Categorías
+          {t('task.title')}
         </Text>
 
         <FlatList
@@ -76,11 +86,7 @@ export default function TasksScreen() {
           }}
         />
       </View>
-        {(
-          selectedCategory === "Todas"
-            ? tasks
-            : tasks.filter((t) => t.status === selectedCategory)
-        ).map((task) => (
+        {filteredTasks.map((task) => (
           <TaskItem
             key={task.id}
             id={task.id}

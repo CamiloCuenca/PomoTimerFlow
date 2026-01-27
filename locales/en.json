@@ -1,0 +1,81 @@
+{
+  "home": {
+    "title": "Pomodoro Timer",
+    "start": "Start",
+    "stop": "Stop",
+    "pause": "Pause",
+    "reset": "Reset",
+    "change": "Change",
+    "select_task": "Select task",
+    "no_tasks_available": "No tasks available",
+    "session_complete_title": "Session completed!",
+    "session_complete_body": "You finished a %{type} session.",
+    "work": "work",
+    "break": "break"
+  },
+  "settings": {
+    "title": "Settings",
+    "durations": "Durations",
+    "theme": "Theme",
+    "language": "Language",
+    "music": "Ambient Music",
+    "select_song": "Select Song",
+    "english": "English",
+    "spanish": "Spanish",
+    "close": "Close"
+  },
+  "task": {
+    "title": "Tasks",
+    "add": "Add task",
+    "placeholder": "Task name",
+    "new": "New task",
+    "name": "Task name",
+    "description": "Description",
+    "priority": "Priority",
+    "priority_high": "High",
+    "priority_medium": "Medium",
+    "priority_low": "Low",
+    "cancel": "Cancel",
+    "save": "Save",
+    "pomodoros": "Pomodoros",
+    "categories": {
+      "all": "All",
+      "new": "New Task",
+      "in_progress": "In Progress",
+      "completed": "Completed"
+    },
+    "status_sin_tarea": "No task"
+  },
+  "durations": {
+    "pomodoro": "Pomodoro",
+    "shortBreak": "Short break",
+    "longBreak": "Long break",
+    "minutes": "minutes",
+    "duration_work": "Work duration",
+    "duration_shortBreak": "Short break duration",
+    "duration_longBreak": "Long break duration",
+    "edit_duration": "Edit duration"
+  },
+  "stats": {
+    "streak": "Streak",
+    "work_sessions": "Work sessions",
+    "break_sessions": "Break sessions"
+  },
+  "trophy": {
+    "all": "All",
+    "obtained": "Obtained",
+    "in_progress": "In progress",
+    "levels_all": "All Levels",
+    "level": "Level",
+    "medals": "Medals",
+    "total_hours": "Total Hours",
+    "streak_days": "Streak Days",
+    "loading_level": "Loading level...",
+    "progress_next": "Progress to next level",
+    "next_level": "Next level"
+  },
+  "common": {
+    "day": "day",
+    "days": "days"
+  }
+}

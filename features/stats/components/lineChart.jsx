@@ -2,13 +2,17 @@ import { LineChart } from "react-native-gifted-charts";
 import { View, Text } from "react-native";
 import React from "react";
 import { useTheme } from "../../../hooks/useTheme";
+import { useLocalization } from '../../../context/LocalizationContext';
 
 const LineChartCustom = ({ 
   data = [], 
-  title = "Sesiones esta semana",
-  color = "#17CF17" 
+  title, // si no se pasa, usamos la traducción por defecto
+  color = "#17CF17"
 }) => {
   const { theme } = useTheme();
+  const { t, locale } = useLocalization();
+
+  const displayedTitle = title || t('stats.work_sessions');
 
   const customDataPoint = () => (
     <View
@@ -58,6 +62,15 @@ const LineChartCustom = ({
   // 🔢 Total de sesiones
   const totalSessions = fullWeekData.reduce((sum, d) => sum + d.sessions, 0);
 
+  // Localizar nombre del mes según locale actual
+  let monthLabel = '';
+  try {
+    const localeTag = locale === 'es' ? 'es-ES' : 'en-US';
+    monthLabel = new Date().toLocaleDateString(localeTag, { month: 'long' });
+  } catch (e) {
+    monthLabel = new Date().toLocaleDateString(undefined, { month: 'long' });
+  }
+
   return (
     <View
       style={{
@@ -73,13 +86,13 @@ const LineChartCustom = ({
     >
       <View className="flex-row justify-between items-center mb-3">
         <View>
-          <Text style={{ color: theme.colors.textSecondary }} className="text-base pl-2">{title}</Text>
+          <Text style={{ color: theme.colors.textSecondary }} className="text-base pl-2">{displayedTitle}</Text>
           <Text style={{ color: theme.colors.text }} className="text-3xl font-bold pl-2">
             {totalSessions}
           </Text>
         </View>
         <Text style={{ color: theme.colors.textSecondary }} className="text-base capitalize mb-3">
-          {new Date().toLocaleDateString("es-ES", { month: "long" })}
+          {monthLabel}
         </Text>
       </View>
 

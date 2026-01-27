@@ -3,7 +3,6 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   StyleSheet,
-  Text,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, {
@@ -15,6 +14,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useTheme } from "../hooks/useTheme";
 import { useEffect } from "react";
+import { useLocalization } from '../context/LocalizationContext';
 
 const TAB_BAR_HEIGHT = 64;
 const INDICATOR_HEIGHT = 64;
@@ -28,6 +28,7 @@ export default function AnimatedTabBar({ state, descriptors, navigation }) {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
+  const { t } = useLocalization();
 
   const tabCount = state.routes.length;
   const tabWidth = width / tabCount;
@@ -110,6 +111,9 @@ export default function AnimatedTabBar({ state, descriptors, navigation }) {
             ),
           }));
 
+          const rawLabel = options.title ?? route.name;
+          const label = typeof rawLabel === 'string' ? t(rawLabel) : rawLabel;
+
           return (
             <TouchableOpacity
               key={route.key}
@@ -128,7 +132,7 @@ export default function AnimatedTabBar({ state, descriptors, navigation }) {
                   labelStyle,
                 ]}
               >
-                {options.title ?? route.name}
+                {label}
               </Animated.Text>
             </TouchableOpacity>
           );

@@ -1,8 +1,10 @@
 import { View, Text, Image } from "react-native";
 import { useTheme } from "../hooks/useTheme";
+import { useLocalization } from '../context/LocalizationContext';
 
 export default function Strak({ title, days = 0, weekSessions = [] }) {
     const { theme } = useTheme();
+    const { t } = useLocalization();
     const dayOrder = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
 
     const normalizedWeek = dayOrder.map((day) => {
@@ -15,7 +17,7 @@ export default function Strak({ title, days = 0, weekSessions = [] }) {
             <View className="gap-3 flex-row items-center p-4 rounded-lg ">
                 <Text style={{ color: theme.colors.text }} className="font-bold text-2xl">{title}:</Text>
                 <Text style={{ color: theme.colors.text }} className="font-bold text-2xl">
-                    {days} {days === 1 ? "día" : "días"}
+                    {days} {days === 1 ? t('common.day') : t('common.days')}
                 </Text>
             </View>
 

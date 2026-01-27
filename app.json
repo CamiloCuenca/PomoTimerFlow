@@ -4,7 +4,11 @@
     "name": "PomoTimerFlow",
     "slug": "PomoTimerFlow",
     "version": "1.2.0",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -39,21 +43,45 @@
         "FOREGROUND_SERVICE_MEDIA_PLAYBACK"
       ]
     },
-       "web": {
+    "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro",
-        "output": "static",
-        "meta": [
-          { "name": "description", "content": "PomoTimerFlow: Temporizador Pomodoro online gratis. Mejora tu productividad con la técnica Pomodoro, controla tus tareas y alcanza tus metas fácilmente." },
-          { "name": "keywords", "content": "pomodoro, temporizador, timer, técnica pomodoro, productividad, tareas, enfoque, estudio, trabajo, app pomodoro, pomodoro timer" },
-          { "name": "author", "content": "CamiloCuencaDev" },
-          { "property": "og:title", "content": "PomoTimerFlow - Temporizador Pomodoro" },
-          { "property": "og:description", "content": "Temporizador Pomodoro online gratis para mejorar tu productividad y enfoque." },
-          { "property": "og:type", "content": "website" },
-          { "property": "og:image", "content": "https://pomo-timer-flow.vercel.app/assets/icon.png" },
-          { "property": "og:url", "content": "https://pomo-timer-flow.vercel.app" }
-        ],
-        "title": "PomoTimerFlow - Temporizador Pomodoro"
+      "output": "static",
+      "meta": [
+        {
+          "name": "description",
+          "content": "PomoTimerFlow: Temporizador Pomodoro online gratis. Mejora tu productividad con la técnica Pomodoro, controla tus tareas y alcanza tus metas fácilmente."
+        },
+        {
+          "name": "keywords",
+          "content": "pomodoro, temporizador, timer, técnica pomodoro, productividad, tareas, enfoque, estudio, trabajo, app pomodoro, pomodoro timer"
+        },
+        {
+          "name": "author",
+          "content": "CamiloCuencaDev"
+        },
+        {
+          "property": "og:title",
+          "content": "PomoTimerFlow - Temporizador Pomodoro"
+        },
+        {
+          "property": "og:description",
+          "content": "Temporizador Pomodoro online gratis para mejorar tu productividad y enfoque."
+        },
+        {
+          "property": "og:type",
+          "content": "website"
+        },
+        {
+          "property": "og:image",
+          "content": "https://pomo-timer-flow.vercel.app/assets/icon.png"
+        },
+        {
+          "property": "og:url",
+          "content": "https://pomo-timer-flow.vercel.app"
+        }
+      ],
+      "title": "PomoTimerFlow - Temporizador Pomodoro"
     },
     "plugins": [
       [
@@ -87,7 +115,8 @@
       ],
       "expo-router",
       "expo-audio",
-      "expo-asset"
+      "expo-asset",
+      "expo-localization"
     ],
     "extra": {
       "router": {},

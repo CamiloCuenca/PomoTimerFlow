@@ -1,25 +1,38 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useTheme } from "../../hooks/useTheme";
 import DurationsButom from "./components/DurationsButom";
-import Playingsounds from "../../components/Playingsounds";
-import SoundSelector from "./components/SoundSelector";
+import { useLocalization } from '../../context/LocalizationContext';
+import { Picker } from '@react-native-picker/picker';
+import { useRef } from 'react';
 
 export default function SettingsScreen() {
   const { theme, changeTheme, themes } = useTheme();
+  const { t, locale, setLocale } = useLocalization();
+  const pendingRef = useRef(null);
+
+  const delayedSetLocale = (value) => {
+    // cancelar previo
+    if (pendingRef.current) clearTimeout(pendingRef.current);
+    // esperar un pequeño delay (dejar cerrar modal del picker en Android/iOS)
+    pendingRef.current = setTimeout(() => {
+      setLocale(value);
+      pendingRef.current = null;
+    }, 200);
+  };
 
   return (
     <ScrollView style={{ backgroundColor: theme.colors.bgMain }} className="flex-1">
       <View className="p-4">
         {/* Sección de Duraciones */}
         <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
-          Duraciones
+          {t('settings.durations')}
         </Text>
         <DurationsButom />
 
         {/* Sección de Temas */}
         <View className="mt-8 mb-4">
           <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
-            Tema
+            {t('settings.theme')}
           </Text>
           <ScrollView 
             style={{ maxHeight: 420 }}
@@ -58,9 +71,26 @@ export default function SettingsScreen() {
         </View>
         
 
-        
-         {/* Sección de Música 
-         
+        {/* Sección de Idioma */}
+        <View className="mt-8 mb-4">
+          <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
+            {t('settings.language')}
+          </Text>
+          <View style={{ backgroundColor: theme.colors.bgDarkGreen, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4 }}>
+            <Picker
+              selectedValue={locale}
+              onValueChange={(value) => delayedSetLocale(value)}
+              dropdownIconColor={theme.colors.text}
+              style={{ color: theme.colors.text }}
+            >
+              <Picker.Item label={t('settings.spanish')} value="es" />
+              <Picker.Item label={t('settings.english')} value="en" />
+            </Picker>
+          </View>
+        </View>
+
+        {/* Sección de Música
+
          <View className="mt-8 mb-4">
           <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
             Música Ambiente

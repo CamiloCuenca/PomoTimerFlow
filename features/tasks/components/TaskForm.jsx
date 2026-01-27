@@ -2,13 +2,15 @@ import { View, Text, Modal, Pressable } from "react-native";
 import { useTheme } from "../../../hooks/useTheme";
 import { TextInput, Button } from "react-native-paper";
 import * as React from "react";
+import { useLocalization } from '../../../context/LocalizationContext';
 
 export default function TaskForm({ visible, onClose, onSubmit }) {
     const { theme } = useTheme();
+    const { t } = useLocalization();
 
     const [title, setTitle] = React.useState("");
     const [description, setDescription] = React.useState("");
-    const [priority, setPriority] = React.useState("Alta");
+    const [priority, setPriority] = React.useState(t('task.priority_high'));
 
     const handleClose = () => {
         onClose?.();
@@ -19,7 +21,7 @@ export default function TaskForm({ visible, onClose, onSubmit }) {
         onSubmit?.({ title: title.trim(), description: description.trim(), priority });
         setTitle("");
         setDescription("");
-        setPriority("Alta");
+        setPriority(t('task.priority_high'));
         handleClose();
     };
 
@@ -42,13 +44,13 @@ export default function TaskForm({ visible, onClose, onSubmit }) {
                     className="w-11/12 max-w-xl rounded-3xl p-6 border"
                 >
                     <Text className="text-xl font-semibold mb-4" style={{ color: theme.colors.text }}>
-                        Nueva tarea
+                        {t('task.new')}
                     </Text>
 
                                         <View className="gap-4 mb-6 w-full">
                         <TextInput
                             mode="outlined"
-                            label="Nombre de la tarea"
+                            label={t('task.name')}
                             value={title}
                             onChangeText={setTitle}
                             style={{ backgroundColor: theme.colors.bgMain }}
@@ -61,7 +63,7 @@ export default function TaskForm({ visible, onClose, onSubmit }) {
 
                         <TextInput
                             mode="outlined"
-                            label="Descripción"
+                            label={t('task.description')}
                             value={description}
                             onChangeText={setDescription}
                             multiline
@@ -75,9 +77,9 @@ export default function TaskForm({ visible, onClose, onSubmit }) {
                         />
 
                         <View className="gap-2">
-                            <Text style={{ color: theme.colors.text, fontWeight: "600" }}>Prioridad</Text>
+                            <Text style={{ color: theme.colors.text, fontWeight: "600" }}>{t('task.priority')}</Text>
                             <View className="flex-row gap-2">
-                                {["Alta", "Media", "Baja"].map((item) => {
+                                {[t('task.priority_high'), t('task.priority_medium'), t('task.priority_low')].map((item) => {
                                     const active = priority === item;
                                     return (
                                         <Pressable
@@ -107,7 +109,7 @@ export default function TaskForm({ visible, onClose, onSubmit }) {
                             style={{ flex: 1, borderColor: theme.colors.primary }}
                             textColor={theme.colors.primary}
                         >
-                            Cancelar
+                            {t('task.cancel')}
                         </Button>
                         <Button
                             mode="contained"
@@ -115,7 +117,7 @@ export default function TaskForm({ visible, onClose, onSubmit }) {
                             style={{ flex: 1, backgroundColor: theme.colors.primary }}
                             textColor={theme.colors.bgMain}
                         >
-                            Guardar
+                            {t('task.save')}
                         </Button>
                     </View>
                 </View>

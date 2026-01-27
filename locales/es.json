@@ -1,0 +1,81 @@
+{
+  "home": {
+    "title": "Temporizador Pomodoro",
+    "start": "Iniciar",
+    "stop": "Detener",
+    "pause": "Pausar",
+    "reset": "Reiniciar",
+    "change": "Cambiar",
+    "select_task": "Selecciona tarea",
+    "no_tasks_available": "No hay tareas disponibles",
+    "session_complete_title": "¡Sesión completada!",
+    "session_complete_body": "Has terminado una sesión de %{type}.",
+    "work": "trabajo",
+    "break": "descanso"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "durations": "Duraciones",
+    "theme": "Tema",
+    "language": "Idioma",
+    "music": "Música Ambiente",
+    "select_song": "Seleccionar Canción",
+    "english": "Inglés",
+    "spanish": "Español",
+    "close": "Cerrar"
+  },
+  "task": {
+    "title": "Tareas",
+    "add": "Agregar tarea",
+    "placeholder": "Nombre de la tarea",
+    "new": "Nueva tarea",
+    "name": "Nombre de la tarea",
+    "description": "Descripción",
+    "priority": "Prioridad",
+    "priority_high": "Alta",
+    "priority_medium": "Media",
+    "priority_low": "Baja",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "pomodoros": "Pomodoros",
+    "categories": {
+      "all": "Todas",
+      "new": "New Task",
+      "in_progress": "In Progress",
+      "completed": "Completed"
+    },
+    "status_sin_tarea": "Sin tarea"
+  },
+  "durations": {
+    "pomodoro": "Pomodoro",
+    "shortBreak": "Receso",
+    "longBreak": "Descanso",
+    "minutes": "minutos",
+    "duration_work": "Duración de trabajo",
+    "duration_shortBreak": "Duración de descanso corto",
+    "duration_longBreak": "Duración de descanso largo",
+    "edit_duration": "Editar duración"
+  },
+  "stats": {
+    "streak": "Racha",
+    "work_sessions": "Sesiones de trabajo",
+    "break_sessions": "Sesiones de descanso"
+  },
+  "trophy": {
+    "all": "Todas",
+    "obtained": "Obtenidas",
+    "in_progress": "En Progreso",
+    "levels_all": "Todos los Niveles",
+    "level": "Nivel",
+    "medals": "Medallas",
+    "total_hours": "Total Horas",
+    "streak_days": "Días de racha",
+    "loading_level": "Cargando nivel...",
+    "progress_next": "Progreso al siguiente nivel",
+    "next_level": "Próximo nivel"
+  },
+  "common": {
+    "day": "día",
+    "days": "días"
+  }
+}

@@ -10,6 +10,7 @@ import {
   getShortBreak,
   getLongBreak
 } from "../../../utils/timer";
+import { useLocalization } from '../../../context/LocalizationContext';
 
 export default function DurationModal({ 
   visible, 
@@ -19,6 +20,7 @@ export default function DurationModal({
 }) {
   const [minutes, setMinutes] = useState(initialMinutes);
   const { theme } = useTheme();
+  const { t } = useLocalization();
 
   // Cargar el valor actual basado en el tipo
   useEffect(() => {
@@ -76,10 +78,10 @@ export default function DurationModal({
 
   const getTitle = () => {
     switch(type) {
-      case 'work': return 'Duración de trabajo';
-      case 'shortBreak': return 'Duración de descanso corto';
-      case 'longBreak': return 'Duración de descanso largo';
-      default: return 'Editar duración';
+      case 'work': return t('durations.duration_work');
+      case 'shortBreak': return t('durations.duration_shortBreak');
+      case 'longBreak': return t('durations.duration_longBreak');
+      default: return t('durations.edit_duration');
     }
   };
 
@@ -130,7 +132,7 @@ export default function DurationModal({
                     width: 100,
                   }}
                 />
-                <Text style={{ color: theme.colors.textSecondary }} className="text-sm mt-1">minutos</Text>
+                <Text style={{ color: theme.colors.textSecondary }} className="text-sm mt-1">{t('durations.minutes')}</Text>
               </View>
 
               <Pressable
@@ -149,7 +151,7 @@ export default function DurationModal({
                 style={{ borderColor: theme.colors.primary }}
                 className="flex-1 py-4 rounded-xl border-2 active:opacity-70"
               >
-                <Text style={{ color: theme.colors.text }} className="text-center font-medium">Cancelar</Text>
+                <Text style={{ color: theme.colors.text }} className="text-center font-medium">{t('task.cancel')}</Text>
               </Pressable>
 
               <Pressable
@@ -158,7 +160,7 @@ export default function DurationModal({
                 className="flex-1 py-4 rounded-xl flex-row items-center justify-center space-x-2 active:opacity-70"
               >
                 <Save size={18} color={theme.colors.bgMain} />
-                <Text style={{ color: theme.colors.bgMain }} className="font-medium">Guardar</Text>
+                <Text style={{ color: theme.colors.bgMain }} className="font-medium">{t('task.save')}</Text>
               </Pressable>
             </View>
           </View>

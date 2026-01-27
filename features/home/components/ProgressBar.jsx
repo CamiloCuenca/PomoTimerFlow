@@ -3,12 +3,14 @@ import Svg, { Circle } from "react-native-svg";
 import { useEffect, useState, useCallback } from "react";
 import timer from "../../../utils/timer";
 import { useTheme } from "../../../hooks/useTheme";
+import { useLocalization } from '../../../context/LocalizationContext';
 
 export default function ProgressBar() {
   const [time, setTime] = useState(timer.getCurrentTime());
   const [progress, setProgress] = useState(0);
   const [timerType, setTimerType] = useState(timer.getState().timerType);
   const { theme } = useTheme();
+  const { t } = useLocalization();
 
   const updateTimer = useCallback(() => {
     setTime(timer.getCurrentTime());
@@ -57,6 +59,13 @@ export default function ProgressBar() {
 
   const colors = getColors();
 
+  const getTimerLabel = () => {
+    if (timerType === 'work') return t('home.work');
+    if (timerType === 'shortBreak') return t('durations.shortBreak');
+    if (timerType === 'longBreak') return t('durations.longBreak');
+    return t('home.work');
+  };
+
   return (
     <View className="items-center justify-center">
       <Svg width={size} height={size}>
@@ -91,8 +100,7 @@ export default function ProgressBar() {
           {time}
         </Text>
         <Text className="text-sm mt-1" style={{ color: theme.colors.textSecondary}}>
-          {timerType === 'work' ? 'Trabajo' : 
-           timerType === 'shortBreak' ? 'Descanso Corto' : 'Descanso Largo'}
+          {getTimerLabel()}
         </Text>
       </View>
     </View>

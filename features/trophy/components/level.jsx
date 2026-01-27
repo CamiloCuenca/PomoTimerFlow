@@ -7,17 +7,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "expo-router";
 import { getCurrentWeekRange } from "../../../dateUtils";
 import { getCurrentLevel, getLevelProgress } from "../../../utils/levelSystem";
+import { useLocalization } from '../../../context/LocalizationContext';
 
 
-
-
-export default function Level({ number_of_medals, total_hours, days = 0 }) {
+export default function Level({ number_of_medals, total_hours }) {
     const { theme } = useTheme();
     const [workSessions, setWorkSessions] = useState([]);
-    const [breakSessions, setBreakSessions] = useState([]);
     const [levelInfo, setLevelInfo] = useState(null);
     const [levelProgress, setLevelProgress] = useState(null);
-
+    const { t } = useLocalization();
 
     const loadSessions = async () => {
         try {
@@ -41,7 +39,6 @@ export default function Level({ number_of_medals, total_hours, days = 0 }) {
             };
 
             setWorkSessions(filterSessionsByType("work"));
-            setBreakSessions(filterSessionsByType("shortBreak"));
         } catch (e) {
             console.error("Error cargando sesiones:", e);
         }
@@ -69,7 +66,7 @@ export default function Level({ number_of_medals, total_hours, days = 0 }) {
     if (!levelInfo || !levelProgress) {
         return (
             <View style={{ backgroundColor: theme.colors.primary }} className="m-4 p-4 rounded-lg items-center justify-center">
-                <Text style={{ color: theme.colors.text }}>Cargando nivel...</Text>
+                <Text style={{ color: theme.colors.text }}>{t('trophy.loading_level')}</Text>
             </View>
         );
     }
@@ -102,7 +99,7 @@ export default function Level({ number_of_medals, total_hours, days = 0 }) {
                         {number_of_medals || 0}
                     </Text>
                     <Text style={{ color: theme.colors.text }} className="text-sm">
-                        Medallas
+                        {t('trophy.medals')}
                     </Text>
                 </View>
 
@@ -111,7 +108,7 @@ export default function Level({ number_of_medals, total_hours, days = 0 }) {
                         {total_hours || 0}h
                     </Text>
                     <Text style={{ color: theme.colors.text }} className="text-sm">
-                        Total Horas
+                        {t('trophy.total_hours')}
                     </Text>
                 </View>
 
@@ -120,7 +117,7 @@ export default function Level({ number_of_medals, total_hours, days = 0 }) {
                         {workedDays}
                     </Text>
                     <Text style={{ color: theme.colors.text }} className="text-sm">
-                        Dias Racha
+                        {t('trophy.streak_days')}
                     </Text>
                 </View>
             </View>
@@ -130,7 +127,7 @@ export default function Level({ number_of_medals, total_hours, days = 0 }) {
                 <View className="w-full mt-6">
                     <View className="flex flex-row justify-between mb-2">
                         <Text style={{ color: theme.colors.textSecondary }} className="text-xs font-semibold">
-                            Progreso al siguiente nivel
+                            {t('trophy.progress_next')}
                         </Text>
                         <Text style={{ color: theme.colors.textSecondary }} className="text-xs">
                             {levelProgress.hoursInCurrentLevel.toFixed(1)}/{levelProgress.hoursNeeded}h
@@ -146,7 +143,7 @@ export default function Level({ number_of_medals, total_hours, days = 0 }) {
                         />
                     </View>
                     <Text style={{ color: theme.colors.textSecondary }} className="text-xs mt-2 text-center">
-                        Próximo nivel: {levelProgress.next.title}
+                        {t('trophy.next_level')}: {levelProgress.next.title}
                     </Text>
                 </View>
             )}

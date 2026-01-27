@@ -8,29 +8,31 @@ import {
   getLongBreak, 
   getWorkSessionsBeforeLongBreak 
 } from "../../../utils/timer";
+import { useLocalization } from '../../../context/LocalizationContext';
 
 const DurationsButom = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedType, setSelectedType] = useState(null);
   const { theme } = useTheme();
+  const { t } = useLocalization();
 
   const durations = [
     { 
       id: 1, 
       type: 'work',
-      label: 'Pomodoro',
+      labelKey: 'durations.pomodoro',
       getMinutes: getWorkDuration
     },
     { 
       id: 2, 
       type: 'shortBreak',
-      label: 'Receso',
+      labelKey: 'durations.shortBreak',
       getMinutes: getShortBreak
     },
     { 
       id: 3, 
       type: 'longBreak',
-      label: 'Descanso',
+      labelKey: 'durations.longBreak',
       getMinutes: getLongBreak
     },
   ];
@@ -68,7 +70,7 @@ const DurationsButom = () => {
                 {item.getMinutes()}
               </Text>
               <Text style={{ color: theme.colors.textSecondary }} className="text-sm text-center mt-1 font-medium">
-                {item.label}
+                {t(item.labelKey)}
               </Text>
             </View>
           </Pressable>

@@ -12,6 +12,7 @@ import { Provider as PaperProvider, FAB, Portal, Button } from "react-native-pap
 import { Menu } from "lucide-react-native";
 
 import { Modal, Pressable, ScrollView } from "react-native";
+import { useLocalization } from '../../context/LocalizationContext';
 
 const storeSession = async (type) => {
   try {
@@ -36,11 +37,11 @@ export default function HomeScreen() {
   const { theme } = useTheme();
   const { tasks, activeTaskId, setActiveTask, incrementPomodoros } = useTaskContext();
   const [selectorVisible, setSelectorVisible] = useState(false);
+  const { t } = useLocalization();
 
-  // ✅ Usar ref para mantener el valor actualizado de activeTaskId
   const activeTaskIdRef = useRef(activeTaskId);
 
-  // ✅ Actualizar el ref cada vez que activeTaskId cambie
+
   useEffect(() => {
     activeTaskIdRef.current = activeTaskId;
   }, [activeTaskId]);
@@ -67,34 +68,33 @@ export default function HomeScreen() {
     const onTimerComplete = async () => {
       const currentState = timer.getState();
       await storeSession(currentState.timerType);
-      
-      // ✅ CORREGIDO: Usar activeTaskIdRef.current en lugar de activeTaskId
-      // Si fue una sesión de trabajo y hay tarea activa, incrementa su contador
+
+
       if (currentState.timerType === 'work' && activeTaskIdRef.current) {
-        console.log('✅ Incrementando pomodoros para tarea:', activeTaskIdRef.current);
+        console.log(' Incrementando pomodoros para tarea:', activeTaskIdRef.current);
         await incrementPomodoros(activeTaskIdRef.current);
       } else {
         console.log('⚠️ No se incrementa - Tipo:', currentState.timerType, 'Tarea activa:', activeTaskIdRef.current);
       }
-      
+
       setIsRunning(false);
       await mostrarNotificacionLocal({
-        title: '¡Sesión completada!',
-        body: `Has terminado una sesión de ${currentState.timerType === 'work' ? 'trabajo' : 'descanso'}.`,
+        title: t('home.session_complete_title'),
+        body: t('home.session_complete_body', { type: t(`home.${currentState.timerType === 'work' ? 'work' : 'break'}`) }),
         seconds: 1,
       });
     };
 
     timer.on('complete', onTimerComplete);
 
-    // Limpiar los listeners al desmontar
+
     return () => {
       subscription.remove();
       timer.off('complete', onTimerComplete);
     };
   }, []);
 
-  // Manejar cambios en el estado de la aplicación
+
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (nextAppState === 'active' && appState.current.match(/inactive|background/)) {
@@ -156,10 +156,10 @@ export default function HomeScreen() {
         >
           <View className="flex-1 justify-end" style={{ backgroundColor: 'rgba(0,0,0,0.45)' }}>
             <View className="rounded-t-3xl p-6" style={{ backgroundColor: theme.colors.bgMain }}>
-              <Text style={{ color: theme.colors.text }} className="text-lg font-semibold mb-4">Selecciona tarea</Text>
+              <Text style={{ color: theme.colors.text }} className="text-lg font-semibold mb-4">{t('home.select_task')}</Text>
               <ScrollView style={{ maxHeight: 300 }}>
                 <Pressable onPress={() => { setActiveTask(null); setSelectorVisible(false); }} className="px-4 py-3 rounded-xl mb-2" style={{ borderWidth: 1, borderColor: theme.colors.primary }}>
-                  <Text style={{ color: theme.colors.primary, fontWeight: '600' }}>Sin tarea</Text>
+                  <Text style={{ color: theme.colors.primary, fontWeight: '600' }}>{t('task.status_sin_tarea')}</Text>
                 </Pressable>
                 {tasks
                   .filter(t => t.status === 'New Task' || t.status === 'In Progress')
@@ -173,11 +173,11 @@ export default function HomeScreen() {
                     </Pressable>
                   ))}
                 {tasks.filter(t => t.status === 'New Task' || t.status === 'In Progress').length === 0 && (
-                  <Text style={{ color: theme.colors.textSecondary }}>No hay tareas disponibles</Text>
+                  <Text style={{ color: theme.colors.textSecondary }}>{t('home.no_tasks_available')}</Text>
                 )}
               </ScrollView>
               <View className="items-end mt-2">
-                <Button onPress={() => setSelectorVisible(false)} textColor={theme.colors.primary}>Cerrar</Button>
+                <Button onPress={() => setSelectorVisible(false)} textColor={theme.colors.primary}>{t('settings.close')}</Button>
               </View>
             </View>
           </View>
@@ -190,7 +190,7 @@ export default function HomeScreen() {
         <ProgressBar />
 
           <CustomButton 
-            title={isRunning ? "Pausar" : "Iniciar"}
+            title={isRunning ? t('home.pause') : t('home.start')}
             onPress={handleStartPause}
             style="primary"
           />
@@ -198,13 +198,13 @@ export default function HomeScreen() {
         <View className="flex-row gap-5">
         
           <CustomButton
-            title="Reiniciar"
+            title={t('home.reset')}
             onPress={handleReset}
             style="secondary"
           />
 
              <CustomButton
-          title="Cambiar"
+          title={t('home.change')}
           onPress={handleCambiar}
           style="secondary"
         />
@@ -232,5 +232,3 @@ export default function HomeScreen() {
 
   );
 }
-
-

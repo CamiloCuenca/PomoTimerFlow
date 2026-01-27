@@ -9,6 +9,7 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
+import { LocalizationProvider } from '../context/LocalizationContext';
 
 const isWeb = Platform.OS === 'web';
 
@@ -38,16 +39,18 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider>
-      <AudioProvider>
-        <AudioPlayerProvider>
-          <PaperProvider>
-            <TaskProvider>
-              <Stack screenOptions={{ headerShown: false }} />
-            </TaskProvider>
-          </PaperProvider>
-        </AudioPlayerProvider>
-      </AudioProvider>
-    </ThemeProvider>
+    <LocalizationProvider>
+      <ThemeProvider>
+        <AudioProvider>
+          <AudioPlayerProvider>
+            <PaperProvider>
+              <TaskProvider>
+                <Stack screenOptions={{ headerShown: false }} />
+              </TaskProvider>
+            </PaperProvider>
+          </AudioPlayerProvider>
+        </AudioProvider>
+      </ThemeProvider>
+    </LocalizationProvider>
   );
 }

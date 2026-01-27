@@ -4,9 +4,9 @@ import Level from "./components/level";
 import LevelsList from "./components/LevelsList";
 import { useState, useEffect } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Provider as PaperProvider, FAB, Portal } from "react-native-paper";
+import { Provider as PaperProvider } from "react-native-paper";
 import { medals } from "../../utils/medals";
-
+import { useLocalization } from '../../context/LocalizationContext';
 
 
 export default function TrophyScreen() {
@@ -15,11 +15,13 @@ export default function TrophyScreen() {
     const [streakDays, setStreakDays] = useState(0);
     const [totalHours, setTotalHours] = useState(0);
     const [medalsCount, setMedalsCount] = useState(0);
-    const [selectedCategory, setSelectedCategory] = useState("Todas");
     const [workSessionsCount, setWorkSessionsCount] = useState(0);
     const [unlockedMedals, setUnlockedMedals] = useState([]);
 
-    const categories = ["Todas", "Obtenidas", "En Progreso"];
+    const { t } = useLocalization();
+
+    const [selectedCategory, setSelectedCategory] = useState(t('trophy.all'));
+    const categories = [t('trophy.all'), t('trophy.obtained'), t('trophy.in_progress')];
 
     useEffect(() => {
         const loadStats = async () => {
@@ -137,9 +139,9 @@ export default function TrophyScreen() {
                         {medals
                             .filter((medal) => {
                                 const isUnlocked = unlockedMedals.includes(medal.id);
-                                if (selectedCategory === "Obtenidas") return isUnlocked;
-                                if (selectedCategory === "En Progreso") return !isUnlocked;
-                                return true; // "Todas"
+                                if (selectedCategory === t('trophy.obtained')) return isUnlocked;
+                                if (selectedCategory === t('trophy.in_progress')) return !isUnlocked;
+                                return true; // todas
                             })
                             .map((medal) => {
                                 const isUnlocked = unlockedMedals.includes(medal.id);

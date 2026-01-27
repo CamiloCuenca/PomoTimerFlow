@@ -15,7 +15,7 @@ export default function LevelsList({ totalHours }) {
             </Text>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-                {levels.map((level, index) => (
+                {levels.map((level) => (
                     <View
                         key={level.id}
                         style={{

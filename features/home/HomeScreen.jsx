@@ -4,8 +4,7 @@ import ProgressBar from "./components/ProgressBar";
 import { useState, useEffect, useRef } from "react";
 import timer, { initAppStateListener, loadTimerState, clearTimerState } from "../../utils/timer";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
-import { mostrarNotificacionLocal, registerForPushNotificationsAsync } from "../../services/notification";
+import { registerForPushNotificationsAsync } from "../../services/notification";
 import { useTheme } from "../../hooks/useTheme";
 import { useTaskContext } from "../../context/TaskContext";
 import { Provider as PaperProvider, FAB, Portal, Button } from "react-native-paper";
@@ -59,11 +58,6 @@ export default function HomeScreen() {
     initAppStateListener();
     registerForPushNotificationsAsync();
 
-    // Configurar el listener para notificaciones
-    const subscription = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log('Notificación recibida:', response);
-    });
-
     // Suscribirse al evento de finalización del temporizador
     const onTimerComplete = async () => {
       const currentState = timer.getState();
@@ -78,18 +72,12 @@ export default function HomeScreen() {
       }
 
       setIsRunning(false);
-      await mostrarNotificacionLocal({
-        title: t('home.session_complete_title'),
-        body: t('home.session_complete_body', { type: t(`home.${currentState.timerType === 'work' ? 'work' : 'break'}`) }),
-        seconds: 1,
-      });
     };
 
     timer.on('complete', onTimerComplete);
 
 
     return () => {
-      subscription.remove();
       timer.off('complete', onTimerComplete);
     };
   }, []);

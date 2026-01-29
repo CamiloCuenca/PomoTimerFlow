@@ -5,6 +5,10 @@ import { useLocalization } from '../../context/LocalizationContext';
 import { Picker } from '@react-native-picker/picker';
 import { useRef } from 'react';
 
+// Importar componentes faltantes
+import Playingsounds from '../../components/Playingsounds';
+import SoundSelector from './components/SoundSelector';
+
 export default function SettingsScreen() {
   const { theme, changeTheme, themes } = useTheme();
   const { t, locale, setLocale } = useLocalization();
@@ -28,6 +32,26 @@ export default function SettingsScreen() {
           {t('settings.durations')}
         </Text>
         <DurationsButom />
+
+
+        {/* Sección de Idioma */}
+        <View className="mt-8 mb-4">
+          <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
+            {t('settings.language')}
+          </Text>
+          <View style={{ backgroundColor: theme.colors.bgDarkGreen, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4 }}>
+            <Picker
+                selectedValue={locale}
+                onValueChange={(value) => delayedSetLocale(value)}
+                dropdownIconColor={theme.colors.text}
+                style={{ color: theme.colors.text }}
+            >
+              <Picker.Item label={t('settings.spanish')} value="es" />
+              <Picker.Item label={t('settings.english')} value="en" />
+            </Picker>
+          </View>
+        </View>
+
 
         {/* Sección de Temas */}
         <View className="mt-8 mb-4">
@@ -71,25 +95,8 @@ export default function SettingsScreen() {
         </View>
         
 
-        {/* Sección de Idioma */}
-        <View className="mt-8 mb-4">
-          <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
-            {t('settings.language')}
-          </Text>
-          <View style={{ backgroundColor: theme.colors.bgDarkGreen, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4 }}>
-            <Picker
-              selectedValue={locale}
-              onValueChange={(value) => delayedSetLocale(value)}
-              dropdownIconColor={theme.colors.text}
-              style={{ color: theme.colors.text }}
-            >
-              <Picker.Item label={t('settings.spanish')} value="es" />
-              <Picker.Item label={t('settings.english')} value="en" />
-            </Picker>
-          </View>
-        </View>
 
-        {/* Sección de Música
+
 
          <View className="mt-8 mb-4">
           <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
@@ -100,10 +107,9 @@ export default function SettingsScreen() {
           </View>
         </View>
          
-         */}
-        
 
-        {/* Sección de Selección de Canción 
+
+
         <View className="mt-8 mb-6">
           <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
             Seleccionar Canción
@@ -112,7 +118,7 @@ export default function SettingsScreen() {
             <SoundSelector />
           </View>
         </View>
-        */}   
+
         
         
       </View>

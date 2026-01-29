@@ -5,7 +5,8 @@ import { sounds } from '../constants/sounds';
 export const AudioContext = createContext();
 
 export const AudioProvider = ({ children }) => {
-  const [currentSound, setCurrentSound] = useState(sounds.aomoriWings);
+  // Inicializar con un sonido que realmente exista (ambientMusic)
+  const [currentSound, setCurrentSound] = useState(sounds.ambientMusic);
   const [isLoading, setIsLoading] = useState(true);
 
   // Cargar canción guardada de AsyncStorage
@@ -17,6 +18,9 @@ export const AudioProvider = ({ children }) => {
           const sound = sounds[savedSound];
           if (sound) {
             setCurrentSound(sound);
+          } else {
+            // Si la clave guardada no existe, usar el fallback
+            setCurrentSound(sounds.ambientMusic);
           }
         }
       } catch (e) {

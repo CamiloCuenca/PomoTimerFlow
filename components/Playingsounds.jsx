@@ -9,6 +9,10 @@ export default function Playingsounds() {
   const { status, isConfigured, handlePlayPause, handleRestart } = useAudioPlayerContext();
   const { theme } = useTheme();
 
+  // Protecciones: si currentSound no está disponible, usar valores por defecto
+  const soundName = currentSound?.name ?? 'Sin canción';
+  const soundArtist = currentSound?.artist ?? '';
+
   return (
     <View style={{ backgroundColor: theme.colors.bgDarkGreen }} className="rounded-lg p-4 mb-4">
 
@@ -16,10 +20,10 @@ export default function Playingsounds() {
 
         <View className="items-center flex-col">
           <Text style={{ color: theme.colors.text }} className="text-lg font-bold mb-2 text-center">
-            {currentSound.name}
+            {soundName}
           </Text>
           <Text style={{ color: theme.colors.textSecondary }} className="text-xs text-center mb-4">
-            {currentSound.artist}
+            {soundArtist}
           </Text>
         </View>
 

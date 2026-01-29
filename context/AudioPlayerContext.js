@@ -1,70 +1,85 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { useAudioPlayer, useAudioPlayerStatus, setAudioModeAsync } from 'expo-audio';
-import { useSounds } from '../hooks/useSounds';
+// javascript
+          import React, { createContext, useState, useEffect } from 'react';
+          import { useAudioPlayer, useAudioPlayerStatus, setAudioModeAsync } from 'expo-audio';
+          import { useSounds } from '../hooks/useSounds';
+          import { sounds } from '../constants/sounds';
 
-export const AudioPlayerContext = createContext();
+          export const AudioPlayerContext = createContext();
 
-export const AudioPlayerProvider = ({ children }) => {
-  const { currentSound } = useSounds();
-  const [isConfigured, setIsConfigured] = useState(false);
+          export const AudioPlayerProvider = ({ children }) => {
+            const { currentSound } = useSounds();
+            const [isConfigured, setIsConfigured] = useState(false);
 
-  // Crear el reproductor con la canción actual
-  const player = useAudioPlayer(currentSound.file);
-  const playerStatus = useAudioPlayerStatus(player);
+            // Usar file seguro: currentSound.file o fallback a sounds.ambientMusic.file
+            const playerFile = currentSound?.file ?? sounds?.ambientMusic?.file ?? null;
 
-  // Configurar audio para reproducción en segundo plano
-  useEffect(() => {
-    const configureAudio = async () => {
-      try {
-        await setAudioModeAsync({
-          playsInSilentModeIOS: true,
-          staysActiveInBackground: true,
-        });
-        setIsConfigured(true);
-      } catch (error) {
-        console.error('Error configurando audio:', error);
-        setIsConfigured(true);
-      }
-    };
+            // Crear el reproductor con la canción actual (o con el fallback)
+            const player = useAudioPlayer(playerFile);
+            const playerStatus = useAudioPlayerStatus(player);
 
-    configureAudio();
-  }, []);
+            useEffect(() => {
+              if (!currentSound) {
+                console.warn('currentSound es undefined. Usando sounds.ambientMusic como fallback.');
+              }
+            }, [currentSound]);
 
-  // Loop automático cuando termina la canción
-  useEffect(() => {
-    if (playerStatus?.isLoaded && playerStatus?.didJustFinish && player) {
-      player.seekTo(0);
-      player.play();
-    }
-  }, [playerStatus?.didJustFinish, player]);
+            // Configurar audio para reproducción en segundo plano
+            useEffect(() => {
+              const configureAudio = async () => {
+                try {
+                  await setAudioModeAsync({
+                    playsInSilentModeIOS: true,
+                    staysActiveInBackground: true,
+                  });
+                  setIsConfigured(true);
+                } catch (error) {
+                  console.error('Error configurando audio:', error);
+                  setIsConfigured(true);
+                }
+              };
 
-  const handlePlayPause = () => {
-    if (!isConfigured || !player) return;
+              configureAudio();
+            }, []);
 
-    if (playerStatus?.playing) {
-      player.pause();
-    } else {
-      player.play();
-    }
-  };
+            // Loop automático cuando termina la canción
+            useEffect(() => {
+              if (playerStatus?.isLoaded && playerStatus?.didJustFinish && player) {
+                try {
+                  player.seekTo(0);
+                  player.play();
+                } catch (e) {
+                  console.warn('Error al reiniciar la reproducción:', e);
+                }
+              }
+            }, [playerStatus?.didJustFinish, player]);
 
-  const handleRestart = () => {
-    if (!isConfigured || !player) return;
-    player.seekTo(0);
-    player.play();
-  };
+            const handlePlayPause = () => {
+              if (!isConfigured || !player) return;
 
-  return (
-    <AudioPlayerContext.Provider
-      value={{
-        player,
-        status: playerStatus,
-        isConfigured,
-        handlePlayPause,
-        handleRestart,
-      }}
-    >
-      {children}
-    </AudioPlayerContext.Provider>
-  );
-};
+              if (playerStatus?.playing) {
+                player.pause();
+              } else {
+                player.play();
+              }
+            };
+
+            const handleRestart = () => {
+              if (!isConfigured || !player) return;
+              player.seekTo(0);
+              player.play();
+            };
+
+            return (
+              <AudioPlayerContext.Provider
+                value={{
+                  player,
+                  status: playerStatus,
+                  isConfigured,
+                  handlePlayPause,
+                  handleRestart,
+                }}
+              >
+                {children}
+              </AudioPlayerContext.Provider>
+            );
+          };

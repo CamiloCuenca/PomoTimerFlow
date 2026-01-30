@@ -33,13 +33,13 @@ export default function TrophyScreen() {
                 let streak = 0;
                 const today = new Date();
                 today.setHours(0, 0, 0, 0); // Normalizar a medianoche
-                
+
                 let checkDate = new Date(today);
 
                 // Verificar si hay sesión hoy o ayer (la racha puede continuar si trabajaste ayer)
                 const todayStr = today.toISOString().split('T')[0];
                 const hasToday = parsedSessions.some(s => s.date === todayStr);
-                
+
                 if (!hasToday) {
                     // Si no trabajaste hoy, empezar desde ayer
                     checkDate.setDate(checkDate.getDate() - 1);
@@ -49,7 +49,7 @@ export default function TrophyScreen() {
                 while (true) {
                     const dateStr = checkDate.toISOString().split('T')[0];
                     const hasSession = parsedSessions.some(s => s.date === dateStr);
-                    
+
                     if (hasSession) {
                         streak++;
                         checkDate.setDate(checkDate.getDate() - 1);
@@ -78,7 +78,7 @@ export default function TrophyScreen() {
 
                 setUnlockedMedals(unlocked.map(m => m.id));
                 setMedalsCount(unlocked.length);
-                
+
             } catch (error) {
                 console.error('Error loading stats:', error);
             }
@@ -115,7 +115,7 @@ export default function TrophyScreen() {
                                                 : theme.colors.bgDarkGreen,
                                             borderColor: isActive
                                                 ? theme.colors.primary
-                                                : theme.colors.textSecondary,
+                                                : theme.colors.primary,
                                             borderWidth: 1,
                                         }}
                                         className="px-4 py-2 rounded-full"
@@ -172,7 +172,7 @@ export default function TrophyScreen() {
                                 );
                             })}
                     </View>
-                    
+
 
 
 

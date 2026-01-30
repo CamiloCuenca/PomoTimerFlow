@@ -11,7 +11,7 @@ export const themes = {
       bgSurface: '#312E81',
 
       text: '#F8FAFC',
-      textSecondary: '#C7D2FE',
+      textSecondary: '#ffffff',
       accentGray: '#4B5563',
 
       success: '#22C55E',
@@ -73,9 +73,9 @@ export const themes = {
       bgDarkGreen: '#DBEAFE',
       bgSurface: '#BFDBFE',
 
-      text: '#1E3A8A',
-      textSecondary: '#1D4ED8',
-      accentGray: '#CBD5E1',
+      text: '#FAFAF9',
+      textSecondary: '#000000',
+      accentGray: '#78716C',
 
       success: '#16A34A',
       warning: '#F59E0B',
@@ -94,9 +94,9 @@ export const themes = {
       bgDarkGreen: '#020617',
       bgSurface: '#0F172A',
 
-      text: '#E5E7EB',
-      textSecondary: '#86EFAC',
-      accentGray: '#334155',
+      text: '#FAFAF9',
+      textSecondary: '#ffffff',
+      accentGray: '#78716C',
 
       success: '#22C55E',
       warning: '#FACC15',
@@ -116,7 +116,7 @@ export const themes = {
       bgSurface: '#374151',
 
       text: '#F9FAFB',
-      textSecondary: '#9CA3AF',
+      textSecondary: '#ffffff',
       accentGray: '#4B5563',
 
       success: '#22C55E',
@@ -136,9 +136,9 @@ export const themes = {
       bgDarkGreen: '#020617',
       bgSurface: '#111827',
 
-      text: '#E5E7EB',
-      textSecondary: '#A5B4FC',
-      accentGray: '#374151',
+      text: '#FAFAF9',
+      textSecondary: '#ffffff',
+      accentGray: '#78716C',
 
       success: '#22C55E',
       warning: '#FACC15',
@@ -157,9 +157,9 @@ export const themes = {
       bgDarkGreen: '#E5E7EB',
       bgSurface: '#D1D5DB',
 
-      text: '#1F2937',
-      textSecondary: '#6B7280',
-      accentGray: '#9CA3AF',
+      text: '#000000',
+      textSecondary: '#000000',
+      accentGray: '#78716C',
 
       success: '#22C55E',
       warning: '#FBBF24',
@@ -178,8 +178,8 @@ export const themes = {
       bgDarkGreen: '#D1FAE5',
       bgSurface: '#A7F3D0',
 
-      text: '#065F46',
-      textSecondary: '#047857',
+      text: '#000000',
+      textSecondary: '#000000',
       accentGray: '#D1D5DB',
 
       success: '#16A34A',
@@ -200,7 +200,7 @@ export const themes = {
       bgSurface: '#312E81',
 
       text: '#F8FAFC',
-      textSecondary: '#C7D2FE',
+      textSecondary: '#ffffff',
       accentGray: '#4B5563',
 
       success: '#22C55E',
@@ -220,8 +220,8 @@ export const themes = {
       bgDarkGreen: '#F9FAFB',
       bgSurface: '#F1F5F9',
 
-      text: '#1F2937',
-      textSecondary: '#4B5563',
+      text: '#000000',
+      textSecondary: '#000000',
       accentGray: '#D1D5DB',
 
       success: '#16A34A',
@@ -242,7 +242,7 @@ export const themes = {
       bgSurface: '#334155',
 
       text: '#E5E7EB',
-      textSecondary: '#94A3B8',
+      textSecondary: '#ffffff',
       accentGray: '#475569',
 
       success: '#22C55E',
@@ -262,8 +262,8 @@ export const themes = {
       bgDarkGreen: '#F1F3F5',
       bgSurface: '#FAFAFA',
 
-      text: '#111827',
-      textSecondary: '#6B7280',
+      text: '#000000',
+      textSecondary: '#000000',
       accentGray: '#9CA3AF',
 
       success: '#16A34A',
@@ -284,7 +284,7 @@ export const themes = {
       bgSurface: '#222226',
 
       text: '#F9FAFB',
-      textSecondary: '#9CA3AF',
+      textSecondary: '#ffffff',
       accentGray: '#374151',
 
       success: '#22C55E',
@@ -305,7 +305,7 @@ export const themes = {
       bgSurface: '#1C1C1E',
 
       text: '#F5F5F7',
-      textSecondary: '#A1A1AA',
+      textSecondary: '#ffffff',
       accentGray: '#3F3F46',
 
       success: '#34D399',
@@ -326,7 +326,7 @@ export const themes = {
       bgSurface: '#FED7AA',
 
       text: '#7C2D12',
-      textSecondary: '#9A3412',
+      textSecondary: '#5c1d05',
       accentGray: '#E5E7EB',
 
       success: '#16A34A',

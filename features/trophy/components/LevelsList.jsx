@@ -3,10 +3,12 @@ import { useTheme } from "../../../hooks/useTheme";
 import { Ionicons } from "@expo/vector-icons";
 import { School, Hourglass, Medal, Star, Flame, CheckCircle } from "lucide-react-native";
 import { getAllLevelsStatus } from "../../../utils/levelSystem";
+import { useLocalization } from '../../../context/LocalizationContext';
 
 export default function LevelsList({ totalHours }) {
     const { theme } = useTheme();
     const levels = getAllLevelsStatus(totalHours);
+    const { t } = useLocalization();
 
     return (
         <View className="px-4 mt-6">
@@ -76,7 +78,7 @@ export default function LevelsList({ totalHours }) {
                                 }}
                                 className="text-sm font-semibold mb-1"
                             >
-                                {level.title}
+                                { (t && level.titleKey) ? t(level.titleKey) : level.title }
                             </Text>
 
                             <Text
@@ -86,7 +88,7 @@ export default function LevelsList({ totalHours }) {
                                 }}
                                 className="text-xs"
                             >
-                                {level.description}
+                                { (t && level.descriptionKey) ? t(level.descriptionKey) : level.description }
                             </Text>
 
                             <Text

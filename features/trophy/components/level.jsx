@@ -85,10 +85,10 @@ export default function Level({ number_of_medals, total_hours }) {
             {/* Título y descripción del nivel */}
             <View className="items-center justify-center mb-4">
                 <Text style={{ color: theme.colors.text }} className="text-3xl font-bold">
-                    {levelInfo.title}
+                    { (t && levelInfo.titleKey) ? t(levelInfo.titleKey) : levelInfo.title }
                 </Text>
                 <Text style={{ color: theme.colors.textSecondary }} className="text-xs text-center mt-1">
-                    {levelInfo.description}
+                    { (t && levelInfo.descriptionKey) ? t(levelInfo.descriptionKey) : levelInfo.description }
                 </Text>
             </View>
 
@@ -143,7 +143,7 @@ export default function Level({ number_of_medals, total_hours }) {
                         />
                     </View>
                     <Text style={{ color: theme.colors.textSecondary }} className="text-xs mt-2 text-center">
-                        {t('trophy.next_level')}: {levelProgress.next.title}
+                        {t('trophy.next_level')}: { (t && levelProgress.next && levelProgress.next.titleKey) ? t(levelProgress.next.titleKey) : (levelProgress.next ? levelProgress.next.title : '') }
                     </Text>
                 </View>
             )}

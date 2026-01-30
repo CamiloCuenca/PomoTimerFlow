@@ -74,6 +74,32 @@
     "progress_next": "Progreso al siguiente nivel",
     "next_level": "Próximo nivel"
   },
+  "levels": {
+    "1": { "title": "Aprendiz del Pomodoro", "description": "¡Tu primer paso en el método Pomodoro!" },
+    "2": { "title": "Aprendiz del Tiempo", "description": "Empiezas a dominar la gestión del tiempo" },
+    "3": { "title": "Maestro Pomodoro", "description": "¡Ya eres un experto en productividad!" },
+    "4": { "title": "Experto del Tiempo", "description": "Tu dedicación es excepcional" },
+    "5": { "title": "Pomodoro Legendario", "description": "¡Eres una leyenda de la productividad!" }
+  },
+  "medals": {
+    "1": { "name": "Bronce", "description": "Completa 5 sesiones" },
+    "2": { "name": "Plata", "description": "Completa 25 sesiones" },
+    "3": { "name": "Oro", "description": "Completa 50 sesiones" },
+    "4": { "name": "Diamante", "description": "Completa 100 sesiones" },
+    "5": { "name": "Ruby", "description": "Completa 150 sesiones" },
+    "6": { "name": "Esmeralda", "description": "Completa 200 sesiones" }
+  },
+  "info": {
+    "header": "Sobre la app",
+    "app_name": "PomoTimerFlow",
+    "app_subtitle": "Enfócate, mide tu tiempo y celebra tus logros.",
+    "version_label": "Versión",
+    "creator_label": "Creador",
+    "repo_label": "Repositorio",
+    "privacy_label": "Política de privacidad",
+    "notes_title": "Notas",
+    "notes_subtitle": "Gracias por usar la app. Comparte sugerencias o reporta errores en el repo."
+  },
   "common": {
     "day": "día",
     "days": "días"

@@ -77,7 +77,7 @@ export default function TrophyScreen() {
                 });
 
                 setUnlockedMedals(unlocked.map(m => m.id));
-                setMedalsCount(unlocked.length); // ✅ CORREGIDO: Contar medallas desbloqueadas
+                setMedalsCount(unlocked.length);
                 
             } catch (error) {
                 console.error('Error loading stats:', error);
@@ -158,10 +158,10 @@ export default function TrophyScreen() {
                                             }}
                                         />
                                         <Text style={{ color: isUnlocked ? theme.colors.text : theme.colors.textSecondary, marginTop: 8, fontSize: 12, fontWeight: '600' }}>
-                                            {medal.name}
+                                            { (t && medal.nameKey) ? t(medal.nameKey) : medal.name }
                                         </Text>
                                         <Text style={{ color: theme.colors.textSecondary, marginTop: 4, fontSize: 10, textAlign: 'center' }}>
-                                            {medal.description}
+                                            { (t && medal.descriptionKey) ? t(medal.descriptionKey) : medal.description }
                                         </Text>
                                         {!isUnlocked && (
                                             <Text style={{ color: theme.colors.primary, marginTop: 4, fontSize: 9, textAlign: 'center' }}>

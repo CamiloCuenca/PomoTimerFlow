@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import * as Localization from 'expo-localization';
 import { STRINGS } from '../strings';
+import { setLocaleGlobal, subscribeLocale } from '../i18n';
 
 const STORAGE_KEY = '@PomoTimerFlow:locale';
 const ALLOWED = ['en', 'es'];
@@ -64,7 +65,26 @@ export const useI18n = () => {
       if (mounted) setLocaleState(short);
     })();
 
-    return () => { mounted = false; };
+    // Subscribe to global locale changes so this hook updates when another part of the app sets locale
+    let unsubscribe = null;
+    try {
+      if (typeof subscribeLocale === 'function') {
+        unsubscribe = subscribeLocale((newLocale) => {
+          if (mounted && newLocale) {
+            const short = normalize(newLocale);
+            setLocaleState(ALLOWED.includes(short) ? short : 'en');
+          }
+        });
+      }
+    } catch (e) {
+      // ignore subscription failures
+      unsubscribe = null;
+    }
+
+    return () => {
+      mounted = false;
+      try { if (typeof unsubscribe === 'function') unsubscribe(); } catch (e) { /* ignore */ }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -72,6 +92,8 @@ export const useI18n = () => {
     const short = normalize(l);
     const final = ALLOWED.includes(short) ? short : 'en';
     setLocaleState(final);
+    // Notify global subscribers immediately (guarded)
+    try { if (typeof setLocaleGlobal === 'function') setLocaleGlobal(final); } catch (e) { /* ignore */ }
     // persist in background, protected
     (async () => {
       try {

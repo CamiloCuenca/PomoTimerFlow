@@ -34,7 +34,7 @@ export default function SettingsScreen() {
                 }}
                 style={{ padding: 8, borderRadius: 8, backgroundColor: locale === 'es' ? theme.colors.primary : theme.colors.bgDarkGreen }}
               >
-                <Text style={{ color: locale === 'es' ? theme.colors.bgMain : theme.colors.text }}>{t('settings.spanish')}</Text>
+                <Text style={{ color: locale === 'es' ? theme.colors.bgMain : theme.colors.text }} accessibilityLabel="Español">{'🇪🇸 '}{t('settings.spanish')}</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -43,7 +43,7 @@ export default function SettingsScreen() {
                 }}
                 style={{ padding: 8, borderRadius: 8, backgroundColor: locale === 'en' ? theme.colors.primary : theme.colors.bgDarkGreen }}
               >
-                <Text style={{ color: locale === 'en' ? theme.colors.bgMain : theme.colors.text }}>{t('settings.english')}</Text>
+                <Text style={{ color: locale === 'en' ? theme.colors.bgMain : theme.colors.text }} accessibilityLabel="English">{'🇺🇸 '}{t('settings.english')}</Text>
               </TouchableOpacity>
             </View>
           </View>

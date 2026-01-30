@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { LayoutGrid, Lightbulb, Github, ShieldCheck, ExternalLink } from "lucide-react-native";
 import * as Linking from "expo-linking";
 import { useTheme } from "../hooks/useTheme";
+import { useLocalization } from '../context/LocalizationContext';
 
 const REPO_URL = "https://github.com/CamiloCuenca/PomoTimerFlow";
 const PRIVACY_URL = "https://camilocuenca.github.io/PomoTimerFlow/privacy-policy.html";
@@ -11,6 +12,7 @@ const CREATOR_URL = "https://github.com/CamiloCuenca";
 
 export default function InfoScreen() {
   const { theme } = useTheme();
+  const { t } = useLocalization();
 
   const openLink = async (url) => {
     try {
@@ -24,7 +26,7 @@ export default function InfoScreen() {
     <View style={{ flex: 1, backgroundColor: theme.colors.bgMain }}>
       <Stack.Screen
         options={{
-          title: "Sobre la app",
+          title: (t && t('info.header')) ? t('info.header') : 'Sobre la app',
           headerShown: true,
           headerStyle: { backgroundColor: theme.colors.bgMain },
           headerTintColor: theme.colors.text,
@@ -38,12 +40,12 @@ export default function InfoScreen() {
       >
         <Section
           icon="apps-outline"
-          title="PomoTimerFlow"
-          subtitle="Enfócate, mide tu tiempo y celebra tus logros."
+          title={(t && t('info.app_name')) ? t('info.app_name') : 'PomoTimerFlow'}
+          subtitle={(t && t('info.app_subtitle')) ? t('info.app_subtitle') : 'Enfócate, mide tu tiempo y celebra tus logros.'}
           theme={theme}
         />
 
-        <Row label="Versión" value="1.2.0" theme={theme} />
+        <Row label={(t && t('info.version_label')) ? t('info.version_label') : 'Versión'} value="1.2.0" theme={theme} />
 
         {/* Creador con avatar al lado del nombre */}
         <TouchableOpacity
@@ -59,48 +61,46 @@ export default function InfoScreen() {
             marginBottom: 4,
           }}
         >
-          <Text style={{ color: theme.colors.textSecondary }}>Creador</Text>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={{ color: theme.colors.text, fontWeight: "600" }}>
-              Juan Camilo Cuenca Sepúlveda
-            </Text>
-            <Image
-              source={{ uri: "https://github.com/CamiloCuenca.png" }}
-              style={{ width: 42, height: 42, borderRadius: 21, marginLeft: 10 }}
-            />
-          </View>
-        </TouchableOpacity>
+          <Text style={{ color: theme.colors.textSecondary }}>{(t && t('info.creator_label')) ? t('info.creator_label') : 'Creador'}</Text>
+           <View style={{ flexDirection: "row", alignItems: "center" }}>
+             <Text style={{ color: theme.colors.text, fontWeight: "600" }}>
+               Juan Camilo Cuenca Sepúlveda
+             </Text>
+             <Image
+               source={{ uri: "https://github.com/CamiloCuenca.png" }}
+               style={{ width: 42, height: 42, borderRadius: 21, marginLeft: 10 }}
+             />
+           </View>
+         </TouchableOpacity>
 
-        
+         <LinkRow
+           icon="logo-github"
+           label={(t && t('info.repo_label')) ? t('info.repo_label') : 'Repositorio'}
+           url={REPO_URL}
+           theme={theme}
+           onPress={openLink}
+         />
 
-        <LinkRow
-          icon="logo-github"
-          label="Repositorio"
-          url={REPO_URL}
-          theme={theme}
-          onPress={openLink}
-        />
-    
-        <LinkRow
-          icon="shield-checkmark-outline"
-          label="Política de privacidad"
-          url={PRIVACY_URL}
-          theme={theme}
-          onPress={openLink}
-        />
+         <LinkRow
+           icon="shield-checkmark-outline"
+           label={(t && t('info.privacy_label')) ? t('info.privacy_label') : 'Política de privacidad'}
+           url={PRIVACY_URL}
+           theme={theme}
+           onPress={openLink}
+         />
 
-        <SectionDivider theme={theme} />
+         <SectionDivider theme={theme} />
 
-        <Section
-          icon="bulb-outline"
-          title="Notas"
-          subtitle="Gracias por usar la app. Comparte sugerencias o reporta errores en el repo."
-          theme={theme}
-        />
-      </ScrollView>
-    </View>
-  );
-}
+         <Section
+           icon="bulb-outline"
+           title={(t && t('info.notes_title')) ? t('info.notes_title') : 'Notas'}
+           subtitle={(t && t('info.notes_subtitle')) ? t('info.notes_subtitle') : 'Gracias por usar la app. Comparte sugerencias o reporta errores en el repo.'}
+           theme={theme}
+         />
+       </ScrollView>
+     </View>
+   );
+ }
 
 function Section({ icon, title, subtitle, theme }) {
   const renderIcon = () => {

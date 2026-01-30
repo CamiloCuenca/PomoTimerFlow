@@ -2,8 +2,6 @@ import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useTheme } from "../../hooks/useTheme";
 import DurationsButom from "./components/DurationsButom";
 import { useLocalization } from '../../context/LocalizationContext';
-import { Picker } from '@react-native-picker/picker';
-import { useRef } from 'react';
 
 // Importar componentes faltantes
 import Playingsounds from '../../components/Playingsounds';
@@ -12,17 +10,6 @@ import SoundSelector from './components/SoundSelector';
 export default function SettingsScreen() {
   const { theme, changeTheme, themes } = useTheme();
   const { t, locale, setLocale } = useLocalization();
-  const pendingRef = useRef(null);
-
-  const delayedSetLocale = (value) => {
-    // cancelar previo
-    if (pendingRef.current) clearTimeout(pendingRef.current);
-    // esperar un pequeño delay (dejar cerrar modal del picker en Android/iOS)
-    pendingRef.current = setTimeout(() => {
-      setLocale(value);
-      pendingRef.current = null;
-    }, 200);
-  };
 
   return (
     <ScrollView style={{ backgroundColor: theme.colors.bgMain }} className="flex-1">
@@ -34,21 +21,31 @@ export default function SettingsScreen() {
         <DurationsButom />
 
 
-        {/* Sección de Idioma */}
+        {/* Sección de Idioma - UI de cambio eliminada, solo mostrar idioma actual */}
         <View className="mt-8 mb-4">
           <Text style={{ color: theme.colors.text }} className="text-xl font-bold p-4">
             {t('settings.language')}
           </Text>
-          <View style={{ backgroundColor: theme.colors.bgDarkGreen, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4 }}>
-            <Picker
-                selectedValue={locale}
-                onValueChange={(value) => delayedSetLocale(value)}
-                dropdownIconColor={theme.colors.text}
-                style={{ color: theme.colors.text }}
-            >
-              <Picker.Item label={t('settings.spanish')} value="es" />
-              <Picker.Item label={t('settings.english')} value="en" />
-            </Picker>
+          <View style={{ backgroundColor: theme.colors.bgDarkGreen, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 8 }}>
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  try { setLocale('es'); } catch (e) { /* no-op */ }
+                }}
+                style={{ padding: 8, borderRadius: 8, backgroundColor: locale === 'es' ? theme.colors.primary : theme.colors.bgDarkGreen }}
+              >
+                <Text style={{ color: locale === 'es' ? theme.colors.bgMain : theme.colors.text }}>{t('settings.spanish')}</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => {
+                  try { setLocale('en'); } catch (e) { /* no-op */ }
+                }}
+                style={{ padding: 8, borderRadius: 8, backgroundColor: locale === 'en' ? theme.colors.primary : theme.colors.bgDarkGreen }}
+              >
+                <Text style={{ color: locale === 'en' ? theme.colors.bgMain : theme.colors.text }}>{t('settings.english')}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 

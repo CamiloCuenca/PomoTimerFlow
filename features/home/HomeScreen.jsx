@@ -4,7 +4,7 @@ import ProgressBar from "./components/ProgressBar";
 import { useState, useEffect, useRef } from "react";
 import timer, { initAppStateListener, loadTimerState, clearTimerState } from "../../utils/timer";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { registerForPushNotificationsAsync } from "../../services/notification";
+import { registerForPushNotificationsAsync, scheduleNotification, cancelScheduledNotification } from "../../services/notification";
 import { useTheme } from "../../hooks/useTheme";
 import { useTaskContext } from "../../context/TaskContext";
 import { Provider as PaperProvider, FAB, Portal, Button } from "react-native-paper";
@@ -39,6 +39,8 @@ export default function HomeScreen() {
   const { t } = useLocalization();
 
   const activeTaskIdRef = useRef(activeTaskId);
+  // Ref para almacenar el id de la notificación programada (puede venir de móvil o web)
+  const notificationIdRef = useRef(null);
 
 
   useEffect(() => {
@@ -52,11 +54,16 @@ export default function HomeScreen() {
       if (savedState) {
         setIsRunning(savedState.isRunning);
       }
+      // Registrar permisos/ajustes de notificación al iniciar (no bloqueante)
+      try {
+        await registerForPushNotificationsAsync();
+      } catch (e) {
+        console.log('registerForPushNotificationsAsync error:', e);
+      }
     };
 
     initTimer();
     initAppStateListener();
-    registerForPushNotificationsAsync();
 
     // Suscribirse al evento de finalización del temporizador
     const onTimerComplete = async () => {
@@ -69,6 +76,16 @@ export default function HomeScreen() {
         await incrementPomodoros(activeTaskIdRef.current);
       } else {
         console.log('⚠️ No se incrementa - Tipo:', currentState.timerType, 'Tarea activa:', activeTaskIdRef.current);
+      }
+
+      // Si la app estaba en foreground cuando terminó, cancelar la notificación programada
+      try {
+        if (appState.current === 'active' && notificationIdRef.current) {
+          await cancelScheduledNotification(notificationIdRef.current);
+          notificationIdRef.current = null;
+        }
+      } catch (e) {
+        console.log('Error cancelling notification on complete:', e);
       }
 
       setIsRunning(false);
@@ -97,12 +114,41 @@ export default function HomeScreen() {
     };
   }, []);
 
-  const handleStartPause = () => {
+  // Manejo de inicio/pausa: al iniciar programamos la notificación basada en remainingSeconds;
+  // al pausar cancelamos la notificación programada.
+  const handleStartPause = async () => {
     if (isRunning) {
+      // Pausar: detener timer y cancelar notificación programada
       timer.pause();
+      try {
+        if (notificationIdRef.current) {
+          await cancelScheduledNotification(notificationIdRef.current);
+          notificationIdRef.current = null;
+        }
+      } catch (e) {
+        console.log('Error cancelling notification on pause:', e);
+      }
     } else {
+      // Iniciar: obtener remainingSeconds y programar notificación
+      const currentState = timer.getState();
+      const remaining = Math.max(0, Number(currentState.remainingSeconds) || 0);
+
+      try {
+        const id = await scheduleNotification({
+          title: t('home.notification_title') || 'Pomo terminado',
+          body: t('home.notification_body') || 'Tu pomodoro ha finalizado',
+          seconds: remaining
+        });
+
+        if (id) notificationIdRef.current = id;
+      } catch (e) {
+        console.log('Error scheduling notification on start:', e);
+      }
+
+      // Iniciamos el timer aunque la programación falle
       timer.start();
     }
+
     setIsRunning(!isRunning);
   };
 
@@ -110,6 +156,15 @@ export default function HomeScreen() {
     timer.reset();
     setIsRunning(false);
     await clearTimerState();
+    // Cancelar cualquier notificación programada al resetear
+    try {
+      if (notificationIdRef.current) {
+        await cancelScheduledNotification(notificationIdRef.current);
+        notificationIdRef.current = null;
+      }
+    } catch (e) {
+      console.log('Error cancelling notification on reset:', e);
+    }
   };
 
   const handleCambiar = () => {

@@ -7,8 +7,8 @@ export const themes = {
       secondary: '#38BDF8',
 
       bgMain: '#0F0A19',
-      bgDarkGreen: '#1E1B2E',
       bgSurface: '#312E81',
+      bgDarkGreen: '#1E1B2E',
 
       text: '#F8FAFC',
       textSecondary: '#ffffff',
@@ -22,14 +22,14 @@ export const themes = {
 
   christmas: {
     id: 'christmas',
-    name: 'Navidad 🎄',
+    name: 'Christmas',
     colors: {
       primary: '#C41E3A',
       secondary: '#165B33',
 
       bgMain: '#0F0F10',
-      bgDarkGreen: '#1A1A1D',
       bgSurface: '#FEE2E2',
+      bgDarkGreen: '#1A1A1D',
 
       text: '#9CA3AF',
       textSecondary: '#9CA3AF',
@@ -49,8 +49,8 @@ export const themes = {
       secondary: '#92400E',
 
       bgMain: '#1C1917',
-      bgDarkGreen: '#292524',
       bgSurface: '#44403C',
+      bgDarkGreen: '#292524',
 
       text: '#FAFAF9',
       textSecondary: '#D6D3D1',
@@ -64,14 +64,14 @@ export const themes = {
 
   cool: {
     id: 'cool',
-    name: 'Frío',
+    name: 'Cool',
     colors: {
       primary: '#3B82F6',
       secondary: '#2563EB',
 
       bgMain: '#F0F9FF',
-      bgDarkGreen: '#DBEAFE',
       bgSurface: '#BFDBFE',
+      bgDarkGreen: '#DBEAFE',
 
       text: '#FAFAF9',
       textSecondary: '#000000',
@@ -91,8 +91,8 @@ export const themes = {
       secondary: '#38BDF8',
 
       bgMain: '#020617',
-      bgDarkGreen: '#020617',
       bgSurface: '#0F172A',
+      bgDarkGreen: '#020617',
 
       text: '#FAFAF9',
       textSecondary: '#ffffff',
@@ -106,14 +106,14 @@ export const themes = {
 
   dark: {
     id: 'dark',
-    name: 'Oscuro',
+    name: 'Dark',
     colors: {
       primary: '#60A5FA',
       secondary: '#3B82F6',
 
       bgMain: '#111827',
-      bgDarkGreen: '#1F2937',
       bgSurface: '#374151',
+      bgDarkGreen: '#1F2937',
 
       text: '#F9FAFB',
       textSecondary: '#ffffff',
@@ -133,8 +133,8 @@ export const themes = {
       secondary: '#22D3EE',
 
       bgMain: '#030712',
-      bgDarkGreen: '#020617',
       bgSurface: '#111827',
+      bgDarkGreen: '#020617',
 
       text: '#FAFAF9',
       textSecondary: '#ffffff',
@@ -148,14 +148,14 @@ export const themes = {
 
   gray: {
     id: 'gray',
-    name: 'Gris',
+    name: 'Gray',
     colors: {
       primary: '#4B5563',
       secondary: '#6B7280',
 
       bgMain: '#F9FAFB',
-      bgDarkGreen: '#E5E7EB',
       bgSurface: '#D1D5DB',
+      bgDarkGreen: '#E5E7EB',
 
       text: '#000000',
       textSecondary: '#000000',
@@ -169,14 +169,14 @@ export const themes = {
 
   green: {
     id: 'green',
-    name: 'Verde',
+    name: 'Green',
     colors: {
       primary: '#10B981',
       secondary: '#047857',
 
       bgMain: '#F0FDF4',
-      bgDarkGreen: '#D1FAE5',
       bgSurface: '#A7F3D0',
+      bgDarkGreen: '#D1FAE5',
 
       text: '#000000',
       textSecondary: '#000000',
@@ -190,14 +190,14 @@ export const themes = {
 
   halloween: {
     id: 'halloween',
-    name: 'Halloween 🎃',
+    name: 'Halloween',
     colors: {
       primary: '#F97316',
       secondary: '#7C3AED',
 
       bgMain: '#0F0A19',
-      bgDarkGreen: '#1E1B2E',
       bgSurface: '#312E81',
+      bgDarkGreen: '#1E1B2E',
 
       text: '#F8FAFC',
       textSecondary: '#ffffff',
@@ -211,14 +211,14 @@ export const themes = {
 
   light: {
     id: 'light',
-    name: 'Claro',
+    name: 'Light',
     colors: {
       primary: '#3B82F6',
       secondary: '#2563EB',
 
       bgMain: '#FFFFFF',
-      bgDarkGreen: '#F9FAFB',
       bgSurface: '#F1F5F9',
+      bgDarkGreen: '#F9FAFB',
 
       text: '#000000',
       textSecondary: '#000000',
@@ -232,14 +232,14 @@ export const themes = {
 
   night: {
     id: 'night',
-    name: 'Noche',
+    name: 'Night',
     colors: {
       primary: '#8B5CF6',
       secondary: '#7C3AED',
 
       bgMain: '#0F172A',
-      bgDarkGreen: '#1E293B',
       bgSurface: '#334155',
+      bgDarkGreen: '#1E293B',
 
       text: '#E5E7EB',
       textSecondary: '#ffffff',
@@ -253,14 +253,14 @@ export const themes = {
 
   redLight: {
     id: 'redLight',
-    name: 'Rojo Claro',
+    name: 'Light Red',
     colors: {
       primary: '#E53935',
       secondary: '#B71C1C',
 
       bgMain: '#FFFFFF',
-      bgDarkGreen: '#F1F3F5',
       bgSurface: '#FAFAFA',
+      bgDarkGreen: '#F1F3F5',
 
       text: '#000000',
       textSecondary: '#000000',
@@ -272,16 +272,16 @@ export const themes = {
     },
   },
 
-  reddark: {
-    id: 'dark',
-    name: 'Oscuro rojo',
+  redDark: {
+    id: 'redDark',
+    name: 'Dark Red',
     colors: {
       primary: '#FF4D4D',
       secondary: '#E63946',
 
       bgMain: '#0F0F10',
-      bgDarkGreen: '#1A1A1D',
       bgSurface: '#222226',
+      bgDarkGreen: '#1A1A1D',
 
       text: '#F9FAFB',
       textSecondary: '#ffffff',
@@ -301,8 +301,8 @@ export const themes = {
       secondary: '#60A5FA',
 
       bgMain: '#0A0A0A',
-      bgDarkGreen: '#121212',
       bgSurface: '#1C1C1E',
+      bgDarkGreen: '#121212',
 
       text: '#F5F5F7',
       textSecondary: '#ffffff',
@@ -316,14 +316,14 @@ export const themes = {
 
   sunset: {
     id: 'sunset',
-    name: 'Atardecer',
+    name: 'Sunset',
     colors: {
       primary: '#F97316',
       secondary: '#EA580C',
 
       bgMain: '#FFF7ED',
-      bgDarkGreen: '#FFEDD5',
       bgSurface: '#FED7AA',
+      bgDarkGreen: '#FFEDD5',
 
       text: '#7C2D12',
       textSecondary: '#5c1d05',
@@ -335,4 +335,3 @@ export const themes = {
     },
   },
 };
-

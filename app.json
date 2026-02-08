@@ -4,7 +4,11 @@
     "name": "PomoTimerFlow",
     "slug": "PomoTimerFlow",
     "version": "1.3.0",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -23,7 +27,13 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.camilocuenca.PomoTimerFlow",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"]
+        "UIBackgroundModes": [
+          "audio"
+        ],
+        "NSUserTrackingUsageDescription": "Este identificador se usará para ofrecer anuncios personalizados."
+      },
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-6679191668109166~1702785206"
       }
     },
     "android": {
@@ -35,8 +45,26 @@
       "package": "com.camilocuenca.PomoTimerFlow",
       "permissions": [
         "FOREGROUND_SERVICE",
-        "FOREGROUND_SERVICE_MEDIA_PLAYBACK"
-      ]
+        "FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        "com.google.android.gms.permission.AD_ID"
+      ],
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-6679191668109166~1702785206"
+      },
+      "manifest": {
+        "$": {
+          "xmlns:tools": "http://schemas.android.com/tools"
+        },
+        "application": {
+          "meta-data": [
+            {
+              "android:name": "com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT",
+              "android:value": "false",
+              "tools:replace": "android:value"
+            }
+          ]
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -110,7 +138,16 @@
       ],
       "expo-router",
       "expo-asset",
-      "expo-localization"
+      "expo-localization",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-6679191668109166~1702785206",
+          "iosAppId": "ca-app-pub-6679191668109166~1702785206",
+          "userTrackingUsageDescription": "Este identificador se usará para ofrecer anuncios personalizados."
+        }
+      ],
+      "expo-build-properties"
     ],
     "extra": {
       "router": {},
@@ -118,5 +155,8 @@
         "projectId": "4c07fa35-e14a-4cb2-8f43-4b0d3d35f80f"
       }
     }
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-6679191668109166~1702785206"
   }
 }

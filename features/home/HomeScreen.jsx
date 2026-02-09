@@ -12,6 +12,8 @@ import { Menu } from "lucide-react-native";
 
 import { Modal, Pressable, ScrollView } from "react-native";
 import { useLocalization } from '../../context/LocalizationContext';
+// Banner Ad (igual patrón que en Stats & Tasks)
+import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
 
 const storeSession = async (type) => {
   try {
@@ -42,6 +44,8 @@ export default function HomeScreen() {
   // Ref para almacenar el id de la notificación programada (puede venir de móvil o web)
   const notificationIdRef = useRef(null);
 
+  // Banner ref para recargar en foreground (iOS)
+  const bannerRef = useRef(null);
 
   useEffect(() => {
     activeTaskIdRef.current = activeTaskId;
@@ -174,9 +178,21 @@ export default function HomeScreen() {
     setIsRunning(false);
   };
 
+  // Mostrar anuncios solo si no es web y el componente BannerAd está disponible
+  const canShowAds = Platform.OS !== 'web' && !!BannerAd;
+  const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-6679191668109166/4855665722';
+
+  // (iOS) recargar banner al volver al primer plano para evitar banners vacíos
+  useForeground(() => {
+    if (Platform.OS === 'ios') {
+      bannerRef.current?.load?.();
+    }
+  });
+
   return (
     <PaperProvider>
-      <View style={{ backgroundColor: theme.colors.bgMain }} className="flex-1 items-center justify-center gap-6">
+      <View style={{ backgroundColor: theme.colors.bgMain }} className="flex-1 items-center justify-start gap-6">
+
         {/* SEO: h1 oculto solo en web */}
         {Platform.OS === 'web' && (
           <h1 style={{
@@ -190,6 +206,19 @@ export default function HomeScreen() {
             PomoTimerFlow | Mejora tu productividad
           </h1>
         )}
+
+        {/* Banner Ad - colocado en la parte superior para ser visible pero no molestar */}
+        {canShowAds ? (
+          <View style={{ alignItems: 'center', marginTop: 0, marginBottom: 8 }}>
+            <BannerAd
+              ref={bannerRef}
+              unitId={adUnitId}
+              size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+              requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+            />
+          </View>
+        ) : null}
+
         {/* Selector de tarea activa (solo FAB como trigger) */}
         <Modal
           visible={selectorVisible}
@@ -225,6 +254,7 @@ export default function HomeScreen() {
             </View>
           </View>
         </Modal>
+
         {activeTaskId && tasks.find(t => t.id === activeTaskId) && (
           <Text style={{ color: theme.colors.textSecondary, fontSize: 12, opacity: 0.6, marginBottom: -10 }}>
             {tasks.find(t => t.id === activeTaskId)?.title}
@@ -253,8 +283,10 @@ export default function HomeScreen() {
         />
 
         </View>
-        
-     
+
+        {/* Banner Ad original eliminado para evitar duplicado */}
+
+
         </View>
       <Portal>
         <FAB

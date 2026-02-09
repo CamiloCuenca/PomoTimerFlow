@@ -1,11 +1,13 @@
-import { View, Text, ScrollView, FlatList, Pressable } from "react-native";
-import { useState } from "react";
+import { View, Text, ScrollView, FlatList, Pressable, Platform } from "react-native";
+import { useState, useRef } from "react";
 import { Provider as PaperProvider, FAB, Portal } from "react-native-paper";
 import { useTheme } from "../../hooks/useTheme";
 import TaskItem from "./components/TaskItem";
 import TaskForm from "./components/TaskForm";
 import { useTaskContext } from "../../context/TaskContext";
 import { useLocalization } from '../../context/LocalizationContext';
+// Banner Ad
+import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
 
 export default function TasksScreen() {
   const { theme } = useTheme();
@@ -13,6 +15,8 @@ export default function TasksScreen() {
   const { t } = useLocalization();
   const [selectedCategory, setSelectedCategory] = useState(t('task.categories.all'));
   const [formVisible, setFormVisible] = useState(false);
+
+  const bannerRef = useRef(null);
 
   const categories = [t('task.categories.all'), t('task.categories.new'), t('task.categories.in_progress'), t('task.categories.completed')];
 
@@ -41,6 +45,17 @@ export default function TasksScreen() {
   };
 
   const filteredTasks = selectedCategory === t('task.categories.all') ? tasks : tasks.filter((tsk) => tsk.status === statusMap[selectedCategory]);
+
+  // Mostrar anuncios solo si no es web y el componente BannerAd está disponible
+  const canShowAds = Platform.OS !== 'web' && !!BannerAd;
+  const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-6679191668109166/4855665722';
+
+  // (iOS) recargar banner al volver al primer plano para evitar banners vacíos
+  useForeground(() => {
+    if (Platform.OS === 'ios') {
+      bannerRef.current?.load?.();
+    }
+  });
 
   return (
     <PaperProvider>
@@ -100,6 +115,18 @@ export default function TasksScreen() {
             onComplete={() => completeTask(task.id)}
           />
         ))}
+
+        {/* Banner Ad - similar a StatsScreen */}
+        {canShowAds ? (
+          <View style={{ alignItems: 'center', marginTop: 16, marginBottom: 32 }}>
+            <BannerAd
+              ref={bannerRef}
+              unitId={adUnitId}
+              size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+              requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+            />
+          </View>
+        ) : null}
 
     </ScrollView>
         <TaskForm visible={formVisible} onClose={() => setFormVisible(false)} onSubmit={handleSubmitTask} />

@@ -1,19 +1,22 @@
 import { useFocusEffect } from "expo-router";
-import { useCallback , useState } from "react";
+import { useCallback , useState, useRef } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Platform } from "react-native";
 import LineChartCustom from "./components/lineChart";
 import { getCurrentWeekRange } from "../../dateUtils";
 import Strak from '../../components/Strak';
 import { useTheme } from "../../hooks/useTheme";
 import { useLocalization } from '../../context/LocalizationContext';
-
+// NOTE: Se usa la API oficial de la librería para el banner (sigue el ejemplo de la librería)
+import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
 
 export default function StatsScreen() {
   const [workSessions, setWorkSessions] = useState([]);
   const [breakSessions, setBreakSessions] = useState([]);
-  const { theme, changeTheme, themes } = useTheme();
+  const { theme } = useTheme();
   const { t } = useLocalization();
+
+  const bannerRef = useRef(null);
 
   const loadSessions = async () => {
     try {
@@ -43,7 +46,6 @@ export default function StatsScreen() {
     }
   };
 
-  
   useFocusEffect(
     useCallback(() => {
       loadSessions();
@@ -52,6 +54,16 @@ export default function StatsScreen() {
 
   const workedDays = workSessions.filter((day) => day.sessions > 0).length;
 
+  // Mostrar anuncios solo si no es web y el componente BannerAd está disponible
+  const canShowAds = Platform.OS !== 'web' && !!BannerAd;
+  const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-6679191668109166/4855665722';
+
+  // (iOS) recargar banner al volver al primer plano para evitar banners vacíos
+  useForeground(() => {
+    if (Platform.OS === 'ios') {
+      bannerRef.current?.load?.();
+    }
+  });
 
   return (
     <ScrollView style={{ backgroundColor: theme.colors.bgMain }}>
@@ -80,6 +92,18 @@ export default function StatsScreen() {
             color={theme.colors.primary}
           />
         </View>
+
+        {/* Banner Ad - sigue el ejemplo oficial de la librería */}
+        {canShowAds ? (
+          <View style={{ alignItems: 'center', marginTop: 16, marginBottom: 32 }}>
+            <BannerAd
+              ref={bannerRef}
+              unitId={adUnitId}
+              size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+              requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+            />
+          </View>
+        ) : null}
       </View>
     </ScrollView>
   );

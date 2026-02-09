@@ -110,7 +110,23 @@
       ],
       "expo-router",
       "expo-asset",
-      "expo-localization"
+      "expo-localization",
+      "expo-build-properties",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-6679191668109166~1702785206",
+          "iosAppId": "ca-app-pub-6679191668109166~1702785206"
+        }
+      ]
     ],
     "extra": {
       "router": {},

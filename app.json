@@ -11,51 +11,37 @@
     "scheme": "pomotimerflow",
     "newArchEnabled": true,
     "jsEngine": "hermes",
-
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-
     "experiments": {
       "baseUrl": "/"
     },
-
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.camilocuenca.PomoTimerFlow",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"],
-        "NSUserTrackingUsageDescription": "Este identificador se usará para ofrecer anuncios personalizados."
-      },
-      "config": {
-        "googleMobileAdsAppId": "ca-app-pub-6679191668109166~1702785206"
+        "UIBackgroundModes": ["audio"]
       }
     },
-
     "android": {
       "versionCode": 4,
-      "package": "com.camilocuenca.PomoTimerFlow",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "package": "com.camilocuenca.PomoTimerFlow",
       "permissions": [
         "FOREGROUND_SERVICE",
-        "FOREGROUND_SERVICE_MEDIA_PLAYBACK",
-        "com.google.android.gms.permission.AD_ID"
-      ],
-      "config": {
-        "googleMobileAdsAppId": "ca-app-pub-6679191668109166~1702785206"
-      }
+        "FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+      ]
     },
-
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro",
       "output": "static",
-      "title": "PomoTimerFlow - Temporizador Pomodoro",
       "meta": [
         {
           "name": "description",
@@ -89,9 +75,9 @@
           "property": "og:url",
           "content": "https://pomo-timer-flow.vercel.app"
         }
-      ]
+      ],
+      "title": "PomoTimerFlow - Temporizador Pomodoro"
     },
-
     "plugins": [
       [
         "expo-notifications",
@@ -125,17 +111,23 @@
       "expo-router",
       "expo-asset",
       "expo-localization",
+      "expo-build-properties",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
       [
         "react-native-google-mobile-ads",
         {
           "androidAppId": "ca-app-pub-6679191668109166~1702785206",
-          "iosAppId": "ca-app-pub-6679191668109166~1702785206",
-          "userTrackingUsageDescription": "Este identificador se usará para ofrecer anuncios personalizados."
+          "iosAppId": "ca-app-pub-6679191668109166~1702785206"
         }
-      ],
-      "expo-build-properties"
+      ]
     ],
-
     "extra": {
       "router": {},
       "eas": {

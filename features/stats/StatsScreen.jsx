@@ -1,5 +1,5 @@
 import { useFocusEffect } from "expo-router";
-import { useCallback , useState, useEffect } from "react";
+import { useCallback , useState, useRef } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, ScrollView, Platform } from "react-native";
 import LineChartCustom from "./components/lineChart";
@@ -7,8 +7,8 @@ import { getCurrentWeekRange } from "../../dateUtils";
 import Strak from '../../components/Strak';
 import { useTheme } from "../../hooks/useTheme";
 import { useLocalization } from '../../context/LocalizationContext';
-// NOTE: No importar react-native-google-mobile-ads en el tope (evita crashes en Expo Go). Cargar dinámicamente.
-
+// NOTE: Se usa la API oficial de la librería para el banner (sigue el ejemplo de la librería)
+import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
 
 export default function StatsScreen() {
   const [workSessions, setWorkSessions] = useState([]);
@@ -16,23 +16,7 @@ export default function StatsScreen() {
   const { theme } = useTheme();
   const { t } = useLocalization();
 
-  // Módulo de ads cargado dinámicamente (null si no está disponible en este entorno)
-  const [adsModule, setAdsModule] = useState(null);
-
-  useEffect(() => {
-    // No intentar cargar en web
-    if (Platform.OS === 'web') return;
-    let mounted = true;
-    try {
-      const mod = require('react-native-google-mobile-ads');
-      if (mounted) setAdsModule(mod);
-    } catch (e) {
-      // Si el módulo nativo no está disponible (p. ej. Expo Go), solo lo ignoramos
-      console.warn('react-native-google-mobile-ads no está disponible en este entorno:', e.message || e);
-      setAdsModule(null);
-    }
-    return () => { mounted = false; };
-  }, []);
+  const bannerRef = useRef(null);
 
   const loadSessions = async () => {
     try {
@@ -62,7 +46,6 @@ export default function StatsScreen() {
     }
   };
 
-  
   useFocusEffect(
     useCallback(() => {
       loadSessions();
@@ -71,10 +54,16 @@ export default function StatsScreen() {
 
   const workedDays = workSessions.filter((day) => day.sessions > 0).length;
 
-  // Decide si mostramos el banner: módulo disponible y no web
-  const canShowAds = !!adsModule && Platform.OS !== 'web' && !!adsModule.BannerAd;
-  // Usar TestIds en DEV si el módulo está disponible
-  const adUnitId = adsModule ? (__DEV__ ? adsModule.TestIds.BANNER : 'ca-app-pub-6679191668109166/4855665722') : null;
+  // Mostrar anuncios solo si no es web y el componente BannerAd está disponible
+  const canShowAds = Platform.OS !== 'web' && !!BannerAd;
+  const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-6679191668109166/4855665722';
+
+  // (iOS) recargar banner al volver al primer plano para evitar banners vacíos
+  useForeground(() => {
+    if (Platform.OS === 'ios') {
+      bannerRef.current?.load?.();
+    }
+  });
 
   return (
     <ScrollView style={{ backgroundColor: theme.colors.bgMain }}>
@@ -104,12 +93,13 @@ export default function StatsScreen() {
           />
         </View>
 
-        {/* Banner Ad - solo si el módulo nativo está disponible */}
+        {/* Banner Ad - sigue el ejemplo oficial de la librería */}
         {canShowAds ? (
           <View style={{ alignItems: 'center', marginTop: 16, marginBottom: 32 }}>
-            <adsModule.BannerAd
+            <BannerAd
+              ref={bannerRef}
               unitId={adUnitId}
-              size={adsModule.BannerAdSize.FULL_BANNER}
+              size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
               requestOptions={{ requestNonPersonalizedAdsOnly: true }}
             />
           </View>

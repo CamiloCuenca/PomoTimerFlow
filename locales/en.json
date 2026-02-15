@@ -11,7 +11,11 @@
     "session_complete_title": "Session completed!",
     "session_complete_body": "You finished a %{type} session.",
     "work": "work",
-    "break": "break"
+    "break": "break",
+    "notification_work_complete": "✅ Session completed",
+    "notification_break_complete": "⏰ Break finished",
+    "notification_work_body": "Time for a break!",
+    "notification_break_body": "Back to work!"
   },
   "settings": {
     "title": "Settings",

@@ -45,7 +45,7 @@ const safeLookup = (locale, key) => {
 
 const formatReplace = (s, params) => {
   if (!params || typeof s !== 'string') return s;
-  return s.replace(/%\{([^}]+)\}/g, (_, k) => (params[k] !== undefined ? String(params[k]) : `%{${k}}`));
+  return s.replace(/%\{([^}]+)}/g, (_, k) => (params[k] !== undefined ? String(params[k]) : `%{${k}}`));
 };
 
 export const t = (key, params) => {

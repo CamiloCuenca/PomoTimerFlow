@@ -26,13 +26,8 @@ let state = {
   isRunning: false,
   timerType: 'work', // 'work' | 'shortBreak' | 'longBreak'
   workSessionsCompleted: 0,
-  intervalId: null,
-  // Nuevo: id de notificación programada (expo) o identificador web
-  scheduledNotificationId: null
+  intervalId: null
 };
-
-// Importar funciones de notificaciones
-import { scheduleNotification, cancelScheduledNotification } from '../services/notification';
 
 // Funciones del temporizador
 function startTimer(callback) {
@@ -46,29 +41,8 @@ function startTimer(callback) {
   state.isRunning = true;
   emit('stateChange', { ...state });
   
-  // Programar la notificación para el tiempo restante (sin usar setTimeout para depender del hilo JS)
-  // scheduleNotification usa expo-notifications, que funciona en background/lockscreen.
-  (async () => {
-    try {
-      // Cancelar notificación previa si existe
-      if (state.scheduledNotificationId) {
-        await cancelScheduledNotification(state.scheduledNotificationId);
-        state.scheduledNotificationId = null;
-      }
-
-      const seconds = Math.max(1, Math.round(state.timeLeft));
-      const title = state.timerType === 'work' ? 'Pomodoro terminado' : 'Descanso terminado';
-      const body = state.timerType === 'work' ? '¡Buen trabajo! Tiempo de descanso.' : 'Hora de volver al trabajo.';
-
-      const id = await scheduleNotification({ title, body, seconds });
-      if (id) {
-        state.scheduledNotificationId = id;
-      }
-    } catch (e) {
-      // No bloquear la ejecución si falla la programación
-      console.log('Error programando notificación:', e);
-    }
-  })();
+  // Nota: la programación de la notificación la hace la UI (HomeScreen) para mantener
+  // el control (start/pause/reset) en un solo lugar y evitar duplicados.
 
   state.intervalId = setInterval(() => {
     state.timeLeft--;
@@ -94,17 +68,7 @@ function pauseTimer() {
   state.isRunning = false;
   state.intervalId = null;
 
-  // Cancelar notificación programada cuando el usuario pausa
-  (async () => {
-    try {
-      if (state.scheduledNotificationId) {
-        await cancelScheduledNotification(state.scheduledNotificationId);
-        state.scheduledNotificationId = null;
-      }
-    } catch (e) {
-      console.log('Error al cancelar notificación al pausar:', e);
-    }
-  })();
+  // La UI (HomeScreen) es responsable de cancelar la notificación programada si corresponde.
 
   emit('stateChange', { ...state });
 }
@@ -115,17 +79,7 @@ function resetTimer() {
   state.isRunning = false;
   state.intervalId = null;
 
-  // Cancelar notificación programada al reiniciar
-  (async () => {
-    try {
-      if (state.scheduledNotificationId) {
-        await cancelScheduledNotification(state.scheduledNotificationId);
-        state.scheduledNotificationId = null;
-      }
-    } catch (e) {
-      console.log('Error al cancelar notificación al resetear:', e);
-    }
-  })();
+  // La UI (HomeScreen) cancelará la notificación programada cuando llame a reset.
 
   emit('stateChange', { ...state });
 }
@@ -177,15 +131,7 @@ async function handleTimerComplete() {
   clearInterval(state.intervalId);
   state.intervalId = null;
 
-  // Al completar, limpiar cualquier notificación pendiente
-  try {
-    if (state.scheduledNotificationId) {
-      await cancelScheduledNotification(state.scheduledNotificationId);
-      state.scheduledNotificationId = null;
-    }
-  } catch (e) {
-    console.log('Error cancelando notificación al completar:', e);
-  }
+  // La UI ya debería haber cancelado la notificación pendiente si estaba en foreground.
 
   emit('complete', {
     completedType: state.timerType,
@@ -219,7 +165,6 @@ export const saveTimerState = async () => {
     await AsyncStorage.setItem(TIMER_STATE_KEY, JSON.stringify({
       ...state,
       intervalId: null, // No guardamos el intervalo
-      scheduledNotificationId: null, // No persistir id de notificación
       lastUpdated: Date.now()
     }));
   } catch (e) {
@@ -236,7 +181,7 @@ export const loadTimerState = async () => {
     if (!parsedState) return null;
 
     // Excluir intervalId y scheduledNotificationId (no válidos tras reinicio)
-    const { intervalId, scheduledNotificationId, lastUpdated, ...savedStateData } = parsedState;
+    const { intervalId, lastUpdated, ...savedStateData } = parsedState;
 
     if (savedStateData.isRunning && lastUpdated) {
       const elapsed = Math.floor((Date.now() - lastUpdated) / 1000);

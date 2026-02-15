@@ -11,25 +11,13 @@
     },
     "preview": {
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "apk"
       }
-    },
-    "preview2": {
-      "android": {
-        "gradleCommand": ":app:assembleRelease"
-      }
-    },
-    "preview3": {
-      "developmentClient": true
     },
     "production": {
-      "android":{
-        "buildType":"apk"
+      "android": {
+        "buildType": "app-bundle"
       }
-    },
-    "developmentClient": {
-      "developmentClient": true,
-      "distribution": "internal"
     }
   },
   "submit": {

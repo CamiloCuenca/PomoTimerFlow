@@ -3,8 +3,8 @@ import { Platform } from 'react-native';
 
 const isWeb = Platform.OS === 'web';
 
-// Map para almacenar timeouts en web (solo como fallback cuando sea posible)
-const webTimeouts = new Map();
+// Map para trackear timeouts de notificaciones web programadas
+const webScheduled = new Map();
 
 // Configuración del manejador de notificaciones (solo para móvil)
 if (!isWeb) {
@@ -77,136 +77,127 @@ export async function registerForPushNotificationsAsync() {
   }
 }
 
-// Mostrar notificación inmediata (funciona en web y móvil)
-export async function mostrarNotificacionLocal({ title, body }) {
+
+// Programar una notificación para X segundos en el futuro.
+// Devuelve un id que puede usarse para cancelar.
+export async function scheduleNotification({ title, body, seconds = 1, timerType = 'work' }) {
+  // Mensajes por defecto (inglés)
+  const defaultTitle = 'Session completed!';
+  const defaultBodyWork = 'You finished a work session.';
+  const defaultBodyBreak = 'You finished a break session.';
+
+  const finalTitle = title || defaultTitle;
+  const finalBody = body || (timerType === 'work' ? defaultBodyWork : defaultBodyBreak);
+
   if (isWeb) {
-    // Web Notifications API (mostramos inmediatamente si hay permiso)
-    if ('Notification' in window && Notification.permission === 'granted') {
-      try {
-        new Notification(title, {
-          body,
-          icon: require('../assets/icon-mini.png'),
-        });
-      } catch (e) {
-        console.log('Error showing web notification:', e);
+    try {
+      if (!('Notification' in window)) return null;
+      if (Notification.permission !== 'granted') {
+        const granted = await registerForPushNotificationsAsync();
+        if (!granted) return null;
       }
+
+      const id = `web_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+      const timeoutId = setTimeout(() => {
+        try {
+          new Notification(finalTitle, { body: finalBody, icon: require('../assets/icon-mini.png') });
+        } catch (e) {
+          console.log('Error showing scheduled web notification:', e);
+        }
+        webScheduled.delete(id);
+      }, Math.max(0, Math.round(Number(seconds)) * 1000));
+
+      webScheduled.set(id, timeoutId);
+      return id;
+    } catch (e) {
+      console.log('Error scheduling web notification:', e);
+      return null;
     }
   } else {
-    // Expo Notifications (móvil) - mostramos inmediatamente
     try {
-      await Notifications.scheduleNotificationAsync({
+      const secondsInt = Math.max(1, Math.round(Number(seconds)));
+
+      await registerForPushNotificationsAsync();
+
+      return await Notifications.scheduleNotificationAsync({
+        content: {
+          title: finalTitle,
+          body: finalBody,
+          sound: 'default',
+        },
+        trigger: { seconds: secondsInt, channelId: 'default' },
+      });
+    } catch (e) {
+      console.log('Error scheduling mobile notification:', e);
+      return null;
+    }
+  }
+}
+
+export async function cancelScheduledNotification(id) {
+  if (!id) return;
+
+  if (isWeb) {
+    try {
+      const timeoutId = webScheduled.get(id);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        webScheduled.delete(id);
+      }
+    } catch (e) {
+      console.log('Error cancelling web scheduled notification:', e);
+    }
+  } else {
+    try {
+      await Notifications.cancelScheduledNotificationAsync(id);
+    } catch (e) {
+      console.log('Error cancelling mobile scheduled notification:', e);
+    }
+  }
+}
+
+// Se exportan funciones nombradas; no export default necesario
+export async function mostrarNotificacionLocal({ title, body, seconds = 1 }) {
+  if (isWeb) {
+    try {
+      if (!('Notification' in window)) return null;
+      if (Notification.permission !== 'granted') {
+        const granted = await registerForPushNotificationsAsync();
+        if (!granted) return null;
+      }
+
+      const id = `web_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+      const timeoutId = setTimeout(() => {
+        try {
+          new Notification(title, { body, icon: require('../assets/icon-mini.png') });
+        } catch (e) {
+          console.log('Error showing scheduled web notification:', e);
+        }
+        webScheduled.delete(id);
+      }, Math.max(0, Math.round(Number(seconds)) * 1000));
+
+      webScheduled.set(id, timeoutId);
+      return id;
+    } catch (e) {
+      console.log('Error scheduling web local notification:', e);
+      return null;
+    }
+  } else {
+    try {
+      const secondsInt = Math.max(1, Math.round(Number(seconds)));
+      await registerForPushNotificationsAsync();
+      return await Notifications.scheduleNotificationAsync({
         content: {
           title,
           body,
           sound: 'default',
           priority: Notifications.AndroidNotificationPriority.HIGH,
         },
-        trigger: null,
+        trigger: { seconds: Number.isFinite(secondsInt) ? secondsInt : 1, channelId: 'default' },
       });
     } catch (e) {
-      console.log('Error showing mobile notification:', e);
+      console.log('Error scheduling mobile local notification:', e);
+      return null;
     }
-  }
-}
-
-// Programar una notificación para que se dispare en `seconds` segundos.
-// Devuelve un id que puede usarse para cancelar la notificación.
-export async function scheduleNotification({ title, body, seconds = 1 }) {
-  // Asegurar segundos como entero >= 0
-  const secs = Math.max(0, Math.round(Number(seconds) || 0));
-
-  if (isWeb) {
-    // Fallback web: solo posible si la página está activa y con permiso.
-    // Guardamos el timeout para permitir cancelación mientras la pestaña esté abierta.
-    if ('Notification' in window && Notification.permission === 'granted') {
-      try {
-        const timeoutId = setTimeout(() => {
-          try {
-            new Notification(title, {
-              body,
-              icon: require('../assets/icon-mini.png'),
-            });
-          } catch (e) {
-            console.log('Error showing scheduled web notification:', e);
-          }
-        }, secs * 1000);
-
-        const id = `web-${String(timeoutId)}`;
-        webTimeouts.set(id, timeoutId);
-        return id;
-      } catch (e) {
-        console.log('Error scheduling web notification:', e);
-        return null;
-      }
-    }
-    return null;
-  }
-
-  try {
-    await setupNotifications();
-    const id = await Notifications.scheduleNotificationAsync({
-      content: {
-        title,
-        body,
-        sound: 'default',
-        priority: Notifications.AndroidNotificationPriority.HIGH,
-      },
-      trigger: {
-        seconds: Math.max(1, secs),
-      },
-    });
-
-    return id;
-  } catch (e) {
-    console.log('Error scheduling mobile notification:', e);
-    return null;
-  }
-}
-
-// Cancelar una notificación programada por id
-export async function cancelScheduledNotification(id) {
-  if (!id) return;
-
-  if (isWeb) {
-    // fallback web
-    try {
-      if (typeof id === 'string' && id.startsWith('web-')) {
-        const timeoutId = webTimeouts.get(id);
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-          webTimeouts.delete(id);
-        }
-      }
-    } catch (e) {
-      console.log('Error cancelling web scheduled notification:', e);
-    }
-    return;
-  }
-
-  try {
-    await Notifications.cancelScheduledNotificationAsync(id);
-  } catch (e) {
-    console.log('Error cancelling scheduled mobile notification:', e);
-  }
-}
-
-// Cancelar todas las notificaciones programadas (móvil)
-export async function cancelAllScheduledNotifications() {
-  if (isWeb) {
-    try {
-      for (const [id, timeoutId] of webTimeouts) {
-        clearTimeout(timeoutId);
-      }
-      webTimeouts.clear();
-    } catch (e) {
-      console.log('Error cancelling all web scheduled notifications:', e);
-    }
-    return;
-  }
-
-  try {
-    await Notifications.cancelAllScheduledNotificationsAsync();
-  } catch (e) {
-    console.log('Error cancelling all scheduled mobile notifications:', e);
   }
 }

@@ -23,7 +23,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.camilocuenca.PomoTimerFlow",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"]
+        "UIBackgroundModes": ["remote-notification"]
       }
     },
     "android": {
@@ -34,8 +34,12 @@
       },
       "package": "com.camilocuenca.PomoTimerFlow",
       "permissions": [
-        "FOREGROUND_SERVICE",
-        "FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE",
+        "POST_NOTIFICATIONS",
+        "SCHEDULE_EXACT_ALARM",
+        "USE_EXACT_ALARM",
+        "WAKE_LOCK"
       ]
     },
     "web": {
@@ -83,7 +87,9 @@
         "expo-notifications",
         {
           "icon": "./assets/icon-mini.png",
-          "color": "#F54E4E"
+          "color": "#F54E4E",
+          "sounds": [],
+          "mode": "production"
         }
       ],
       [
@@ -115,6 +121,11 @@
       [
         "expo-build-properties",
         {
+          "android": {
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "34.0.0"
+          },
           "ios": {
             "useFrameworks": "static"
           }

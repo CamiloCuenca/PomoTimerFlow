@@ -1,14 +1,15 @@
 // Variables editables 
-let workDuration = 25;    
-let shortBreak = 5;        
-let longBreak = 15;       
-let workSessionsBeforeLongBreak = 4; 
+let workDuration = 25;
+let shortBreak = 5;
+let longBreak = 15;
+let workSessionsBeforeLongBreak = 4;
 
 // Eventos
 const eventListeners = {
   complete: [],
   tick: [],
-  stateChange: []
+  stateChange: [],
+  segmentStarted: []   // ✅ NUEVO: para avisar a HomeScreen cuando auto-inicia el siguiente segmento
 };
 
 function getCurrentTimerDuration(timerType) {
@@ -32,29 +33,29 @@ let state = {
 // Funciones del temporizador
 function startTimer(callback) {
   if (state.isRunning) return;
-  
+
   if (state.intervalId) {
     clearInterval(state.intervalId);
     state.intervalId = null;
   }
-  
+
   state.isRunning = true;
   emit('stateChange', { ...state });
-  
+
   // Nota: la programación de la notificación la hace la UI (HomeScreen) para mantener
   // el control (start/pause/reset) en un solo lugar y evitar duplicados.
 
   state.intervalId = setInterval(() => {
     state.timeLeft--;
-    
+
     // Notificar cada segundo
     if (callback) callback(getFormattedTime());
-    emit('tick', { 
+    emit('tick', {
       timeLeft: state.timeLeft,
       formattedTime: getFormattedTime(),
       progress: getProgress()
     });
-    
+
     if (state.timeLeft <= 0) {
       handleTimerComplete();
     }
@@ -63,7 +64,7 @@ function startTimer(callback) {
 
 function pauseTimer() {
   if (!state.isRunning) return;
-  
+
   clearInterval(state.intervalId);
   state.isRunning = false;
   state.intervalId = null;
@@ -89,7 +90,7 @@ function setTimerType(type) {
     console.error('Tipo de temporizador no válido:', type);
     return;
   }
-  
+
   state.timerType = type;
   resetTimer();
 }
@@ -111,7 +112,7 @@ function on(event, callback) {
     eventListeners[event] = [];
   }
   eventListeners[event].push(callback);
-  
+
   return () => {
     eventListeners[event] = eventListeners[event].filter(cb => cb !== callback);
   };
@@ -140,7 +141,7 @@ async function handleTimerComplete() {
 
   if (state.timerType === 'work') {
     state.workSessionsCompleted++;
-    
+
     if (state.workSessionsCompleted % workSessionsBeforeLongBreak === 0) {
       setTimerType('longBreak');
     } else {
@@ -149,9 +150,16 @@ async function handleTimerComplete() {
   } else {
     setTimerType('work');
   }
-  
+
   // Empezar automáticamente el siguiente segmento
   startTimer();
+
+  // ✅ NUEVO: avisar a HomeScreen que un nuevo segmento comenzó automáticamente
+  // para que programe la notificación del OS para este nuevo segmento
+  emit('segmentStarted', {
+    timerType: state.timerType,
+    timeLeft: state.timeLeft
+  });
 }
 
 // Ejecución en segundo plano
@@ -176,7 +184,7 @@ export const loadTimerState = async () => {
   try {
     const savedState = await AsyncStorage.getItem(TIMER_STATE_KEY);
     if (!savedState) return null;
-    
+
     const parsedState = JSON.parse(savedState);
     if (!parsedState) return null;
 
@@ -186,12 +194,12 @@ export const loadTimerState = async () => {
     if (savedStateData.isRunning && lastUpdated) {
       const elapsed = Math.floor((Date.now() - lastUpdated) / 1000);
       savedStateData.timeLeft = Math.max(0, (savedStateData.timeLeft || 0) - elapsed);
-      
+
       if (savedStateData.timeLeft <= 0) {
         savedStateData.isRunning = false;
       }
     }
-    
+
     return savedStateData;
   } catch (e) {
     console.error('Error al cargar el estado del temporizador:', e);
@@ -211,7 +219,7 @@ let appStateListener = null;
 
 export const initAppStateListener = () => {
   if (appStateListener) return appStateListener;
-  
+
   appStateListener = AppState.addEventListener('change', async (nextAppState) => {
     if (nextAppState === 'background') {
       await saveTimerState();
@@ -219,8 +227,8 @@ export const initAppStateListener = () => {
       const savedState = await loadTimerState();
       if (savedState) {
         if (savedState.isRunning) {
-          state = { 
-            ...state, 
+          state = {
+            ...state,
             ...savedState,
             isRunning: false
           };
@@ -232,7 +240,7 @@ export const initAppStateListener = () => {
       }
     }
   });
-  
+
   return appStateListener;
 };
 

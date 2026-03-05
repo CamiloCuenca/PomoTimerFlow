@@ -4,7 +4,7 @@ import ProgressBar from "./components/ProgressBar";
 import { useState, useEffect, useRef } from "react";
 import timer, { initAppStateListener, loadTimerState, clearTimerState } from "../../utils/timer";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { registerForPushNotificationsAsync, cancelScheduledNotification, mostrarNotificacionLocal } from "../../services/notification";
+import { registerForPushNotificationsAsync, cancelScheduledNotification, mostrarNotificacionLocal, scheduleNotification } from "../../services/notification";
 import { useTheme } from "../../hooks/useTheme";
 import { useTaskContext } from "../../context/TaskContext";
 import { Provider as PaperProvider, FAB, Portal, Button } from "react-native-paper";
@@ -18,12 +18,7 @@ const storeSession = async (type) => {
     const today = new Date().toISOString().split('T')[0];
     const existingSessions = await AsyncStorage.getItem('sessions');
     const sessions = existingSessions ? JSON.parse(existingSessions) : [];
-
-    sessions.push({
-      type,
-      date: today
-    });
-
+    sessions.push({ type, date: today });
     await AsyncStorage.setItem('sessions', JSON.stringify(sessions));
   } catch (e) {
     console.error('Error al guardar sesión:', e);
@@ -42,6 +37,34 @@ export default function HomeScreen() {
   const notificationIdRef = useRef(null);
   const bannerRef = useRef(null);
 
+  // Helper para obtener textos de notificación según el tipo de timer
+  const getNotificationTexts = (timerType) => {
+    const title = timerType === 'work'
+        ? (t('home.notification_work_complete') || '✅ Sesión completada')
+        : (t('home.notification_break_complete') || '⏰ Descanso terminado');
+    const body = timerType === 'work'
+        ? (t('home.notification_work_body') || '¡Tiempo de descanso!')
+        : (t('home.notification_break_body') || '¡De vuelta al trabajo!');
+    return { title, body };
+  };
+
+  // Helper para programar notificación y guardar el id
+  const programarNotificacion = async (timeLeft, timerType) => {
+    const { title, body } = getNotificationTexts(timerType);
+    const id = await scheduleNotification({ title, body, seconds: timeLeft, timerType });
+    notificationIdRef.current = id;
+    console.log('🔔 Notificación programada para', timeLeft, 'segundos. ID:', id);
+  };
+
+  // Helper para cancelar notificación programada
+  const cancelarNotificacion = async () => {
+    if (notificationIdRef.current) {
+      await cancelScheduledNotification(notificationIdRef.current);
+      notificationIdRef.current = null;
+      console.log('🔕 Notificación programada cancelada');
+    }
+  };
+
   useEffect(() => {
     activeTaskIdRef.current = activeTaskId;
   }, [activeTaskId]);
@@ -52,6 +75,12 @@ export default function HomeScreen() {
       const savedState = await loadTimerState();
       if (savedState) {
         setIsRunning(savedState.isRunning);
+
+        // Si el timer estaba corriendo cuando se cerró la app,
+        // programar notificación para el tiempo restante restaurado
+        if (savedState.isRunning && savedState.timeLeft > 0) {
+          await programarNotificacion(savedState.timeLeft, savedState.timerType);
+        }
       }
 
       try {
@@ -64,11 +93,13 @@ export default function HomeScreen() {
     initTimer();
     initAppStateListener();
 
-    // Evento cuando el timer termina
+    // Evento cuando el timer termina un segmento
     const onTimerComplete = async () => {
       const currentState = timer.getState();
-
       console.log('🔔 Timer completado:', currentState.timerType);
+
+      // CANCELAR notificación programada (la app estaba abierta, no necesitamos la del OS)
+      await cancelarNotificacion();
 
       await storeSession(currentState.timerType);
 
@@ -77,37 +108,45 @@ export default function HomeScreen() {
         await incrementPomodoros(activeTaskIdRef.current);
       }
 
-      // MOSTRAR NOTIFICACIÓN INMEDIATAMENTE
-      const title = currentState.timerType === 'work'
-          ? (t('home.notification_work_complete') || '✅ Sesión completada')
-          : (t('home.notification_break_complete') || '⏰ Descanso terminado');
-
-      const body = currentState.timerType === 'work'
-          ? (t('home.notification_work_body') || '¡Tiempo de descanso!')
-          : (t('home.notification_break_body') || '¡De vuelta al trabajo!');
-
+      // MOSTRAR NOTIFICACIÓN LOCAL INMEDIATAMENTE (app abierta)
+      const { title, body } = getNotificationTexts(currentState.timerType);
       try {
         await mostrarNotificacionLocal({ title, body, seconds: 0 });
-        console.log('✅ Notificación mostrada');
+        console.log('✅ Notificación local mostrada');
       } catch (e) {
         console.log('❌ Error mostrando notificación:', e);
       }
 
       setIsRunning(false);
+      // Nota: NO programamos la siguiente notificación aquí.
+      // El evento 'segmentStarted' de timer.js lo hará de forma limpia.
+    };
+
+    // ✅ Evento cuando timer.js auto-inicia el siguiente segmento
+    // Reemplaza el setTimeout anterior — más limpio y confiable
+    const onSegmentStarted = async ({ timerType, timeLeft }) => {
+      console.log('▶️ Nuevo segmento auto-iniciado:', timerType, '- programando notificación para', timeLeft, 'segundos');
+      await cancelarNotificacion(); // por si acaso queda alguna
+      await programarNotificacion(timeLeft, timerType);
+      setIsRunning(true);
     };
 
     timer.on('complete', onTimerComplete);
+    timer.on('segmentStarted', onSegmentStarted);
 
     return () => {
       timer.off('complete', onTimerComplete);
+      timer.off('segmentStarted', onSegmentStarted);
     };
   }, []);
 
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', nextAppState => {
+    const subscription = AppState.addEventListener('change', async nextAppState => {
       if (nextAppState === 'active' && appState.current.match(/inactive|background/)) {
+        // App volvió al frente: sincronizar estado del timer
         const currentState = timer.getState();
         setIsRunning(currentState.isRunning);
+        console.log('📱 App activa - timer isRunning:', currentState.isRunning, 'timeLeft:', currentState.timeLeft);
       }
       appState.current = nextAppState;
     });
@@ -122,15 +161,16 @@ export default function HomeScreen() {
       // PAUSAR
       console.log('⏸️ Pausando');
       timer.pause();
-
-      if (notificationIdRef.current) {
-        await cancelScheduledNotification(notificationIdRef.current);
-        notificationIdRef.current = null;
-      }
+      await cancelarNotificacion();
     } else {
-      // INICIAR - NO programar notificación aquí
+      // INICIAR
       console.log('▶️ Iniciando');
       timer.start();
+
+      // Programar notificación para cuando termine el segmento actual
+      // (será disparada por el OS aunque la app esté cerrada)
+      const { timeLeft, timerType } = timer.getState();
+      await programarNotificacion(timeLeft, timerType);
     }
 
     setIsRunning(!isRunning);
@@ -141,11 +181,7 @@ export default function HomeScreen() {
     timer.reset();
     setIsRunning(false);
     await clearTimerState();
-
-    if (notificationIdRef.current) {
-      await cancelScheduledNotification(notificationIdRef.current);
-      notificationIdRef.current = null;
-    }
+    await cancelarNotificacion();
   };
 
   const handleCambiar = () => {
@@ -154,6 +190,7 @@ export default function HomeScreen() {
     timer.setTimerType(currentState.timerType === 'work' ? 'shortBreak' : 'work');
     timer.reset();
     setIsRunning(false);
+    cancelarNotificacion();
   };
 
   const canShowAds = Platform.OS !== 'web' && !!BannerAd;
